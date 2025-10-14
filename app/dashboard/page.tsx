@@ -1,14 +1,8 @@
-async function fetchDashboard(): Promise<{ total: number; grade: string; perDimension: Record<string, number> }> {
-  // Placeholder client-side fetch to Edge GET (would include auth)
-  const res = await fetch("/api/dashboard-mock", { cache: "no-store" });
-  return res.json();
-}
-
+"use client";
 import Badge from "../../components/Badge";
 import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 
-export default async function DashboardPage() {
-  // In real app, fetch from Edge function; SSR/CSR depending on auth strategy
+export default function DashboardPage() {
   const data = { total: 0, grade: "E", perDimension: { people: 0, planet: 0, materials: 0, circularity: 0 } };
   const pieData = [
     { name: "People", value: data.perDimension.people },

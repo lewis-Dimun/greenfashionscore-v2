@@ -1,5 +1,5 @@
-import { z } from "https://esm.sh/zod@3.23.8";
-import { errorResponse, jsonResponse, rateLimitCheck } from "../_shared/utils.ts";
+import { z } from "zod";
+import { errorResponse, jsonResponse, rateLimitCheck } from "../_shared/utils";
 
 export const payloadSchema = z.object({
   survey_type: z.enum(["general", "specific"]),
