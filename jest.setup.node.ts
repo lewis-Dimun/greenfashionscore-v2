@@ -1,4 +1,4 @@
-import { fetch, Request, Response, Headers, FormData, File } from 'undici';
+import { fetch, Request, Response, Headers, FormData } from 'undici';
 
 if (!(globalThis as any).fetch) Object.assign(globalThis, { fetch });
 if (!(globalThis as any).Request) Object.assign(globalThis, { Request });
