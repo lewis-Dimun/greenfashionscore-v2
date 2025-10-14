@@ -11,11 +11,14 @@ export default function Home() {
     <main>
       <Hero />
 
-      <section aria-label="¿Qué es el Green Fashion Score?">
-        <Card>People</Card>
-        <Card>Planet</Card>
-        <Card>Materials</Card>
-        <Card>Circularity</Card>
+      <section aria-label="¿Qué es el Green Fashion Score?" className="container mx-auto px-4 py-16">
+        <h2 className="text-3xl font-bold text-center mb-8">¿Qué es el Green Fashion Score?</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <Card>People</Card>
+          <Card>Planet</Card>
+          <Card>Materials</Card>
+          <Card>Circularity</Card>
+        </div>
       </section>
 
       <Steps />
@@ -26,9 +29,11 @@ export default function Home() {
 
       <Partners />
 
-      <section aria-label="Área de usuario">
-        <a href="/login">Iniciar sesión</a>
-        <a href="/survey">Ver resultados</a>
+      <section aria-label="Área de usuario" className="container mx-auto px-4 py-16 text-center bg-gray-50">
+        <div className="flex flex-wrap gap-4 justify-center">
+          <a href="/login" className="text-emerald-600 hover:text-emerald-700 font-semibold underline">Iniciar sesión</a>
+          <a href="/survey" className="text-emerald-600 hover:text-emerald-700 font-semibold underline">Ver resultados</a>
+        </div>
       </section>
 
       <Footer />

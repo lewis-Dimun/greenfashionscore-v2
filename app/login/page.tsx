@@ -15,32 +15,45 @@ export default function LoginPage() {
   }
 
   return (
-    <main>
-      <h1>Iniciar sesión</h1>
-      <form onSubmit={onSubmit} aria-label="Login">
-        <label>
-          Email
-          <input
-            name="email"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </label>
-        <label>
-          Contraseña
-          <input
-            name="password"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </label>
-        <button type="submit">Entrar</button>
-      </form>
-      {error && <p role="alert">{error}</p>}
+    <main className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-md w-full space-y-8">
+        <div>
+          <h1 className="text-3xl font-bold text-center text-gray-900">Iniciar sesión</h1>
+        </div>
+        <form onSubmit={onSubmit} aria-label="Login" className="mt-8 space-y-6">
+          <div className="space-y-4">
+            <label className="block">
+              <span className="text-sm font-medium text-gray-700">Email</span>
+              <input
+                name="email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-emerald-500 focus:outline-none focus:ring-emerald-500"
+              />
+            </label>
+            <label className="block">
+              <span className="text-sm font-medium text-gray-700">Contraseña</span>
+              <input
+                name="password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-emerald-500 focus:outline-none focus:ring-emerald-500"
+              />
+            </label>
+          </div>
+          <button 
+            type="submit"
+            className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500"
+          >
+            Entrar
+          </button>
+        </form>
+        {error && <p role="alert" className="mt-4 text-sm text-red-600 text-center">{error}</p>}
+      </div>
     </main>
   );
 }

@@ -3,20 +3,14 @@ import React from "react";
 type Props = React.ButtonHTMLAttributes<HTMLButtonElement> & { asLink?: { href: string } };
 
 export default function Button({ asLink, children, ...rest }: Props) {
+  const baseClasses = "inline-flex items-center justify-center rounded-md bg-emerald-600 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 transition-colors";
+  
   if (asLink) {
     return (
       <a
         href={asLink.href}
         role="link"
-        style={{
-          display: "inline-block",
-          padding: "8px 14px",
-          backgroundColor: "#00A676",
-          color: "#FFFFFF",
-          borderRadius: 8,
-          textDecoration: "none",
-          fontWeight: 600
-        }}
+        className={baseClasses}
       >
         {children}
       </a>
@@ -25,13 +19,7 @@ export default function Button({ asLink, children, ...rest }: Props) {
   return (
     <button
       {...rest}
-      style={{
-        padding: "8px 14px",
-        backgroundColor: "#00A676",
-        color: "#FFFFFF",
-        borderRadius: 8,
-        fontWeight: 600
-      }}
+      className={baseClasses}
     >
       {children}
     </button>
