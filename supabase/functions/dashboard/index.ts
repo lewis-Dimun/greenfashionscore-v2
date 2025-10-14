@@ -22,6 +22,7 @@ const deps = dashboardHandlerDeps({
   }
 });
 
-export default { fetch: dashboardHandler(deps) };
+const runtime = { fetch: dashboardHandler(deps) };
+export default runtime;
 
 

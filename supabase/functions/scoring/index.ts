@@ -42,7 +42,7 @@ const deps = scoringHandlerDeps({
   }
 });
 
-export default {
+const runtime = {
   fetch: async (req: Request) => {
     try {
       const handler = scoringHandler({ ...deps });
@@ -101,5 +101,7 @@ export default {
     }
   }
 };
+
+export default runtime;
 
 
