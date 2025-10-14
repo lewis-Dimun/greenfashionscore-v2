@@ -1,25 +1,58 @@
 "use client";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { supabase } from "../../lib/supabase";
+import AuthGuard from "../../components/AuthGuard";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
+    setLoading(true);
+    
     const { error: err } = await supabase.auth.signInWithPassword({ email, password });
-    if (err) setError(err.message);
+    
+    if (err) {
+      setError(err.message);
+    } else {
+      // Redirect to dashboard on successful login
+      router.push("/dashboard");
+    }
+    
+    setLoading(false);
   }
 
   return (
-    <main className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <AuthGuard requireAuth={false}>
+      <main className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
         <div>
+          <a href="/" className="text-sm text-emerald-600 hover:text-emerald-700 font-medium mb-4 inline-block">
+            ← Volver al inicio
+          </a>
           <h1 className="text-3xl font-bold text-center text-gray-900">Iniciar sesión</h1>
         </div>
+        {/* Demo Users */}
+        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+          <h3 className="text-sm font-medium text-blue-900 mb-2">Usuarios de prueba:</h3>
+          <div className="space-y-2 text-xs text-blue-800">
+            <div className="flex justify-between">
+              <span>test@example.com</span>
+              <span>password123</span>
+            </div>
+            <div className="flex justify-between">
+              <span>admin@example.com</span>
+              <span>admin123</span>
+            </div>
+          </div>
+        </div>
+
         <form onSubmit={onSubmit} aria-label="Login" className="mt-8 space-y-6">
           <div className="space-y-4">
             <label className="block">
@@ -47,14 +80,16 @@ export default function LoginPage() {
           </div>
           <button 
             type="submit"
-            className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500"
+            disabled={loading}
+            className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Entrar
+            {loading ? "Iniciando sesión..." : "Entrar"}
           </button>
         </form>
         {error && <p role="alert" className="mt-4 text-sm text-red-600 text-center">{error}</p>}
       </div>
     </main>
+    </AuthGuard>
   );
 }
 

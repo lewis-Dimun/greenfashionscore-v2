@@ -1,5 +1,6 @@
 "use client";
 import Badge from "../../components/Badge";
+import AuthGuard from "../../components/AuthGuard";
 import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 
 export default function DashboardPage() {
@@ -12,7 +13,8 @@ export default function DashboardPage() {
   ];
   const colors = ["#6AA67F", "#AAD4AC", "#F2D857", "#D99B84"];
   return (
-    <main className="min-h-screen bg-gray-50 py-8">
+    <AuthGuard>
+      <main className="min-h-screen bg-gray-50 py-8">
       <div className="container mx-auto px-4 max-w-6xl">
         <h1 className="text-3xl font-bold text-gray-900 mb-8">Resultados</h1>
         
@@ -64,6 +66,7 @@ export default function DashboardPage() {
         </section>
       </div>
     </main>
+    </AuthGuard>
   );
 }
 
