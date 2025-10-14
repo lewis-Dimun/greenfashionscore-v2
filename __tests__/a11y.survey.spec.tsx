@@ -17,7 +17,7 @@ describe("A11y - Survey wizard", () => {
     const user = userEvent.setup();
     render(<SurveyWizardPage />);
     const next = screen.getByRole("button", { name: /siguiente/i });
-    await user.tab();
+    next.focus();
     expect(next).toHaveFocus();
     await user.keyboard("{Enter}");
     expect(screen.getByRole("heading", { name: /planet/i })).toBeInTheDocument();

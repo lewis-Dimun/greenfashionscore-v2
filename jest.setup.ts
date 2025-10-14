@@ -28,4 +28,18 @@ class ResizeObserver {
 // @ts-ignore
 global.ResizeObserver = (global as any).ResizeObserver || ResizeObserver;
 
+// Ensure Fetch API globals exist (Node 20 via undici)
+try {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  const { fetch, Headers, Request, Response } = require('undici');
+  // @ts-ignore
+  if (!(global as any).fetch) (global as any).fetch = fetch;
+  // @ts-ignore
+  if (!(global as any).Headers) (global as any).Headers = Headers;
+  // @ts-ignore
+  if (!(global as any).Request) (global as any).Request = Request;
+  // @ts-ignore
+  if (!(global as any).Response) (global as any).Response = Response;
+} catch {}
+
 

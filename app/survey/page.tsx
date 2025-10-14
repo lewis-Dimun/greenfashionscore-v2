@@ -42,7 +42,7 @@ export default function SurveyWizardPage() {
 
   return (
     <main aria-label="Encuesta Green Fashion Score">
-      <div role="progressbar" aria-valuemin={1} aria-valuemax={STEPS.length} aria-valuenow={stepIndex + 1}>
+      <div role="progressbar" aria-label="Progreso" aria-valuemin={1} aria-valuemax={STEPS.length} aria-valuenow={stepIndex + 1}>
         Paso {stepIndex + 1} de {STEPS.length}
       </div>
       <section aria-label={`Sección ${current.title}`}>

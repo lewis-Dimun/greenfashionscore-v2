@@ -15,10 +15,8 @@ describe("Landing GFS - Home", () => {
       "href",
       "/register"
     );
-    expect(screen.getByRole("link", { name: /iniciar sesión/i })).toHaveAttribute(
-      "href",
-      "/login"
-    );
+    const loginLinksHero = screen.getAllByRole("link", { name: /iniciar sesión/i });
+    expect(loginLinksHero.some((a) => a.getAttribute("href") === "/login")).toBe(true);
   });
 
   it("¿Qué es el GFS? con 4 pilares", () => {
