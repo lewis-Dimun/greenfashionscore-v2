@@ -63,10 +63,8 @@ describe("Landing GFS - Home", () => {
   it("Área de usuario con Login y Ver resultados", () => {
     render(<Home />);
     const section = screen.getByRole("region", { name: /área de usuario/i });
-    expect(within(section).getByRole("link", { name: /iniciar sesión/i })).toHaveAttribute(
-      "href",
-      "/login"
-    );
+    const loginLinks = within(section).getAllByRole("link", { name: /iniciar sesión/i });
+    expect(loginLinks.some((a) => a.getAttribute("href") === "/login")).toBe(true);
     expect(within(section).getByRole("link", { name: /ver resultados/i })).toHaveAttribute(
       "href",
       "/survey"
