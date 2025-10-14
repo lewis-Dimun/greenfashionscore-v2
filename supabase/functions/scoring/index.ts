@@ -1,4 +1,4 @@
-import { scoringHandler, scoringHandlerDeps } from "./handler.ts";
+import { scoringHandler, scoringHandlerDeps } from "./handler.deno.ts";
 import { computeTotalScore, gradeFromTotal, computeCategoryPercent } from "../_shared/engine.ts";
 import { mapAnswersToPoints } from "../_shared/mapping.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
@@ -8,7 +8,7 @@ const deps = scoringHandlerDeps({
   getSurveyMeta: async () => ({ version: "v1" }),
   insertSubmissionTx: async (payload: any) => {
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
-    const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+    const serviceKey = Deno.env.get("SERVICE_ROLE_KEY") || Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     const supabase = createClient(supabaseUrl, serviceKey);
     const { data: subm, error: errSub } = await supabase
       .from("survey_submissions")
@@ -48,7 +48,7 @@ export default {
       const handler = scoringHandler({ ...deps });
       const res = await handler(req);
       const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
-      const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+      const serviceKey = Deno.env.get("SERVICE_ROLE_KEY") || Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
       const supabase = createClient(supabaseUrl, serviceKey);
       try {
         const body = await (res as any).json();

@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { scoringEndpointPath } from "../../lib/config";
+import { scoringEndpointPath, FUNCTIONS_HEADERS } from "../../lib/config";
 import { useSurveyStore } from "../../lib/state/surveyStore";
 import { isSurveyValid } from "../../lib/validation/survey";
 
@@ -75,7 +75,7 @@ export default function SurveyWizardPage() {
               try {
                 const res = await fetch(scoringEndpointPath(), {
                   method: "POST",
-                  headers: { "content-type": "application/json" },
+                  headers: FUNCTIONS_HEADERS,
                   body: JSON.stringify({
                     survey_type: "general",
                     survey_version: "v1",

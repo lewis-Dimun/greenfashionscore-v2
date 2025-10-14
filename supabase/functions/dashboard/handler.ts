@@ -1,4 +1,4 @@
-import { jsonResponse } from "../_shared/utils";
+import { jsonResponse } from "../_shared/utils.ts";
 export type DashboardDeps = ReturnType<typeof dashboardHandlerDeps>;
 
 export function dashboardHandlerDeps(factory: {

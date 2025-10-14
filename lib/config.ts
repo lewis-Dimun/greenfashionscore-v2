@@ -7,4 +7,13 @@ export function scoringEndpointPath(): string {
   return "/functions/v1/scoring";
 }
 
+export const FUNCTIONS_HEADERS = (() => {
+  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "";
+  return {
+    "content-type": "application/json",
+    apikey: key,
+    Authorization: `Bearer ${key}`
+  } as Record<string, string>;
+})();
+
 
