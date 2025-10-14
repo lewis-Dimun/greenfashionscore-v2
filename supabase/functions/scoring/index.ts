@@ -1,38 +1,34 @@
-import { scoringHandler, scoringHandlerDeps } from "./handler";
-import { withClient } from "../../../lib/db";
-import { computeTotalScore, gradeFromTotal, computeCategoryPercent } from "../../../lib/scoring/engine";
-import { mapAnswersToPoints } from "../../../lib/scoring/mapping";
+import { scoringHandler, scoringHandlerDeps } from "./handler.ts";
+import { computeTotalScore, gradeFromTotal, computeCategoryPercent } from "../_shared/engine.ts";
+import { mapAnswersToPoints } from "../_shared/mapping.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { errorResponse } from "../_shared/utils.ts";
 
 const deps = scoringHandlerDeps({
   getSurveyMeta: async () => ({ version: "v1" }),
   insertSubmissionTx: async (payload: any) => {
-    const id = await withClient(async (c) => {
-      await c.query("BEGIN");
-      try {
-        const subm = await c.query(
-          `INSERT INTO survey_submissions (user_id, survey_id, brand_id)
-           VALUES ($1,$2,$3) RETURNING id`,
-          [null, payload.survey_id || '00000000-0000-0000-0000-000000000000', payload.brand_id || null]
-        );
-        const submissionId = subm.rows[0].id as string;
-        // Persist responses (normalized_value placeholder for now)
-        const points = mapAnswersToPoints(payload.answers || []);
-        for (const ans of payload.answers || []) {
-          const norm = Number(points[ans.question_code] ?? 0);
-          await c.query(
-            `INSERT INTO responses (submission_id, question_code, raw_value, normalized_value)
-             VALUES ($1, $2, $3, $4)`,
-            [submissionId, ans.question_code, JSON.stringify({ answer_code: ans.answer_code }), norm]
-          );
-        }
-        await c.query("COMMIT");
-        return submissionId;
-      } catch (e) {
-        await c.query("ROLLBACK");
-        throw e;
-      }
-    });
-    return { submissionId: id };
+    const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
+    const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+    const supabase = createClient(supabaseUrl, serviceKey);
+    const { data: subm, error: errSub } = await supabase
+      .from("survey_submissions")
+      .insert({ user_id: null, survey_id: payload.survey_id, brand_id: payload.brand_id })
+      .select("id")
+      .single();
+    if (errSub) throw errSub;
+    const submissionId = subm.id as string;
+    const points = mapAnswersToPoints(payload.answers || []);
+    const rows = (payload.answers || []).map((ans: any) => ({
+      submission_id: submissionId,
+      question_code: ans.question_code,
+      raw_value: { answer_code: ans.answer_code },
+      normalized_value: Number(points[ans.question_code] ?? 0)
+    }));
+    if (rows.length) {
+      const { error: errRes } = await supabase.from("responses").insert(rows);
+      if (errRes) throw errRes;
+    }
+    return { submissionId };
   },
   computeScoreSnapshot: (_payload: any) => {
     // Placeholder snapshot (expects real per-dimension sums later)
@@ -48,71 +44,61 @@ const deps = scoringHandlerDeps({
 
 export default {
   fetch: async (req: Request) => {
-    const handler = scoringHandler({
-      ...deps,
-      insertSubmissionTx: deps.insertSubmissionTx
-    });
-    // call handler first to validate and compute snapshot
-    const res = await handler(req);
     try {
-      const body = await (res as any).json();
-      if (res.status === 200 && body?.submission_id && body?.scores) {
-        const submissionId = body.submission_id as string;
-        // Recompute snapshot from stored responses
-        const perDimension = await withClient(async (c) => {
-          const r = await c.query(
-            `SELECT question_code, coalesce(normalized_value,0) AS v
-             FROM responses WHERE submission_id = $1`,
-            [submissionId]
-          );
-          const sums = { people: 0, planet: 0, circularity: 0, materials: 0 } as Record<string, number>;
-          for (const row of r.rows) {
-            const q: string = row.question_code || "";
-            const v = Number(row.v) || 0;
+      const handler = scoringHandler({ ...deps });
+      const res = await handler(req);
+      const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
+      const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+      const supabase = createClient(supabaseUrl, serviceKey);
+      try {
+        const body = await (res as any).json();
+        if (res.status === 200 && body?.submission_id) {
+          const submissionId = body.submission_id as string;
+          const { data: resp } = await supabase
+            .from("responses")
+            .select("question_code, normalized_value")
+            .eq("submission_id", submissionId);
+          const sums: Record<string, number> = { people: 0, planet: 0, circularity: 0, materials: 0 };
+          for (const r of resp || []) {
+            const q = r.question_code as string;
+            const v = Number(r.normalized_value || 0);
             if (q.startsWith("PEO")) sums.people += v;
             else if (q.startsWith("PLA")) sums.planet += v;
             else if (q.startsWith("CIR")) sums.circularity += v;
             else if (q.startsWith("MAT")) sums.materials += v;
           }
-          return sums as { people: number; planet: number; circularity: number; materials: number };
-        });
-        const cat = [
-          computeCategoryPercent(perDimension.people, 50, 20),
-          computeCategoryPercent(perDimension.planet, 50, 20),
-          computeCategoryPercent(perDimension.circularity, 50, 20),
-          computeCategoryPercent(perDimension.materials, 65, 40)
-        ];
-        const total = computeTotalScore(cat);
-        // Try thresholds from DB; fallback to default gradeFromTotal
-        const grade = await withClient(async (c) => {
-          try {
-            const q = await c.query(`SELECT thresholds FROM grading_thresholds ORDER BY version DESC LIMIT 1`);
-            if (q.rows.length) {
-              const t = q.rows[0].thresholds as any;
-              const decide = (x: number): string => {
-                if (x >= t.A[0] && x <= t.A[1]) return "A";
-                if (x >= t.B[0] && x <= t.B[1]) return "B";
-                if (x >= t.C[0] && x <= t.C[1]) return "C";
-                if (x >= t.D[0] && x <= t.D[1]) return "D";
-                return "E";
-              };
-              return decide(total);
-            }
-          } catch {}
-          return gradeFromTotal(total);
-        });
-        await withClient(async (c) => {
-          await c.query(
-            `INSERT INTO scores (submission_id, total, per_dimension, grade)
-             VALUES ($1, $2, $3, $4)`,
-            [submissionId, total, perDimension as any, grade]
-          );
-        });
+          const cat = [
+            computeCategoryPercent(sums.people, 50, 20),
+            computeCategoryPercent(sums.planet, 50, 20),
+            computeCategoryPercent(sums.circularity, 50, 20),
+            computeCategoryPercent(sums.materials, 65, 40)
+          ];
+          const total = computeTotalScore(cat);
+          // thresholds
+          const { data: thr } = await supabase
+            .from("grading_thresholds")
+            .select("thresholds")
+            .order("version", { ascending: false })
+            .limit(1)
+            .single();
+          const t = (thr?.thresholds as any) || { A: [75, 100], B: [50, 74], C: [25, 49], D: [1, 24], E: [0, 0] };
+          const decide = (x: number): string => {
+            if (x >= t.A[0] && x <= t.A[1]) return "A";
+            if (x >= t.B[0] && x <= t.B[1]) return "B";
+            if (x >= t.C[0] && x <= t.C[1]) return "C";
+            if (x >= t.D[0] && x <= t.D[1]) return "D";
+            return "E";
+          };
+          const grade = decide(total);
+          await supabase.from("scores").insert({ submission_id: submissionId, total, per_dimension: sums, grade });
+        }
+      } catch {
+        // ignore
       }
-    } catch {
-      // ignore JSON parse errors (e.g., error responses)
+      return res;
+    } catch (e) {
+      return errorResponse(500, "Internal Server Error", String(e));
     }
-    return res;
   }
 };
 
