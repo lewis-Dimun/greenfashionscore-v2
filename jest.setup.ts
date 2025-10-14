@@ -1,16 +1,9 @@
 import '@testing-library/jest-dom';
-// jest-axe types can be tricky with ESM; import via require fallback
-// eslint-disable-next-line
-const { toHaveNoViolations } = require('jest-axe');
-expect.extend({ toHaveNoViolations: toHaveNoViolations });
+import 'jest-axe/extend-expect';
 
-jest.mock('next/image', () => {
-  return {
-    __esModule: true,
-    default: function NextImage(props: any) {
-      return require('react').createElement('img', props);
-    }
-  };
-});
+jest.mock('next/image', () => ({
+  __esModule: true,
+  default: (props: any) => require('react').createElement('img', props)
+}));
 
 
