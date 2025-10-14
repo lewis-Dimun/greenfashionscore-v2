@@ -34,7 +34,6 @@ module.exports = async () => {
     displayName: 'ui',
     testMatch: [
       '<rootDir>/**/?(*.)+(spec|test).tsx',
-      '<rootDir>/**/?(*.)+(spec|test).ts',
       '!<rootDir>/__tests__/api.*.spec.ts',
     ],
     testEnvironment: 'jest-environment-jsdom',
