@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom';
 // jest-axe types can be tricky with ESM; import via require fallback
-// eslint-disable-next-line @typescript-eslint/no-var-requires
+// eslint-disable-next-line
 const { toHaveNoViolations } = require('jest-axe');
 expect.extend({ toHaveNoViolations: toHaveNoViolations });
 
