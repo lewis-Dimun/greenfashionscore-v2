@@ -48,7 +48,10 @@ module.exports = async () => {
     ],
     testEnvironment: 'jest-environment-jsdom',
     setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
-    moduleNameMapper: base.moduleNameMapper,
+    moduleNameMapper: {
+      ...base.moduleNameMapper,
+      '^../..?/components/AuthGuard$': '<rootDir>/__mocks__/components/AuthGuard.tsx',
+    },
     testPathIgnorePatterns: base.testPathIgnorePatterns,
   })();
 

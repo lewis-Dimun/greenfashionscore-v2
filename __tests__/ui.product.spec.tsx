@@ -1,4 +1,4 @@
-import { describe, it, expect } from '@jest/globals';
+import { describe, it, expect, beforeEach, afterEach } from '@jest/globals';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import ProductWizardPage from '../app/product/new/page';
 
@@ -41,7 +41,20 @@ jest.mock('../lib/config', () => ({
   FUNCTIONS_HEADERS: { 'Content-Type': 'application/json' }
 }));
 
+// Mock fetch for API calls
+const mockApiResponse = {
+  ok: true,
+  json: async () => ({ hasGeneralSurvey: true })
+};
+
 describe('Product Wizard', () => {
+  beforeEach(() => {
+    global.fetch = jest.fn(() => Promise.resolve(mockApiResponse as any));
+  });
+
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
   it('should render product selector initially', () => {
     render(<ProductWizardPage />);
     

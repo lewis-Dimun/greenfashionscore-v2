@@ -70,4 +70,17 @@ try {
   if (!(global as any).Response) (global as any).Response = Response;
 } catch {}
 
+// Default fetch mock for tests that don't override it
+if (!global.fetch) {
+  global.fetch = jest.fn(() =>
+    Promise.resolve({
+      ok: true,
+      json: async () => ({}),
+      text: async () => '',
+      status: 200,
+      statusText: 'OK',
+    } as Response)
+  );
+}
+
 
