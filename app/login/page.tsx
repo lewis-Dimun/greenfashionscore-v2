@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { supabase } from "../../lib/supabase";
 import AuthGuard from "../../components/AuthGuard";
 
@@ -33,9 +34,9 @@ export default function LoginPage() {
       <main className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
         <div>
-          <a href="/" className="text-sm text-emerald-600 hover:text-emerald-700 font-medium mb-4 inline-block">
-            ← Volver al inicio
-          </a>
+                <Link href="/" className="text-sm text-emerald-600 hover:text-emerald-700 font-medium mb-4 inline-block">
+                  ← Volver al inicio
+                </Link>
           <h1 className="text-3xl font-bold text-center text-gray-900">Iniciar sesión</h1>
         </div>
         {/* Demo Users */}

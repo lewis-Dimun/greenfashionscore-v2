@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { supabase } from "../lib/supabase";
 import Button from "./Button";
 
@@ -35,9 +36,9 @@ export default function Header() {
         <nav className="flex items-center justify-between h-16">
           {/* Logo */}
           <div className="flex items-center">
-            <a href="/" className="text-xl font-bold text-emerald-600">
+            <Link href="/" className="text-xl font-bold text-emerald-600">
               Green Fashion Score
-            </a>
+            </Link>
           </div>
 
           {/* Navigation */}
@@ -50,18 +51,18 @@ export default function Header() {
                 <span className="text-sm text-gray-600">
                   {user.email}
                 </span>
-                <a 
-                  href="/survey" 
-                  className="text-sm text-emerald-600 hover:text-emerald-700 font-medium"
-                >
-                  Encuesta
-                </a>
-                <a 
-                  href="/dashboard" 
-                  className="text-sm text-emerald-600 hover:text-emerald-700 font-medium"
-                >
-                  Dashboard
-                </a>
+                  <Link
+                    href="/survey"
+                    className="text-sm text-emerald-600 hover:text-emerald-700 font-medium"
+                  >
+                    Encuesta
+                  </Link>
+                  <Link
+                    href="/dashboard"
+                    className="text-sm text-emerald-600 hover:text-emerald-700 font-medium"
+                  >
+                    Dashboard
+                  </Link>
                 <button
                   onClick={handleSignOut}
                   className="text-sm text-gray-600 hover:text-gray-900 font-medium"
@@ -72,12 +73,12 @@ export default function Header() {
             ) : (
               // Guest menu
               <div className="flex items-center space-x-4">
-                <a 
+                <Link 
                   href="/login" 
                   className="text-sm text-gray-600 hover:text-gray-900 font-medium"
                 >
                   Iniciar sesión
-                </a>
+                </Link>
                 <Button asLink={{ href: "/register" }}>
                   Registrarse
                 </Button>
