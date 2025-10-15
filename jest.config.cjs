@@ -50,7 +50,10 @@ module.exports = async () => {
     setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
     moduleNameMapper: {
       ...base.moduleNameMapper,
-      '^../..?/components/AuthGuard$': '<rootDir>/__mocks__/components/AuthGuard.tsx',
+      '^@/components/AuthGuard$': '<rootDir>/__mocks__/components/AuthGuard.tsx',
+      '^../components/AuthGuard$': '<rootDir>/__mocks__/components/AuthGuard.tsx',
+      '^../../components/AuthGuard$': '<rootDir>/__mocks__/components/AuthGuard.tsx',
+      '^../../../components/AuthGuard$': '<rootDir>/__mocks__/components/AuthGuard.tsx',
     },
     testPathIgnorePatterns: base.testPathIgnorePatterns,
   })();

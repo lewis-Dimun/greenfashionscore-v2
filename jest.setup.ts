@@ -47,6 +47,19 @@ jest.mock('@supabase/supabase-js', () => ({
 
 // Supabase auth helpers are mocked in __mocks__/@supabase/auth-helpers-nextjs.ts
 
+// Mock AuthGuard globally to avoid auth state side-effects
+// This will catch all imports of AuthGuard regardless of the path
+const mockAuthGuard = () => {
+  return function MockAuthGuard({ children }: { children: any }) {
+    return children;
+  };
+};
+
+jest.mock('../components/AuthGuard', mockAuthGuard);
+jest.mock('@/components/AuthGuard', mockAuthGuard);
+jest.mock('../../components/AuthGuard', mockAuthGuard);
+jest.mock('../../../components/AuthGuard', mockAuthGuard);
+
 // Polyfill ResizeObserver for Recharts
 class ResizeObserver {
   observe() {}
