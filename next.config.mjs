@@ -12,14 +12,8 @@ const nextConfig = {
   },
   // Enable compression
   compress: true,
-  // Silence workspace root warning
-  outputFileTracingRoot: process.cwd(),
-  // Disable typed routes to prevent Windows filesystem errors
-  experimental: {
-    typedRoutes: false,
-  },
-  // Additional Windows workarounds
-  outputFileTracing: false,
+  // Enable typed routes (moved from experimental)
+  typedRoutes: true,
 };
 
 export default withBundleAnalyzer(nextConfig);

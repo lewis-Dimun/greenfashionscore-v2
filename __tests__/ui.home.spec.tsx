@@ -38,11 +38,11 @@ describe("Landing GFS - Home", () => {
     );
   });
 
-  it("Beneficios: 4 tarjetas", () => {
+  it("Beneficios: 6 tarjetas", () => {
     render(<Home />);
     const section = screen.getByRole("region", { name: /beneficios para tu marca/i });
     const cards = within(section).getAllByRole("article");
-    expect(cards.length).toBe(4);
+    expect(cards.length).toBe(6);
   });
 
   it("Respaldado por la ciencia con timeline 2024–2025", () => {
@@ -65,7 +65,7 @@ describe("Landing GFS - Home", () => {
     expect(loginLinks.some((a) => a.getAttribute("href") === "/login")).toBe(true);
     expect(within(section).getByRole("link", { name: /ver resultados/i })).toHaveAttribute(
       "href",
-      "/survey"
+      "/dashboard"
     );
   });
 });

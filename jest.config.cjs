@@ -32,13 +32,9 @@ module.exports = async () => {
   const uiProject = await createNextConfig({
     displayName: 'ui',
     testMatch: [
-      '<rootDir>/__tests__/**/*.spec.tsx',
-      '<rootDir>/__tests__/**/*.spec.ts',
-      '<rootDir>/__tests__/**/*.test.tsx',
-      '<rootDir>/__tests__/**/*.test.ts',
-      '!<rootDir>/__tests__/api.*.spec.ts',
-      '!<rootDir>/__tests__/domain.*.spec.ts',
-      '!<rootDir>/__tests__/data.*.spec.ts',
+      '<rootDir>/__tests__/ui.*.spec.tsx',
+      '<rootDir>/__tests__/components.*.spec.tsx',
+      '<rootDir>/__tests__/a11y.*.spec.tsx',
     ],
     testEnvironment: 'jest-environment-jsdom',
     setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],

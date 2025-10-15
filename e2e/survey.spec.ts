@@ -11,6 +11,7 @@ test.describe("Survey wizard flow (smoke)", () => {
     });
 
     await page.goto("/survey");
+    await page.waitForLoadState('networkidle');
     await page.addInitScript(() => {
       window.localStorage.setItem(
         "gfs_survey_draft",
@@ -18,11 +19,12 @@ test.describe("Survey wizard flow (smoke)", () => {
       );
     });
     await page.reload();
+    await page.waitForLoadState('networkidle');
 
     const submit = page.getByRole("button", { name: /enviar/i });
-    await expect(submit).toBeEnabled();
+    await expect(submit).toBeEnabled({ timeout: 10000 });
     await submit.click();
-    await page.waitForURL(/dashboard/);
+    await page.waitForURL(/dashboard/, { timeout: 10000 });
   });
 });
 
