@@ -1,11 +1,11 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { scoringEndpointPath, FUNCTIONS_HEADERS } from "../../lib/config";
+import { getAuthHeaders } from "../../lib/auth/client";
 import { useSurveyStore } from "../../lib/state/surveyStore";
 import { isSurveyValid } from "../../lib/validation/survey";
 import AuthGuard from "../../components/AuthGuard";
-import { getQuestionsByDimension, type SurveyQuestion } from "../../lib/survey/questions";
+import { getFallbackQuestions } from "../../lib/survey/fallback";
 
 const STEPS = [
   { key: "people", title: "People", description: "Condiciones laborales y bienestar" },
@@ -19,29 +19,85 @@ export default function SurveyWizardPage() {
   const [stepIndex, setStepIndex] = useState(draft.stepIndex);
   const nextButtonRef = useRef<HTMLButtonElement | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const [questions, setQuestions] = useState<Record<string, any[]>>({});
+  const [loading, setLoading] = useState(true);
   const router = useRouter();
+
+  // Load questions from database or fallback
+  useEffect(() => {
+    async function loadQuestions() {
+      try {
+        const res = await fetch('/api/questions/general', {
+          headers: await getAuthHeaders()
+        });
+        if (!res.ok) throw new Error('Failed to load general questions');
+        const payload = await res.json();
+
+        // Normalizar: la API devuelve objeto agrupado por dimensión.
+        // Aseguramos claves en minúscula esperadas por el wizard.
+        const normalized: Record<string, any[]> = { people: [], planet: [], materials: [], circularity: [] };
+
+        if (payload && typeof payload === 'object' && !Array.isArray(payload)) {
+          Object.entries(payload).forEach(([key, list]: [string, any]) => {
+            const k = key.toLowerCase().trim();
+            if (Array.isArray(list)) {
+              // Aceptar preguntas con >=1 respuesta; si no hay respuestas, añadir placeholder 0 pts
+              const cleaned = list.map((q: any) => {
+                const answers = Array.isArray(q.answers) ? q.answers : [];
+                return {
+                  ...q,
+                  answers: answers.length > 0 ? answers : [{ id: `${q.id}_none`, text: 'Sin respuesta', points: 0 }]
+                };
+              });
+              if (k in normalized) normalized[k as keyof typeof normalized] = cleaned;
+            }
+          });
+        } else if (Array.isArray(payload)) {
+          // Si viniese plano, lo agrupamos por dimension.name
+          const grouped: Record<string, any[]> = { people: [], planet: [], materials: [], circularity: [] };
+          payload.forEach((q: any) => {
+            const k = (q?.dimension?.name || '').toLowerCase().trim();
+            if (k in grouped) grouped[k as keyof typeof grouped].push(q);
+          });
+          normalized.people = grouped.people;
+          normalized.planet = grouped.planet;
+          normalized.materials = grouped.materials;
+          normalized.circularity = grouped.circularity;
+        }
+
+        setQuestions(normalized);
+      } catch (error) {
+        console.warn('Failed to load questions from DB, using fallback:', error);
+        const fallbackQuestions = getFallbackQuestions();
+        setQuestions(fallbackQuestions);
+      } finally {
+        setLoading(false);
+      }
+    }
+    
+    loadQuestions();
+  }, []);
 
   useEffect(() => {
     nextButtonRef.current?.focus();
   }, [stepIndex]);
 
+  // Persist step index changes to the store outside of render
+  useEffect(() => {
+    if (draft.stepIndex !== stepIndex) {
+      draft.setStepIndex(stepIndex);
+    }
+  }, [stepIndex]);
+
   function goNext() {
-    setStepIndex((i) => {
-      const ni = Math.min(i + 1, STEPS.length - 1);
-      draft.setStepIndex(ni);
-      return ni;
-    });
+    setStepIndex((i) => Math.min(i + 1, STEPS.length - 1));
   }
   function goPrev() {
-    setStepIndex((i) => {
-      const ni = Math.max(i - 1, 0);
-      draft.setStepIndex(ni);
-      return ni;
-    });
+    setStepIndex((i) => Math.max(i - 1, 0));
   }
 
   const current = STEPS[stepIndex];
-  const questions = getQuestionsByDimension(current.key);
+  const currentQuestions = questions[current.key] || [];
 
   return (
     <AuthGuard>
@@ -66,39 +122,44 @@ export default function SurveyWizardPage() {
             <p className="text-lg text-gray-600">{current.description}</p>
           </div>
           
-          <div className="space-y-8">
-            {questions.map((question, qIndex) => (
-              <div key={question.id} className="border-b border-gray-100 pb-6 last:border-b-0">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                  {qIndex + 1}. {question.question}
-                </h3>
-                <div className="space-y-3">
-                  {question.options.map((option) => (
-                    <label key={option.value} className="flex items-start space-x-3 cursor-pointer group">
-                      <input
-                        type="radio"
-                        name={question.id}
-                        value={option.value}
-                        className="mt-1 h-4 w-4 text-emerald-600 border-gray-300 focus:ring-emerald-500"
-                        onChange={(e) => {
-                          draft.setAnswer(question.id, e.target.value);
-                        }}
-                        checked={draft.answers[question.id] === option.value}
-                      />
-                      <div className="flex-1">
-                        <span className="text-gray-900 group-hover:text-emerald-700 transition-colors">
-                          {option.label}
-                        </span>
-                        <div className="text-sm text-gray-500 mt-1">
-                          {option.points} puntos
+                {loading ? (
+                  <div className="text-center py-8">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-600 mx-auto"></div>
+                    <p className="mt-2 text-gray-600">Cargando preguntas...</p>
+                  </div>
+                ) : (
+                  <div className="space-y-8">
+                    {currentQuestions.map((question, qIndex) => (
+                      <div key={question.id} className="border-b border-gray-100 pb-6 last:border-b-0">
+                        <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                          {qIndex + 1}. {question.text}
+                        </h3>
+                        <div className="space-y-3">
+                          {(question.answers || []).map((answer: any) => (
+                            <label key={answer.id} className="flex items-start space-x-3 cursor-pointer group">
+                              <input
+                                type="radio"
+                                name={String(question.id)}
+                                value={String(answer.id)}
+                                className="mt-1 h-4 w-4 text-emerald-600 border-gray-300 focus:ring-emerald-500"
+                                onChange={(e) => {
+                                  draft.setAnswer(String(question.id), String(e.target.value));
+                                }}
+                                checked={draft.answers[String(question.id)] === String(answer.id)}
+                              />
+                              <div className="flex-1">
+                                <span className="text-gray-900 group-hover:text-emerald-700 transition-colors">
+                                  {answer.text}
+                                </span>
+                                {/* Ocultamos puntos en la UI por requisitos de UX */}
+                              </div>
+                            </label>
+                          ))}
                         </div>
                       </div>
-                    </label>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
+                    ))}
+                  </div>
+                )}
         </section>
         
         <nav aria-label="Controles del wizard" className="flex gap-4 justify-between">
@@ -125,28 +186,67 @@ export default function SurveyWizardPage() {
             >
               {stepIndex === STEPS.length - 1 ? "Finalizar" : "Siguiente"}
             </button>
+            {/* Guardar borrador disponible en cualquier paso */}
+            <button
+              aria-label="Guardar borrador"
+              disabled={submitting}
+              onClick={async () => {
+                setSubmitting(true);
+                try {
+                  const answers = Object.entries(draft.answers).map(([questionId, answerId]) => {
+                    const question = Object.values(questions).flat().find((q: any) => String(q.id) === String(questionId));
+                    const answer = question?.answers?.find((a: any) => String(a.id) === String(answerId));
+                    return {
+                      questionId,
+                      answerId,
+                      numericValue: answer?.numeric_value ?? answer?.points ?? 0
+                    };
+                  });
+                  await fetch('/api/surveys/general', {
+                    method: 'PUT',
+                    headers: await getAuthHeaders(),
+                    body: JSON.stringify({ completed: false, answers })
+                  });
+                } finally {
+                  setSubmitting(false);
+                }
+              }}
+              className="px-6 py-2 border border-emerald-600 text-emerald-700 rounded-md font-medium hover:bg-emerald-50 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
+            >
+              Guardar borrador
+            </button>
             {stepIndex === STEPS.length - 1 && (
               <button
                 aria-label="Enviar encuesta"
                 disabled={submitting || !isSurveyValid(draft.answers)}
-                onClick={async () => {
-                  setSubmitting(true);
-                  try {
-                    const res = await fetch(scoringEndpointPath(), {
-                      method: "POST",
-                      headers: FUNCTIONS_HEADERS,
-                      body: JSON.stringify({
-                        survey_type: "general",
-                        survey_version: "v1",
-                        brand_id: null,
-                        answers: Object.entries(draft.answers).map(([question_code, answer_code]) => ({ question_code, answer_code }))
-                      })
-                    });
-                    if (res.ok) router.push("/dashboard");
-                  } finally {
-                    setSubmitting(false);
-                  }
-                }}
+                      onClick={async () => {
+                        setSubmitting(true);
+                        try {
+                          // Convert answers to new format
+                          const answers = Object.entries(draft.answers).map(([questionId, answerId]) => {
+                            // Find the numeric value for this answer
+                            const question = Object.values(questions).flat().find((q: any) => String(q.id) === String(questionId));
+                            const answer = question?.answers?.find((a: any) => String(a.id) === String(answerId));
+                            return {
+                              questionId,
+                              answerId,
+                              numericValue: answer?.numeric_value ?? answer?.points ?? 0
+                            };
+                          });
+
+                          const res = await fetch('/api/scoring', {
+                            method: "POST",
+                            headers: await getAuthHeaders(),
+                            body: JSON.stringify({
+                              scope: "general",
+                              answers
+                            })
+                          });
+                          if (res.ok) router.push("/dashboard");
+                        } finally {
+                          setSubmitting(false);
+                        }
+                      }}
                 className="px-6 py-2 bg-emerald-700 text-white rounded-md font-medium hover:bg-emerald-800 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
               >
                 {submitting ? "Enviando..." : "Enviar"}

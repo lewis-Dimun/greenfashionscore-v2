@@ -2,6 +2,9 @@
   "name": "greenfashionscore-v2",
   "private": true,
   "version": "0.1.0",
+  "engines": {
+    "node": ">=20.10.0"
+  },
   "type": "module",
   "scripts": {
     "dev": "next dev",
@@ -10,9 +13,21 @@
     "lint": "eslint .",
     "test": "jest --passWithNoTests --config jest.config.cjs",
     "test:e2e": "playwright test",
+    "analyze": "ANALYZE=true npm run build",
+    "lighthouse": "lighthouse http://localhost:3000 --view",
     "db:generate": "drizzle-kit generate --config=drizzle.config.ts",
     "db:migrate": "drizzle-kit migrate --config=drizzle.config.ts",
-    "seed:excel": "ts-node lib/excel/ingest.ts ./data/Encuestas.xlsx"
+    "db:reset": "node scripts/apply-schema-reset.js",
+    "db:unified": "node scripts/apply-unified-schema.js",
+    "db:repair": "tsx scripts/repairImport.ts",
+    "db:clean": "node scripts/clean-and-import.js",
+    "db:validate": "tsx scripts/validate-data.ts",
+    "db:seed": "node scripts/seed-excel.js Encuestas.xlsx",
+    "seed:excel": "node scripts/seed-excel.js",
+    "test:data": "jest __tests__/data-integrity.test.ts",
+    "test:guard": "jest __tests__/guard-functionality.test.ts",
+    "test:scoring": "jest __tests__/scoring.test.ts",
+    "test:all": "jest __tests__/"
   },
   "dependencies": {
     "@supabase/ssr": "^0.7.0",
@@ -25,6 +40,7 @@
   },
   "devDependencies": {
     "@axe-core/react": "4.8.4",
+    "@next/bundle-analyzer": "^15.5.5",
     "@playwright/test": "^1.56.0",
     "@testing-library/jest-dom": "6.6.3",
     "@testing-library/react": "16.0.1",

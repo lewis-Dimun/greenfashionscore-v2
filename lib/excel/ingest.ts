@@ -1,128 +1,168 @@
 /*
-  Excel ingest scaffolding (idempotent, versioned upserts by code+version)
-  Note: Implementation will be completed after DB connection utilities are added.
+  Excel ingest para Green Fashion Score
+  Lee Encuestas.xlsx y mapea a la nueva estructura de DB
 */
 
-export type DimensionRow = {
-  code: string;
-  name: string;
-  order: number;
-  max_points: number;
-  weight_percent: number;
-  version: string;
-};
-
-export type GradingThresholdsRow = {
-  version: string;
-  thresholds: { A: [number, number]; B: [number, number]; C: [number, number]; D: [number, number]; E: [number, number] };
-};
-
-export type GlobalWeightsRow = {
-  version: string;
-  global_distribution: { general: number; specifics: number };
-};
-
-import { withClient } from "../db";
+import { withClient } from "../db.js";
 import * as XLSX from "xlsx";
 
-export async function upsertDimensions(rows: DimensionRow[]): Promise<void> {
-  if (!rows.length) return;
+// Tipos basados en la estructura del Excel
+export type ExcelQuestion = {
+  Id_dimension: number;
+  nombre_dimensión: string;
+  Pregunta_especifica: string;
+  Id_pregunta: number;
+  Pregunta: string;
+  puntos_pregunta: number;
+};
+
+export type ExcelAnswer = {
+  Id_Pregunta: number;
+  Id_Respuesta: number;
+  Respuesta: string;
+  puntos_respuesta: number;
+};
+
+export type ExcelDimension = {
+  Id_dimension: number;
+  nombre_dimensión: string;
+  Intro_dimension: string;
+  Descripcion_dimension: string;
+  puntos_dimension: number;
+};
+
+// Función para mapear categorías del Excel a nuestro enum
+function mapCategory(excelCategory: string): string {
+  const categoryMap: Record<string, string> = {
+    'PEOPLE': 'people',
+    'PLANET': 'planet', 
+    'MATERIALS ': 'materials', // Nota: hay un espacio extra en el Excel
+    ' CIRCULARITY': 'circularity' // Nota: hay un espacio al inicio en el Excel
+  };
+  return categoryMap[excelCategory] || excelCategory.toLowerCase().trim();
+}
+
+// Función para mapear scope basado en Pregunta_especifica
+function mapScope(preguntaEspecifica: string): string {
+  return preguntaEspecifica === 'Si' ? 'product' : 'general';
+}
+
+// Upsert questions
+export async function upsertQuestions(questions: ExcelQuestion[]): Promise<void> {
+  if (!questions.length) return;
+  
   await withClient(async (c) => {
-    for (const r of rows) {
+    for (const q of questions) {
       await c.query(
-        `INSERT INTO dimensions (code, name, "order", max_points, weight_percent)
-         VALUES ($1,$2,$3,$4,$5)
-         ON CONFLICT (code) DO UPDATE SET name = EXCLUDED.name, "order" = EXCLUDED."order", max_points = EXCLUDED.max_points, weight_percent = EXCLUDED.weight_percent`,
-        [r.code, r.name, r.order, r.max_points, r.weight_percent]
+        `INSERT INTO questions (scope, category, text, excel_id, "order", weight, created_at, updated_at)
+         VALUES ($1, $2, $3, $4, $5, $6, NOW(), NOW())
+         ON CONFLICT (excel_id) DO UPDATE SET 
+           scope = EXCLUDED.scope,
+           category = EXCLUDED.category,
+           text = EXCLUDED.text,
+           "order" = EXCLUDED."order",
+           weight = EXCLUDED.weight,
+           updated_at = NOW()`,
+        [
+          mapScope(q.Pregunta_especifica),
+          mapCategory(q.nombre_dimensión),
+          q.Pregunta,
+          q.Id_pregunta.toString(),
+          q.Id_pregunta,
+          q.puntos_pregunta
+        ]
       );
     }
   });
 }
 
-export async function upsertGradingThresholds(row: GradingThresholdsRow): Promise<void> {
-  // Defaults if not provided
-  const defaults: GradingThresholdsRow = {
-    version: row.version,
-    thresholds: row.thresholds || { A: [75, 100], B: [50, 74], C: [25, 49], D: [1, 24], E: [0, 0] }
-  };
+// Upsert answers
+export async function upsertAnswers(answers: ExcelAnswer[]): Promise<void> {
+  if (!answers.length) return;
+  
   await withClient(async (c) => {
-    await c.query(
-      `INSERT INTO grading_thresholds (version, thresholds)
-       VALUES ($1, $2)
-       ON CONFLICT (version) DO UPDATE SET thresholds = EXCLUDED.thresholds`,
-      [defaults.version, defaults.thresholds as any]
-    );
-  });
-}
-
-export async function upsertGlobalWeights(row: GlobalWeightsRow): Promise<void> {
-  const defaults: GlobalWeightsRow = {
-    version: row.version,
-    global_distribution: row.global_distribution || { general: 0.6, specifics: 0.4 }
-  };
-  await withClient(async (c) => {
-    await c.query(
-      `INSERT INTO weights (version, global_distribution)
-       VALUES ($1, $2)
-       ON CONFLICT (version) DO UPDATE SET global_distribution = EXCLUDED.global_distribution`,
-      [defaults.version, defaults.global_distribution as any]
-    );
-  });
-}
-
-export async function ingestFromExcel(_excelPath: string): Promise<void> {
-  const excelPath = _excelPath;
-  if (!excelPath) throw new Error("Missing Excel path");
-  const wb = XLSX.readFile(excelPath);
-  // Expect sheets: Dimensions, GradingThresholds, GlobalWeights
-  const dimsSheet = wb.Sheets["Dimensions"]; 
-  if (dimsSheet) {
-    const rows = XLSX.utils.sheet_to_json<any>(dimsSheet);
-    const parsed: DimensionRow[] = rows.map((r, i) => ({
-      code: String(r.code || r.CODE),
-      name: String(r.name || r.NAME),
-      order: Number(r.order ?? i + 1),
-      max_points: Number(r.max_points ?? r.max ?? 0),
-      weight_percent: Number(r.weight_percent ?? r.weight ?? 0),
-      version: String(r.version || "v1")
-    }));
-    await upsertDimensions(parsed);
-  }
-  const thrSheet = wb.Sheets["GradingThresholds"]; 
-  if (thrSheet) {
-    const [row] = XLSX.utils.sheet_to_json<any>(thrSheet) as any[];
-    const thresholds = {
-      A: [Number(row.A_min ?? 75), Number(row.A_max ?? 100)] as [number, number],
-      B: [Number(row.B_min ?? 50), Number(row.B_max ?? 74)] as [number, number],
-      C: [Number(row.C_min ?? 25), Number(row.C_max ?? 49)] as [number, number],
-      D: [Number(row.D_min ?? 1), Number(row.D_max ?? 24)] as [number, number],
-      E: [Number(row.E_min ?? 0), Number(row.E_max ?? 0)] as [number, number]
-    };
-    await upsertGradingThresholds({ version: String(row.version || "v1"), thresholds });
-  }
-  const weightsSheet = wb.Sheets["GlobalWeights"]; 
-  if (weightsSheet) {
-    const [row] = XLSX.utils.sheet_to_json<any>(weightsSheet) as any[];
-    await upsertGlobalWeights({
-      version: String(row.version || "v1"),
-      global_distribution: {
-        general: Number(row.general ?? 0.6),
-        specifics: Number(row.specifics ?? 0.4)
+    for (const a of answers) {
+      // Para respuestas de encuesta general, question_id será null
+      // Para respuestas de encuesta producto, necesitamos buscar el question_id
+      let questionId = null;
+      
+      if (a.Id_Pregunta) {
+        const questionResult = await c.query(
+          'SELECT id FROM questions WHERE excel_id = $1',
+          [a.Id_Pregunta.toString()]
+        );
+        if (questionResult.rows.length > 0) {
+          questionId = questionResult.rows[0].id;
+        }
       }
-    });
+      
+      await c.query(
+        `INSERT INTO answers (question_id, answer_code, text, numeric_value, "order")
+         VALUES ($1, $2, $3, $4, $5)
+         ON CONFLICT (answer_code) DO UPDATE SET 
+           question_id = EXCLUDED.question_id,
+           text = EXCLUDED.text,
+           numeric_value = EXCLUDED.numeric_value,
+           "order" = EXCLUDED."order"`,
+        [
+          questionId,
+          a.Id_Respuesta.toString(),
+          a.Respuesta,
+          a.puntos_respuesta,
+          a.Id_Respuesta
+        ]
+      );
+    }
+  });
+}
+
+// Función principal de ingesta
+export async function ingestFromExcel(excelPath: string): Promise<void> {
+  if (!excelPath) throw new Error("Missing Excel path");
+  
+  console.log(`📊 Leyendo archivo Excel: ${excelPath}`);
+  const wb = XLSX.readFile(excelPath);
+  console.log(`📋 Hojas disponibles: ${wb.SheetNames.join(', ')}`);
+  
+  // Leer dimensiones
+  if (wb.Sheets['Dimensiones']) {
+    const dimensiones = XLSX.utils.sheet_to_json<ExcelDimension>(wb.Sheets['Dimensiones']);
+    console.log(`📐 Dimensiones encontradas: ${dimensiones.length}`);
+    console.log('Dimensiones:', dimensiones.map(d => `${d.nombre_dimensión} (${d.puntos_dimension} pts)`));
   }
+  
+  // Leer preguntas completas (encuesta general)
+  if (wb.Sheets['Preguntas completas']) {
+    const preguntasCompletas = XLSX.utils.sheet_to_json<ExcelQuestion>(wb.Sheets['Preguntas completas']);
+    console.log(`❓ Preguntas completas: ${preguntasCompletas.length}`);
+    await upsertQuestions(preguntasCompletas);
+  }
+  
+  // Leer preguntas específicas (encuesta producto)
+  if (wb.Sheets['Preguntas especificas']) {
+    const preguntasEspecificas = XLSX.utils.sheet_to_json<ExcelQuestion>(wb.Sheets['Preguntas especificas']);
+    console.log(`🔍 Preguntas específicas: ${preguntasEspecificas.length}`);
+    await upsertQuestions(preguntasEspecificas);
+  }
+  
+  // Leer respuestas completas
+  if (wb.Sheets['Respuestas completas']) {
+    const respuestasCompletas = XLSX.utils.sheet_to_json<ExcelAnswer>(wb.Sheets['Respuestas completas']);
+    console.log(`💬 Respuestas completas: ${respuestasCompletas.length}`);
+    await upsertAnswers(respuestasCompletas);
+  }
+  
+  console.log('✅ Ingesta de Excel completada');
 }
 
 // CLI entrypoint
-if (require.main === module) {
+if (import.meta.url === `file://${process.argv[1]}`) {
   const [, , excel] = process.argv;
   ingestFromExcel(excel)
     .then(() => {
-      // eslint-disable-next-line no-console
       console.log("Excel ingest completed");
     })
     .catch((e) => {
-      // eslint-disable-next-line no-console
       console.error(e);
       process.exit(1);
     });

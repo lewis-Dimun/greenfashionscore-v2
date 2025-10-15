@@ -7,4 +7,16 @@ if (!(globalThis as any).Headers) Object.assign(globalThis, { Headers });
 if (!(globalThis as any).FormData) Object.assign(globalThis, { FormData });
 if (!(globalThis as any).File) Object.assign(globalThis, { File });
 
+// Polyfill for Edge runtime
+if (!global.structuredClone) {
+  global.structuredClone = (obj) => JSON.parse(JSON.stringify(obj));
+}
+
+// Mock Deno environment for Edge Functions
+global.Deno = {
+  env: {
+    get: (key: string) => process.env[key]
+  }
+} as any;
+
 

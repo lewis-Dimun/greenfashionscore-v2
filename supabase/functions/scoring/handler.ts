@@ -1,14 +1,16 @@
 import { z } from "zod";
 import { errorResponse, jsonResponse, rateLimitCheck } from "../_shared/utils";
+import { calculateCompleteSurveyScore, type SurveyScore } from "../../../lib/scoring/engine";
 
+// Schema para el nuevo sistema
 export const payloadSchema = z.object({
-  survey_type: z.enum(["general", "specific"]),
-  survey_version: z.string(),
-  brand_id: z.string(),
+  scope: z.enum(["general", "product"]),
+  product_type: z.string().optional(), // Solo para scope="product"
   answers: z.array(
     z.object({
-      question_code: z.string(),
-      answer_code: z.string()
+      questionId: z.string(),
+      answerId: z.string(),
+      numericValue: z.number()
     })
   )
 });
@@ -16,15 +18,20 @@ export const payloadSchema = z.object({
 export type ScoringDeps = ReturnType<typeof scoringHandlerDeps>;
 
 export function scoringHandlerDeps(factory: {
-  getSurveyMeta: (args: any) => Promise<any>;
-  insertSubmissionTx: (payload: any) => Promise<{ submissionId: string }>;
-  computeScoreSnapshot: (payload: any) => {
-    total: number;
-    perDimension: Record<string, number>;
-    grade: string;
-    message: string;
-  };
-  invalidateDashboard?: (args: { brandId?: string; userId?: string }) => Promise<void>;
+  createSurvey: (args: {
+    userId: string;
+    scope: 'general' | 'product';
+    productType?: string;
+  }) => Promise<{ surveyId: string }>;
+  insertSurveyResponses: (args: {
+    surveyId: string;
+    responses: Array<{ questionId: string; answerId: string; numericValue: number }>;
+  }) => Promise<void>;
+  insertScore: (args: {
+    surveyId: string;
+    score: SurveyScore;
+  }) => Promise<void>;
+  invalidateDashboard?: (args: { userId: string }) => Promise<void>;
 }) {
   return factory;
 }
@@ -32,23 +39,66 @@ export function scoringHandlerDeps(factory: {
 export function scoringHandler(deps: ScoringDeps) {
   return async function handler(req: Request) {
     try {
-      const rl = await rateLimitCheck("scoring:" + (req.headers as any)?.get?.("x-client-ip") || "anon");
+      // Rate limiting
+      const clientIp = (req.headers as any)?.get?.("x-client-ip") || "anon";
+      const rl = await rateLimitCheck("scoring:" + clientIp);
       if (!rl.allowed) return errorResponse(429, "Too Many Requests");
+
+      // Parse request
       const json = await (req as any).json();
       const parsed = payloadSchema.safeParse(json);
       if (!parsed.success) {
         return errorResponse(400, "Bad Request", parsed.error.flatten());
       }
-      await deps.getSurveyMeta({ version: parsed.data.survey_version });
-      const tx = await deps.insertSubmissionTx(parsed.data);
-      const snapshot = deps.computeScoreSnapshot(parsed.data);
-      // Fire-and-forget dashboard cache invalidation if provided
+
+      // Extract user ID from JWT (this would be done in the real function)
+      const userId = "user-id-from-jwt"; // Placeholder
+
+      // Create survey
+      const survey = await deps.createSurvey({
+        userId,
+        scope: parsed.data.scope,
+        productType: parsed.data.product_type
+      });
+
+      // Insert survey responses
+      await deps.insertSurveyResponses({
+        surveyId: survey.surveyId,
+        responses: parsed.data.answers
+      });
+
+      // Calculate score
+      const score = calculateCompleteSurveyScore(
+        parsed.data.answers,
+        parsed.data.scope,
+        parsed.data.product_type
+      );
+      score.surveyId = survey.surveyId;
+
+      // Save score
+      await deps.insertScore({
+        surveyId: survey.surveyId,
+        score
+      });
+
+      // Invalidate dashboard cache
       if (deps.invalidateDashboard) {
-        // brand_id present in payload; user id will be resolved in real function
-        deps.invalidateDashboard({ brandId: parsed.data.brand_id }).catch(() => {});
+        deps.invalidateDashboard({ userId }).catch(() => {});
       }
-      return jsonResponse({ submission_id: tx.submissionId, scores: snapshot, grade: snapshot.grade });
+
+      return jsonResponse({
+        surveyId: survey.surveyId,
+        score: {
+          people: score.scores.people,
+          planet: score.scores.planet,
+          materials: score.scores.materials,
+          circularity: score.scores.circularity,
+          total: score.total,
+          grade: score.grade
+        }
+      });
     } catch (e) {
+      console.error("Scoring handler error:", e);
       return errorResponse(500, "Internal Server Error");
     }
   };

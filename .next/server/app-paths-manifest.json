@@ -1,7 +1,11 @@
 {
-  "/page": "app/page.js",
-  "/register/page": "app/register/page.js",
+  "/api/surveys/general/route": "app/api/surveys/general/route.js",
+  "/api/scoring/route": "app/api/scoring/route.js",
+  "/api/dashboard/route": "app/api/dashboard/route.js",
+  "/api/surveys/general/responses/route": "app/api/surveys/general/responses/route.js",
+  "/api/questions/general/route": "app/api/questions/general/route.js",
   "/login/page": "app/login/page.js",
   "/dashboard/page": "app/dashboard/page.js",
-  "/survey/page": "app/survey/page.js"
+  "/survey/page": "app/survey/page.js",
+  "/survey/responses/page": "app/survey/responses/page.js"
 }

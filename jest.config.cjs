@@ -2,39 +2,37 @@ module.exports = async () => {
   const nextJest = require('next/jest');
   const createNextConfig = nextJest({ dir: './' });
 
-  /** @type {import('jest').Config} */
   const base = {
     moduleNameMapper: {
-      '^whatwg-fetch$': '<rootDir>/test/polyfills/whatwg-fetch.ts',
       '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
       '^@/(.*)$': '<rootDir>/$1',
     },
-    testPathIgnorePatterns: ['<rootDir>/e2e/'],
-    transform: {
-      '^.+\\.(ts|tsx)$': [
-        'ts-jest',
-        { tsconfig: 'tsconfig.json', useESM: false }
-      ]
-    },
-    extensionsToTreatAsEsm: [],
+    testPathIgnorePatterns: ['<rootDir>/e2e/', '<rootDir>/.next/', '<rootDir>/node_modules/'],
+    collectCoverageFrom: [
+      'app/**/*.{js,jsx,ts,tsx}',
+      'components/**/*.{js,jsx,ts,tsx}',
+      'lib/**/*.{js,ts}',
+      '!**/*.d.ts',
+      '!**/node_modules/**',
+    ],
   };
 
   const apiProject = {
     displayName: 'api',
-    testMatch: ['<rootDir>/__tests__/api.*.spec.ts'],
+    testMatch: ['<rootDir>/__tests__/api.*.spec.ts', '<rootDir>/__tests__/domain.*.spec.ts', '<rootDir>/__tests__/data.*.spec.ts'],
     testEnvironment: 'node',
-    setupFilesAfterEnv: [
-      '<rootDir>/jest.setup.node.ts',
-      '<rootDir>/jest.setup.ts'
-    ],
+    setupFilesAfterEnv: ['<rootDir>/jest.setup.node.ts'],
     ...base,
   };
 
   const uiProject = await createNextConfig({
     displayName: 'ui',
     testMatch: [
-      '<rootDir>/**/?(*.)+(spec|test).tsx',
+      '<rootDir>/__tests__/**/*.spec.tsx',
+      '<rootDir>/__tests__/**/*.spec.ts',
       '!<rootDir>/__tests__/api.*.spec.ts',
+      '!<rootDir>/__tests__/domain.*.spec.ts',
+      '!<rootDir>/__tests__/data.*.spec.ts',
     ],
     testEnvironment: 'jest-environment-jsdom',
     setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
@@ -43,8 +41,8 @@ module.exports = async () => {
   })();
 
   return {
-    projects: [apiProject, uiProject]
+    projects: [apiProject, uiProject],
+    coverageDirectory: 'coverage',
+    coverageReporters: ['text', 'lcov', 'html'],
   };
 };
-
-

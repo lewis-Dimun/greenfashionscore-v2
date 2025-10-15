@@ -1,28 +1,112 @@
-import { dashboardHandler, dashboardHandlerDeps } from "./handler.ts";
-import { computeTotalScore, gradeFromTotal } from "../_shared/engine.ts";
-import { weakEtagFromString } from "../_shared/utils.ts";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
+import { createSupabaseClient, fetchUserSurveys } from '../_shared/db.ts';
+import { aggregateScores } from '../_shared/engine.ts';
 
-const deps = dashboardHandlerDeps({
-  fetchAggregates: async ({ brandId }) => {
-    const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
-    const serviceKey = Deno.env.get("SERVICE_ROLE_KEY") || Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
-    const supabase = createClient(supabaseUrl, serviceKey);
-    const { data } = await supabase
-      .from("scores")
-      .select("per_dimension, total, grade, survey_submissions!inner(brand_id, created_at)")
-      .order("survey_submissions.created_at", { ascending: false })
-      .limit(1);
-    const row = (data && data[0]) || null;
-    const per = (row?.per_dimension as any) || { people: 0, planet: 0, materials: 0, circularity: 0 };
-    const total = typeof row?.total === "number" ? row!.total : computeTotalScore([per.people, per.planet, per.circularity, per.materials]);
-    const grade = typeof row?.grade === "string" ? row!.grade : gradeFromTotal(total);
-    const etag = weakEtagFromString(`${brandId || "anon"}:${total}`);
-    return { total, perDimension: per, grade, etag };
+serve(async (req) => {
+  try {
+    // Get user from JWT
+    const authHeader = req.headers.get('Authorization');
+    if (!authHeader) {
+      return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+        status: 401,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
+
+    const supabase = createSupabaseClient();
+    const token = authHeader.replace('Bearer ', '');
+    const { data: { user }, error: authError } = await supabase.auth.getUser(token);
+    
+    if (authError || !user) {
+      return new Response(JSON.stringify({ error: 'Invalid token' }), {
+        status: 401,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
+
+    // Fetch all user surveys with scores
+    const surveys = await fetchUserSurveys(supabase, user.id);
+
+    if (surveys.length === 0) {
+      return new Response(JSON.stringify({
+        people: 0,
+        planet: 0,
+        materials: 0,
+        circularity: 0,
+        total: 0,
+        grade: 'E',
+        breakdown: []
+      }), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
+
+    // Separate general and product surveys
+    const generalSurvey = surveys.find(s => s.scope === 'general');
+    const productSurveys = surveys.filter(s => s.scope === 'product');
+
+    if (!generalSurvey) {
+      return new Response(JSON.stringify({
+        people: 0,
+        planet: 0,
+        materials: 0,
+        circularity: 0,
+        total: 0,
+        grade: 'E',
+        breakdown: surveys
+      }), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
+
+    // Convert to SurveyScore format for aggregation
+    const generalScore = {
+      surveyId: generalSurvey.id,
+      scope: 'general' as const,
+      scores: generalSurvey.scores,
+      total: generalSurvey.scores.total,
+      grade: generalSurvey.scores.grade as 'A' | 'B' | 'C' | 'D' | 'E'
+    };
+
+    const productScores = productSurveys.map(survey => ({
+      surveyId: survey.id,
+      scope: 'product' as const,
+      productType: survey.product_type,
+      scores: survey.scores,
+      total: survey.scores.total,
+      grade: survey.scores.grade as 'A' | 'B' | 'C' | 'D' | 'E'
+    }));
+
+    // Aggregate scores
+    const aggregated = aggregateScores(generalScore, productScores);
+
+    // Generate ETag based on last survey update
+    const etag = `"${Date.now()}"`;
+
+    // Check for ETag match
+    const ifNoneMatch = req.headers.get('if-none-match');
+    if (ifNoneMatch && ifNoneMatch === etag) {
+      return new Response(null, { 
+        status: 304, 
+        headers: { ETag: etag } 
+      });
+    }
+
+    return new Response(JSON.stringify(aggregated), {
+      status: 200,
+      headers: { 
+        'Content-Type': 'application/json',
+        ETag: etag
+      }
+    });
+
+  } catch (error) {
+    console.error('Dashboard function error:', error);
+    return new Response(JSON.stringify({ error: 'Internal Server Error' }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' }
+    });
   }
 });
-
-const runtime = { fetch: dashboardHandler(deps) };
-export default runtime;
-
-

@@ -1,0 +1,24 @@
+{
+  "timestamp": "2025-10-15T13:41:02.943Z",
+  "counts": {
+    "dimensions": 4,
+    "generalQuestions": 31,
+    "specificQuestions": 15,
+    "totalQuestions": 46,
+    "totalAnswers": 197,
+    "questionsWithoutAnswers": 0,
+    "duplicateQuestions": 0,
+    "duplicateAnswers": 0
+  },
+  "integrity": {
+    "weightsSum": 100,
+    "weightsValid": true,
+    "noOrphans": true,
+    "noDuplicates": true,
+    "allQuestionsHaveAnswers": true
+  },
+  "anomalies": [],
+  "recommendations": [
+    "Expected 46 general questions, found 31"
+  ]
+}
