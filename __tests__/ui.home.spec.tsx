@@ -1,13 +1,15 @@
 import "@testing-library/jest-dom";
-import { render, screen, within } from "@testing-library/react";
+import { render, screen, within, waitFor } from "@testing-library/react";
 import Home from "../app/page";
 
 describe("Landing GFS - Home", () => {
-  it("muestra hero con título, subtítulo y CTAs", () => {
+  it("muestra hero con título, subtítulo y CTAs", async () => {
     render(<Home />);
-    expect(
-      screen.getByRole("heading", { name: /mide\. mejora\. comunica tu sostenibilidad\./i })
-    ).toBeInTheDocument();
+    await waitFor(() => {
+      expect(
+        screen.getByRole("heading", { name: /mide\. mejora\. comunica tu sostenibilidad\./i })
+      ).toBeInTheDocument();
+    });
     expect(
       screen.getByText(/la certificación española que evalúa el impacto real de tu marca de moda\./i)
     ).toBeInTheDocument();
@@ -58,15 +60,17 @@ describe("Landing GFS - Home", () => {
     expect(within(section).getByText(/más de 30 marcas/i)).toBeInTheDocument();
   });
 
-  it("Área de usuario con Login y Ver resultados", () => {
+  it("Área de usuario con Login y Ver resultados", async () => {
     render(<Home />);
-    const section = screen.getByRole("region", { name: /área de usuario/i });
-    const loginLinks = within(section).getAllByRole("link", { name: /iniciar sesión/i });
-    expect(loginLinks.some((a) => a.getAttribute("href") === "/login")).toBe(true);
-    expect(within(section).getByRole("link", { name: /ver resultados/i })).toHaveAttribute(
-      "href",
-      "/dashboard"
-    );
+    await waitFor(() => {
+      const section = screen.getByRole("region", { name: /área de usuario/i });
+      const loginLinks = within(section).getAllByRole("link", { name: /iniciar sesión/i });
+      expect(loginLinks.some((a) => a.getAttribute("href") === "/login")).toBe(true);
+      expect(within(section).getByRole("link", { name: /ver resultados/i })).toHaveAttribute(
+        "href",
+        "/dashboard"
+      );
+    });
   });
 });
 
