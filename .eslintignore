@@ -1,0 +1,9 @@
+scripts/**
+supabase/functions/**
+postcss.config.js
+next.config.mjs
+jest.config.cjs
+playwright.config.ts
+__mocks__/**
+*.config.js
+*.config.mjs

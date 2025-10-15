@@ -33,7 +33,7 @@ const RAW_MAX_SCORES: CategoryScores = {
   circularity: 225
 };
 
-const RAW_TOTAL_MAX = RAW_MAX_SCORES.people + RAW_MAX_SCORES.planet + RAW_MAX_SCORES.materials + RAW_MAX_SCORES.circularity; // 384
+const _RAW_TOTAL_MAX = RAW_MAX_SCORES.people + RAW_MAX_SCORES.planet + RAW_MAX_SCORES.materials + RAW_MAX_SCORES.circularity; // 384
 
 // Máximos DISPLAY por categoría (prorrateados a 100: 20/20/40/20)
 const DISPLAY_MAX_SCORES: CategoryScores = {
@@ -82,7 +82,7 @@ export function calculateSurveyScore(
   responses: Array<{ questionId: string; answerId: string; numericValue: number }>,
   category: keyof CategoryScores
 ): number {
-  const categoryResponses = responses.filter(r => {
+  const categoryResponses = responses.filter(_r => {
     // Aquí necesitarías filtrar por categoría basado en questionId
     // Por simplicidad, asumimos que ya están filtradas
     return true;

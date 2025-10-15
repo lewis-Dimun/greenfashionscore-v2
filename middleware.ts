@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
-export async function middleware(req: NextRequest) {
+export async function middleware(_req: NextRequest) {
   // For now, let client-side handle auth redirects
   // This avoids SSR complexity with Supabase auth
   return NextResponse.next()

@@ -19,9 +19,13 @@ module.exports = async () => {
 
   const apiProject = {
     displayName: 'api',
-    testMatch: ['<rootDir>/__tests__/api.*.spec.ts', '<rootDir>/__tests__/domain.*.spec.ts', '<rootDir>/__tests__/data.*.spec.ts'],
+    testMatch: ['<rootDir>/__tests__/api.*.spec.ts', '<rootDir>/__tests__/domain.*.spec.ts', '<rootDir>/__tests__/data.*.spec.ts', '<rootDir>/__tests__/*.test.ts', '<rootDir>/__tests__/scoring.*.spec.ts', '<rootDir>/__tests__/excel.*.spec.ts', '<rootDir>/__tests__/rls.*.spec.ts'],
     testEnvironment: 'node',
     setupFilesAfterEnv: ['<rootDir>/jest.setup.node.ts'],
+    preset: 'ts-jest',
+    transform: {
+      '^.+\\.tsx?$': ['ts-jest', { isolatedModules: true }],
+    },
     ...base,
   };
 
@@ -30,6 +34,8 @@ module.exports = async () => {
     testMatch: [
       '<rootDir>/__tests__/**/*.spec.tsx',
       '<rootDir>/__tests__/**/*.spec.ts',
+      '<rootDir>/__tests__/**/*.test.tsx',
+      '<rootDir>/__tests__/**/*.test.ts',
       '!<rootDir>/__tests__/api.*.spec.ts',
       '!<rootDir>/__tests__/domain.*.spec.ts',
       '!<rootDir>/__tests__/data.*.spec.ts',

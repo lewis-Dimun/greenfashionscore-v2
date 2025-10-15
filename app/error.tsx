@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
+import Link from 'next/link';
 import { logger } from '../lib/logger';
 
 export default function Error({
@@ -56,12 +57,12 @@ export default function Error({
           </div>
           
           <div className="mt-4">
-            <a
+            <Link
               href="/"
               className="text-sm text-emerald-600 hover:text-emerald-500"
             >
               Volver al inicio
-            </a>
+            </Link>
           </div>
         </div>
       </div>

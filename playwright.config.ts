@@ -7,8 +7,15 @@ export default defineConfig({
   retries: 0,
   reporter: "list",
   use: {
+    baseURL: process.env.PLAYWRIGHT_BASE_URL || 'http://localhost:3000',
     actionTimeout: 0,
-    trace: "retain-on-failure"
+    trace: "retain-on-failure",
+    headless: true,
+  },
+  webServer: {
+    command: 'npm run dev',
+    port: 3000,
+    reuseExistingServer: !process.env.CI,
   },
   projects: [
     {

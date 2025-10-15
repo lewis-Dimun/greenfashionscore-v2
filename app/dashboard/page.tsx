@@ -268,10 +268,10 @@ export default function DashboardPage() {
           <div className="text-center mb-8">
             <div className="space-x-4 mb-4">
               <a
-                href="/survey/responses"
+                href="/surveys"
                 className="inline-flex items-center px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors"
               >
-                📝 Ver Mis Respuestas
+                📝 Ver Mis Resultados
               </a>
               <a
                 href="/product/new"

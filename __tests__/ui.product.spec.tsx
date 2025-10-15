@@ -137,7 +137,7 @@ describe('Product Wizard', () => {
 
   it('should show loading state while fetching questions', async () => {
     // Mock a delayed response
-    const { getProductQuestions } = require('../lib/survey/questions-service');
+    const { getProductQuestions } = await import('../lib/survey/questions-service');
     getProductQuestions.mockImplementation(() => 
       new Promise(resolve => setTimeout(() => resolve([]), 100))
     );
@@ -151,7 +151,7 @@ describe('Product Wizard', () => {
   });
 
   it('should handle fallback questions when DB fails', async () => {
-    const { getProductQuestions } = require('../lib/survey/questions-service');
+    const { getProductQuestions } = await import('../lib/survey/questions-service');
     getProductQuestions.mockRejectedValue(new Error('DB Error'));
     
     render(<ProductWizardPage />);

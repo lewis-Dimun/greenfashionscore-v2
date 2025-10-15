@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { getAuthHeaders } from "../../../lib/auth/client";
-import { useSurveyStore } from "../../../lib/state/surveyStore";
+// import { useSurveyStore } from "../../../lib/state/surveyStore";
 import AuthGuard from "../../../components/AuthGuard";
 import { getFallbackQuestions } from "../../../lib/survey/fallback";
 

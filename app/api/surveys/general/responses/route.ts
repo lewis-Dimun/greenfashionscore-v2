@@ -28,7 +28,7 @@ export async function GET(req: NextRequest) {
     // Get user's general survey
     const { data: generalSurvey, error: surveyError } = await supabaseAdmin
       .from('general_surveys')
-      .select('id, completed, created_at, completed_at')
+      .select('id, completed, created_at')
       .eq('user_id', user.id)
       .single();
 

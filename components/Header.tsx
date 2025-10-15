@@ -58,10 +58,10 @@ export default function Header() {
                     Encuesta
                   </Link>
                   <Link
-                    href="/survey/responses"
+                    href="/surveys"
                     className="text-sm text-blue-600 hover:text-blue-700 font-medium"
                   >
-                    Mis Respuestas
+                    Mis Resultados
                   </Link>
                   <Link
                     href="/dashboard"
