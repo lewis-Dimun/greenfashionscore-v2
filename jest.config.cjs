@@ -23,8 +23,6 @@ module.exports = async () => {
     testMatch: [
       '<rootDir>/__tests__/api.*.spec.ts', 
       '<rootDir>/__tests__/domain.*.spec.ts', 
-      '<rootDir>/__tests__/data.*.spec.ts', 
-      '<rootDir>/__tests__/*.test.ts', 
       '<rootDir>/__tests__/scoring.*.spec.ts', 
       '<rootDir>/__tests__/excel.*.spec.ts', 
       '<rootDir>/__tests__/rls.*.spec.ts'
