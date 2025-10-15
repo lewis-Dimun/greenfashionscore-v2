@@ -20,7 +20,15 @@ module.exports = async () => {
 
   const apiProject = {
     displayName: 'api',
-    testMatch: ['<rootDir>/__tests__/api.*.spec.ts', '<rootDir>/__tests__/domain.*.spec.ts', '<rootDir>/__tests__/data.*.spec.ts', '<rootDir>/__tests__/*.test.ts', '<rootDir>/__tests__/scoring.*.spec.ts', '<rootDir>/__tests__/excel.*.spec.ts', '<rootDir>/__tests__/rls.*.spec.ts'],
+    testMatch: [
+      '<rootDir>/__tests__/api.*.spec.ts', 
+      '<rootDir>/__tests__/domain.*.spec.ts', 
+      '<rootDir>/__tests__/data.*.spec.ts', 
+      '<rootDir>/__tests__/*.test.ts', 
+      '<rootDir>/__tests__/scoring.*.spec.ts', 
+      '<rootDir>/__tests__/excel.*.spec.ts', 
+      '<rootDir>/__tests__/rls.*.spec.ts'
+    ],
     testEnvironment: 'node',
     setupFilesAfterEnv: ['<rootDir>/jest.setup.node.ts'],
     preset: 'ts-jest',
@@ -36,6 +44,9 @@ module.exports = async () => {
       '<rootDir>/__tests__/ui.*.spec.tsx',
       '<rootDir>/__tests__/components.*.spec.tsx',
       '<rootDir>/__tests__/a11y.*.spec.tsx',
+      '<rootDir>/__tests__/ui.*.spec.ts',
+      '<rootDir>/__tests__/components.*.spec.ts',
+      '<rootDir>/__tests__/a11y.*.spec.ts',
     ],
     testEnvironment: 'jest-environment-jsdom',
     setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],

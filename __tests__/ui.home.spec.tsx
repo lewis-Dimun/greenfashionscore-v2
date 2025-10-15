@@ -34,7 +34,7 @@ describe("Landing GFS - Home", () => {
     const section = screen.getByRole("region", { name: /cómo funciona/i });
     const items = within(section).getAllByRole("listitem");
     expect(items.length).toBe(3);
-    expect(within(section).getByRole("link", { name: /diagnóstico/i })).toHaveAttribute(
+    expect(within(section).getByRole("link", { name: /comenzar evaluación gratuita/i })).toHaveAttribute(
       "href",
       "/register"
     );
@@ -60,16 +60,16 @@ describe("Landing GFS - Home", () => {
     expect(within(section).getByText(/más de 30 marcas/i)).toBeInTheDocument();
   });
 
-  it("Área de usuario con Login y Ver resultados", async () => {
+  it("Hero section con CTA de evaluación y login", async () => {
     render(<Home />);
     await waitFor(() => {
-      const section = screen.getByRole("region", { name: /área de usuario/i });
-      const loginLinks = within(section).getAllByRole("link", { name: /iniciar sesión/i });
-      expect(loginLinks.some((a) => a.getAttribute("href") === "/login")).toBe(true);
-      expect(within(section).getByRole("link", { name: /ver resultados/i })).toHaveAttribute(
-        "href",
-        "/dashboard"
-      );
+      // Verificar que existe el botón de comenzar evaluación
+      const evaluationButton = screen.getByRole("link", { name: /comenzar evaluación gratuita/i });
+      expect(evaluationButton).toHaveAttribute("href", "/register");
+      
+      // Verificar que existe el botón de iniciar sesión
+      const loginButton = screen.getByRole("link", { name: /iniciar sesión/i });
+      expect(loginButton).toHaveAttribute("href", "/login");
     });
   });
 });
