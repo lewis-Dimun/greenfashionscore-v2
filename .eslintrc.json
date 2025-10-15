@@ -29,6 +29,12 @@
       "rules": {
         "@typescript-eslint/triple-slash-reference": "off"
       }
+    },
+    {
+      "files": ["lib/logger.ts", "lib/excel/ingest.ts"],
+      "rules": {
+        "no-console": "off"
+      }
     }
   ]
 }

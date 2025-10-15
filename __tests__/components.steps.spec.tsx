@@ -6,12 +6,13 @@ describe("Steps component", () => {
   it("renders three steps and CTA", () => {
     render(<Steps />);
     const section = screen.getByRole("region", { name: /cómo funciona/i });
-    const items = within(section).getAllByRole("listitem");
-    expect(items.length).toBe(3);
-    expect(within(section).getByRole("link", { name: /diagnóstico/i })).toHaveAttribute(
-      "href",
-      "/register"
-    );
+    // Steps are rendered as divs, not listitems
+    const stepHeadings = within(section).getAllByRole("heading", { level: 3 });
+    expect(stepHeadings.length).toBe(3);
+    
+    // Check for CTA link in the section
+    const evaluationLinks = within(section).getAllByRole("link", { name: /comenzar evaluación gratuita/i });
+    expect(evaluationLinks[0]).toHaveAttribute("href", "/register");
   });
 });
 

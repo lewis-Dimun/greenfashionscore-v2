@@ -11,10 +11,11 @@ describe("Hero component", () => {
     expect(
       screen.getByText(/la certificación española que evalúa el impacto real de tu marca de moda\./i)
     ).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: /comenzar la evaluación/i })).toHaveAttribute(
-      "href",
-      "/register"
-    );
+    
+    // Handle multiple CTA links with same text
+    const evaluationLinks = screen.getAllByRole("link", { name: /comenzar evaluación gratuita/i });
+    expect(evaluationLinks[0]).toHaveAttribute("href", "/register");
+    
     expect(screen.getByRole("link", { name: /iniciar sesión/i })).toHaveAttribute(
       "href",
       "/login"

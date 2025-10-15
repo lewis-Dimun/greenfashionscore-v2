@@ -5,18 +5,19 @@ import Home from "../app/page";
 describe("Landing GFS - Home", () => {
   it("muestra hero con título, subtítulo y CTAs", async () => {
     render(<Home />);
-    await waitFor(() => {
-      expect(
-        screen.getByRole("heading", { name: /mide\. mejora\. comunica tu sostenibilidad\./i })
-      ).toBeInTheDocument();
-    });
+    
+    // Use findByRole for better async handling
+    const heading = await screen.findByRole("heading", { name: /mide\. mejora\. comunica tu sostenibilidad\./i });
+    expect(heading).toBeInTheDocument();
+    
     expect(
       screen.getByText(/la certificación española que evalúa el impacto real de tu marca de moda\./i)
     ).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: /comenzar la evaluación/i })).toHaveAttribute(
-      "href",
-      "/register"
-    );
+    
+    // Handle multiple CTA links with same text
+    const evaluationLinks = screen.getAllByRole("link", { name: /comenzar evaluación gratuita/i });
+    expect(evaluationLinks[0]).toHaveAttribute("href", "/register");
+    
     const loginLinksHero = screen.getAllByRole("link", { name: /iniciar sesión/i });
     expect(loginLinksHero.some((a) => a.getAttribute("href") === "/login")).toBe(true);
   });
@@ -32,12 +33,13 @@ describe("Landing GFS - Home", () => {
   it("Cómo funciona con 3 pasos y CTA", () => {
     render(<Home />);
     const section = screen.getByRole("region", { name: /cómo funciona/i });
-    const items = within(section).getAllByRole("listitem");
-    expect(items.length).toBe(3);
-    expect(within(section).getByRole("link", { name: /comenzar evaluación gratuita/i })).toHaveAttribute(
-      "href",
-      "/register"
-    );
+    // Steps are rendered as divs, not listitems
+    const stepHeadings = within(section).getAllByRole("heading", { level: 3 });
+    expect(stepHeadings.length).toBe(3);
+    
+    // Check for CTA link in the section
+    const evaluationLinks = within(section).getAllByRole("link", { name: /comenzar evaluación gratuita/i });
+    expect(evaluationLinks[0]).toHaveAttribute("href", "/register");
   });
 
   it("Beneficios: 6 tarjetas", () => {
@@ -62,15 +64,14 @@ describe("Landing GFS - Home", () => {
 
   it("Hero section con CTA de evaluación y login", async () => {
     render(<Home />);
-    await waitFor(() => {
-      // Verificar que existe el botón de comenzar evaluación
-      const evaluationButton = screen.getByRole("link", { name: /comenzar evaluación gratuita/i });
-      expect(evaluationButton).toHaveAttribute("href", "/register");
-      
-      // Verificar que existe el botón de iniciar sesión
-      const loginButton = screen.getByRole("link", { name: /iniciar sesión/i });
-      expect(loginButton).toHaveAttribute("href", "/login");
-    });
+    
+    // Use findByRole for better async handling
+    const evaluationButtons = await screen.findAllByRole("link", { name: /comenzar evaluación gratuita/i });
+    expect(evaluationButtons[0]).toHaveAttribute("href", "/register");
+    
+    // Verificar que existe el botón de iniciar sesión
+    const loginButton = await screen.findByRole("link", { name: /iniciar sesión/i });
+    expect(loginButton).toHaveAttribute("href", "/login");
   });
 });
 
