@@ -45,19 +45,7 @@ jest.mock('@supabase/supabase-js', () => ({
   }))
 }));
 
-// Mock Supabase auth helpers for AuthGuard
-jest.mock('@supabase/auth-helpers-nextjs', () => ({
-  createClientComponentClient: jest.fn(() => ({
-    auth: {
-      getSession: jest.fn(() =>
-        Promise.resolve({ data: { session: { user: { id: 'mock-user' } } } })
-      ),
-      onAuthStateChange: jest.fn(() => ({
-        data: { subscription: { unsubscribe: jest.fn() } },
-      })),
-    },
-  })),
-}));
+// Supabase auth helpers are mocked in __mocks__/@supabase/auth-helpers-nextjs.ts
 
 // Polyfill ResizeObserver for Recharts
 class ResizeObserver {

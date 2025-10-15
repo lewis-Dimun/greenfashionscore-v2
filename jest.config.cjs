@@ -6,6 +6,7 @@ module.exports = async () => {
     moduleNameMapper: {
       '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
       '^@/(.*)$': '<rootDir>/$1',
+      '^@supabase/auth-helpers-nextjs$': '<rootDir>/__mocks__/@supabase/auth-helpers-nextjs.ts',
     },
     testPathIgnorePatterns: ['<rootDir>/e2e/', '<rootDir>/.next/', '<rootDir>/node_modules/'],
     collectCoverageFrom: [
