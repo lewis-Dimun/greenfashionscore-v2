@@ -6,9 +6,10 @@ describe("Landing GFS - Home", () => {
   it("muestra hero con título, subtítulo y CTAs", async () => {
     render(<Home />);
     
-    // Use findByRole for better async handling
-    const heading = await screen.findByRole("heading", { name: /mide\. mejora\. comunica tu sostenibilidad\./i });
-    expect(heading).toBeInTheDocument();
+    // Wait for the component to render completely
+    await waitFor(() => {
+      expect(screen.getByRole("heading", { name: /mide\. mejora\. comunica tu sostenibilidad\./i })).toBeInTheDocument();
+    });
     
     expect(
       screen.getByText(/la certificación española que evalúa el impacto real de tu marca de moda\./i)
@@ -65,12 +66,17 @@ describe("Landing GFS - Home", () => {
   it("Hero section con CTA de evaluación y login", async () => {
     render(<Home />);
     
-    // Use findByRole for better async handling
-    const evaluationButtons = await screen.findAllByRole("link", { name: /comenzar evaluación gratuita/i });
+    // Wait for the component to render completely
+    await waitFor(() => {
+      expect(screen.getByRole("heading", { name: /mide\. mejora\. comunica tu sostenibilidad\./i })).toBeInTheDocument();
+    });
+    
+    // Use getAllByRole to handle multiple links with same text
+    const evaluationButtons = screen.getAllByRole("link", { name: /comenzar evaluación gratuita/i });
     expect(evaluationButtons[0]).toHaveAttribute("href", "/register");
     
     // Verificar que existe el botón de iniciar sesión
-    const loginButton = await screen.findByRole("link", { name: /iniciar sesión/i });
+    const loginButton = screen.getByRole("link", { name: /iniciar sesión/i });
     expect(loginButton).toHaveAttribute("href", "/login");
   });
 });
