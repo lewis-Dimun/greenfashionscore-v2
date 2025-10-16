@@ -6,6 +6,7 @@ import { useSurveyStore } from "../../lib/state/surveyStore";
 import { isSurveyValid } from "../../lib/validation/survey";
 import AuthGuard from "../../components/AuthGuard";
 import { getFallbackQuestions } from "../../lib/survey/fallback";
+import { Toast } from "../../components/Toast";
 
 const STEPS = [
   { key: "people", title: "People", description: "Condiciones laborales y bienestar" },
@@ -22,6 +23,7 @@ export default function SurveyWizardPage() {
   const [loading, setLoading] = useState(true);
   const [hasCompletedSurvey, setHasCompletedSurvey] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
+  const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' | 'info' } | null>(null);
   const router = useRouter();
 
   // Load questions from database or fallback
@@ -126,10 +128,17 @@ export default function SurveyWizardPage() {
   const current = STEPS[stepIndex];
   const currentQuestions = questions[current.key] || [];
 
-  return (
-    <AuthGuard>
-      <main aria-label="Encuesta Green Fashion Score" className="min-h-screen bg-gray-50 py-8">
-      <div className="container mx-auto px-4 max-w-4xl">
+          return (
+            <AuthGuard>
+              <main aria-label="Encuesta Green Fashion Score" className="min-h-screen bg-gray-50 py-8">
+              {toast && (
+                <Toast
+                  message={toast.message}
+                  type={toast.type}
+                  onClose={() => setToast(null)}
+                />
+              )}
+              <div className="container mx-auto px-4 max-w-4xl">
         <div role="progressbar" aria-label="Progreso del cuestionario" aria-valuemin={1} aria-valuemax={STEPS.length} aria-valuenow={stepIndex + 1} className="mb-8">
           <div className="flex items-center justify-between mb-2">
             <span className="text-sm font-medium text-gray-700">Paso {stepIndex + 1} de {STEPS.length}</span>

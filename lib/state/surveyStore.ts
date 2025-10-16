@@ -17,10 +17,17 @@ type Store = SurveyDraft & {
   setSubmitError: (err: string | null) => void;
   setNamespace: (ns: string) => void;
   reset: () => void;
+  // Specific survey methods
+  loadSpecificDraft: (productType: string) => Record<string, string>;
+  saveSpecificDraft: (productType: string, answers: Record<string, string>) => void;
 };
 
 function keyFor(ns: string) {
   return `gfs_survey_draft:${ns || 'anon'}`;
+}
+
+function specificKeyFor(ns: string, productType: string) {
+  return `gfs_specific_draft:${ns || 'anon'}:${productType}`;
 }
 
 function loadDraft(ns = 'anon'): SurveyDraft {
@@ -86,6 +93,25 @@ export const useSurveyStore = create<Store>((set, get) => ({
     const empty = { stepIndex: 0, answers: {}, isSubmitting: false, isSubmitted: false, submitError: null, namespace: ns };
     saveDraft(empty);
     set(empty);
+  },
+  loadSpecificDraft: (productType: string) => {
+    const ns = get().namespace;
+    if (typeof window === "undefined") return {};
+    try {
+      const raw = window.localStorage.getItem(specificKeyFor(ns, productType));
+      if (!raw) return {};
+      const parsed = JSON.parse(raw);
+      return parsed.answers || {};
+    } catch {
+      return {};
+    }
+  },
+  saveSpecificDraft: (productType: string, answers: Record<string, string>) => {
+    const ns = get().namespace;
+    if (typeof window === "undefined") return;
+    try {
+      window.localStorage.setItem(specificKeyFor(ns, productType), JSON.stringify({ answers }));
+    } catch {}
   }
 }));
 

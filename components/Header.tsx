@@ -36,7 +36,7 @@ export default function Header() {
         <nav className="flex items-center justify-between h-16">
           {/* Logo */}
           <div className="flex items-center">
-            <Link href="/" className="text-xl font-bold text-emerald-600">
+            <Link href={user ? "/dashboard" : "/"} className="text-xl font-bold text-emerald-600">
               Green Fashion Score
             </Link>
           </div>

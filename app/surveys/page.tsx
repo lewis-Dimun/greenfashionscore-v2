@@ -22,6 +22,9 @@ export default function SurveysPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [deleting, setDeleting] = useState<number | null>(null);
+  const [renaming, setRenaming] = useState<number | null>(null);
+  const [newName, setNewName] = useState<string>('');
+  const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' | 'info' } | null>(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -54,7 +57,7 @@ export default function SurveysPage() {
 
   const handleDelete = async (surveyId: number, type: 'general' | 'specific') => {
     if (type === 'general') {
-      alert('No se puede eliminar la encuesta general. Puedes rehacerla desde el dashboard.');
+      setToast({ message: 'No se puede eliminar la encuesta general. Puedes rehacerla desde el dashboard.', type: 'info' });
       return;
     }
 
@@ -70,6 +73,7 @@ export default function SurveysPage() {
       });
 
       if (response.ok) {
+        setToast({ message: 'Encuesta eliminada correctamente', type: 'success' });
         // Refresh the data
         const surveysResponse = await fetch('/api/surveys/me', {
           headers: await getAuthHeaders()
@@ -79,13 +83,47 @@ export default function SurveysPage() {
           setData(surveysData);
         }
       } else {
-        alert('Error al eliminar la encuesta');
+        setToast({ message: 'Error al eliminar la encuesta', type: 'error' });
       }
     } catch (error) {
       console.error('Delete error:', error);
-      alert('Error al eliminar la encuesta');
+      setToast({ message: 'Error al eliminar la encuesta', type: 'error' });
     } finally {
       setDeleting(null);
+    }
+  };
+
+  const handleRename = async (surveyId: number) => {
+    if (!newName.trim()) {
+      setToast({ message: 'El nombre no puede estar vacío', type: 'error' });
+      return;
+    }
+
+    try {
+      const response = await fetch('/api/surveys/specific', {
+        method: 'PATCH',
+        headers: await getAuthHeaders(),
+        body: JSON.stringify({ surveyId, product_name: newName.trim() })
+      });
+
+      if (response.ok) {
+        setToast({ message: 'Encuesta renombrada correctamente', type: 'success' });
+        setRenaming(null);
+        setNewName('');
+        // Refresh the data
+        const surveysResponse = await fetch('/api/surveys/me', {
+          headers: await getAuthHeaders()
+        });
+        if (surveysResponse.ok) {
+          const surveysData = await surveysResponse.json();
+          setData(surveysData);
+        }
+      } else {
+        setToast({ message: 'Error al renombrar la encuesta', type: 'error' });
+      }
+    } catch (error) {
+      console.error('Rename error:', error);
+      setToast({ message: 'Error al renombrar la encuesta', type: 'error' });
     }
   };
 
@@ -163,6 +201,28 @@ export default function SurveysPage() {
   return (
     <AuthGuard>
       <main className="min-h-screen bg-gray-50 py-8">
+        {toast && (
+          <div className={`fixed top-4 right-4 p-4 rounded-lg border-2 shadow-lg z-50 ${
+            toast.type === 'success' ? 'bg-green-50 border-green-200 text-green-800' :
+            toast.type === 'error' ? 'bg-red-50 border-red-200 text-red-800' :
+            'bg-blue-50 border-blue-200 text-blue-800'
+          }`}>
+            <div className="flex items-center space-x-2">
+              <span className="font-medium">
+                {toast.type === 'success' && '✅'}
+                {toast.type === 'error' && '❌'}
+                {toast.type === 'info' && 'ℹ️'}
+              </span>
+              <span>{toast.message}</span>
+              <button
+                onClick={() => setToast(null)}
+                className="ml-2 text-gray-500 hover:text-gray-700"
+              >
+                ×
+              </button>
+            </div>
+          </div>
+        )}
         <div className="container mx-auto px-4 max-w-6xl">
           <div className="mb-8">
             <h1 className="text-3xl font-bold text-gray-900 mb-2">Mis Resultados</h1>
@@ -234,7 +294,39 @@ export default function SurveysPage() {
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                          {survey.type === 'specific' ? survey.product_name || 'Sin nombre' : '-'}
+                          {survey.type === 'specific' ? (
+                            renaming === survey.id ? (
+                              <div className="flex items-center space-x-2">
+                                <input
+                                  type="text"
+                                  value={newName}
+                                  onChange={(e) => setNewName(e.target.value)}
+                                  className="px-2 py-1 border border-gray-300 rounded text-sm"
+                                  placeholder="Nuevo nombre"
+                                  autoFocus
+                                />
+                                <button
+                                  onClick={() => handleRename(survey.id)}
+                                  className="text-green-600 hover:text-green-800 text-xs"
+                                >
+                                  ✓
+                                </button>
+                                <button
+                                  onClick={() => {
+                                    setRenaming(null);
+                                    setNewName('');
+                                  }}
+                                  className="text-gray-500 hover:text-gray-700 text-xs"
+                                >
+                                  ✕
+                                </button>
+                              </div>
+                            ) : (
+                              <span className="group-hover:bg-gray-50 px-2 py-1 rounded">
+                                {survey.product_name || 'Sin nombre'}
+                              </span>
+                            )
+                          ) : '-'}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           {getStatusBadge(survey.completed)}
@@ -250,13 +342,24 @@ export default function SurveysPage() {
                             {survey.completed ? 'Rehacer' : 'Continuar'}
                           </button>
                           {survey.type === 'specific' && (
-                            <button
-                              onClick={() => handleDelete(survey.id, survey.type)}
-                              disabled={deleting === survey.id}
-                              className="text-red-600 hover:text-red-900 disabled:opacity-50 transition-colors"
-                            >
-                              {deleting === survey.id ? 'Eliminando...' : 'Eliminar'}
-                            </button>
+                            <>
+                              <button
+                                onClick={() => {
+                                  setRenaming(survey.id);
+                                  setNewName(survey.product_name || '');
+                                }}
+                                className="text-blue-600 hover:text-blue-900 transition-colors"
+                              >
+                                ✏️ Renombrar
+                              </button>
+                              <button
+                                onClick={() => handleDelete(survey.id, survey.type)}
+                                disabled={deleting === survey.id}
+                                className="text-red-600 hover:text-red-900 disabled:opacity-50 transition-colors"
+                              >
+                                {deleting === survey.id ? 'Eliminando...' : '🗑️ Eliminar'}
+                              </button>
+                            </>
                           )}
                         </td>
                       </tr>

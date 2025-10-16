@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import AuthGuard from "../../components/AuthGuard";
 import { getAuthHeaders } from "../../lib/auth/client";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 
 // Componente para tarjeta de categoría
 function CategoryCard({ 
@@ -264,6 +265,69 @@ export default function DashboardPage() {
             </div>
           </div>
           
+          {/* Charts Section */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+            {/* Bar Chart */}
+            <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
+              <h3 className="text-xl font-bold text-gray-900 mb-4">Puntuación por Dimensión</h3>
+              <ResponsiveContainer width="100%" height={300}>
+                <BarChart data={[
+                  { name: 'People', score: data.people, max: 20, percentage: (data.people / 20) * 100 },
+                  { name: 'Planet', score: data.planet, max: 20, percentage: (data.planet / 20) * 100 },
+                  { name: 'Materials', score: data.materials, max: 40, percentage: (data.materials / 40) * 100 },
+                  { name: 'Circularity', score: data.circularity, max: 20, percentage: (data.circularity / 20) * 100 }
+                ]}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="name" />
+                  <YAxis />
+                  <Tooltip 
+                    formatter={(value, name) => [
+                      name === 'score' ? `${value} puntos` : `${value} puntos máx`,
+                      name === 'score' ? 'Tu puntuación' : 'Máximo'
+                    ]}
+                  />
+                  <Legend />
+                  <Bar dataKey="score" fill="#10b981" name="Tu puntuación" />
+                  <Bar dataKey="max" fill="#e5e7eb" name="Máximo" />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+
+            {/* Pie Chart */}
+            <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
+              <h3 className="text-xl font-bold text-gray-900 mb-4">Distribución de Puntuación</h3>
+              <ResponsiveContainer width="100%" height={300}>
+                <PieChart>
+                  <Pie
+                    data={[
+                      { name: 'People', value: data.people, color: '#3b82f6' },
+                      { name: 'Planet', value: data.planet, color: '#10b981' },
+                      { name: 'Materials', value: data.materials, color: '#8b5cf6' },
+                      { name: 'Circularity', value: data.circularity, color: '#f59e0b' }
+                    ]}
+                    cx="50%"
+                    cy="50%"
+                    labelLine={false}
+                    label={({ name, value, percent }) => `${name}: ${value} (${(percent * 100).toFixed(0)}%)`}
+                    outerRadius={80}
+                    fill="#8884d8"
+                    dataKey="value"
+                  >
+                    {[
+                      { name: 'People', value: data.people, color: '#3b82f6' },
+                      { name: 'Planet', value: data.planet, color: '#10b981' },
+                      { name: 'Materials', value: data.materials, color: '#8b5cf6' },
+                      { name: 'Circularity', value: data.circularity, color: '#f59e0b' }
+                    ].map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.color} />
+                    ))}
+                  </Pie>
+                  <Tooltip />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+
           {/* Navigation Actions */}
           <div className="text-center mb-8">
             <div className="space-x-4 mb-4">

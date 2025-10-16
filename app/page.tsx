@@ -1,3 +1,6 @@
+"use client";
+import { useEffect, useState } from "react";
+import { supabase } from "../lib/supabase";
 import Hero from "../components/Hero";
 import Card from "../components/Card";
 import Steps from "../components/Steps";
@@ -5,9 +8,43 @@ import Benefits from "../components/Benefits";
 import Methodology from "../components/Methodology";
 import Partners from "../components/Partners";
 import Footer from "../components/Footer";
-import AuthGuard from "../components/AuthGuard";
+import AuthenticatedHome from "../components/AuthenticatedHome";
 
 export default function Home() {
+  const [user, setUser] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      setUser(session?.user ?? null);
+      setLoading(false);
+    };
+
+    checkAuth();
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      (_event, session) => {
+        setUser(session?.user ?? null);
+        setLoading(false);
+      }
+    );
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  if (loading) {
+    return (
+      <main className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-600"></div>
+      </main>
+    );
+  }
+
+  if (user) {
+    return <AuthenticatedHome user={user} />;
+  }
+
   return (
     <main>
       <Hero />
@@ -79,10 +116,7 @@ export default function Home() {
       <section aria-label="Área de usuario" className="container mx-auto px-4 py-16 text-center bg-gray-50">
         <div className="flex flex-wrap gap-4 justify-center">
           <a href="/login" className="text-emerald-600 hover:text-emerald-700 font-semibold underline">Iniciar sesión</a>
-          <AuthGuard requireAuth={true}>
-            <a href="/survey" className="text-emerald-600 hover:text-emerald-700 font-semibold underline">Realizar encuesta</a>
-            <a href="/dashboard" className="text-emerald-600 hover:text-emerald-700 font-semibold underline">Ver resultados</a>
-          </AuthGuard>
+          <a href="/register" className="text-emerald-600 hover:text-emerald-700 font-semibold underline">Registrarse</a>
         </div>
       </section>
 

@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { getAuthHeaders } from "../../../lib/auth/client";
-// import { useSurveyStore } from "../../../lib/state/surveyStore";
+import { useSurveyStore } from "../../../lib/state/surveyStore";
 import AuthGuard from "../../../components/AuthGuard";
 import { getFallbackQuestions } from "../../../lib/survey/fallback";
 
@@ -26,7 +26,9 @@ export default function ProductWizardPage() {
   const [requiresGeneralSurvey, setRequiresGeneralSurvey] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [answers, setAnswers] = useState<Record<string, string>>({});
+  const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' | 'info' } | null>(null);
   const router = useRouter();
+  const surveyStore = useSurveyStore();
 
   // Verify guard and load product questions when product is selected
   useEffect(() => {
@@ -52,11 +54,23 @@ export default function ProductWizardPage() {
             ? productQuestions
             : Object.values(productQuestions || {}).flat();
           setQuestions(Array.isArray(normalized) ? normalized : []);
+          
+          // Load existing draft for this product type
+          if (selectedProduct) {
+            const draftAnswers = surveyStore.loadSpecificDraft(selectedProduct);
+            setAnswers(draftAnswers);
+          }
         } catch (error) {
           console.warn('Failed to load product questions from DB, using fallback:', error);
           // For now, use general questions as fallback
           const fallbackQuestions = getFallbackQuestions();
           setQuestions(fallbackQuestions.people); // Use people questions as fallback
+          
+          // Load existing draft for this product type
+          if (selectedProduct) {
+            const draftAnswers = surveyStore.loadSpecificDraft(selectedProduct);
+            setAnswers(draftAnswers);
+          }
         } finally {
           setLoading(false);
         }
@@ -64,7 +78,7 @@ export default function ProductWizardPage() {
       
       loadQuestions();
     }
-  }, [selectedProduct, step]);
+  }, [selectedProduct, step, surveyStore]);
 
   const handleProductSelect = (productId: string) => {
     setSelectedProduct(productId);
@@ -72,10 +86,15 @@ export default function ProductWizardPage() {
   };
 
   const handleAnswerChange = (questionId: string, answerId: string) => {
-    setAnswers(prev => ({
-      ...prev,
+    const newAnswers = {
+      ...answers,
       [questionId]: answerId
-    }));
+    };
+    setAnswers(newAnswers);
+    // Save draft immediately
+    if (selectedProduct) {
+      surveyStore.saveSpecificDraft(selectedProduct, newAnswers);
+    }
   };
 
   const handleSubmit = async (mode: 'draft' | 'submit') => {
@@ -95,11 +114,17 @@ export default function ProductWizardPage() {
       });
 
       if (mode === 'draft') {
-        await fetch('/api/surveys/specific', {
+        const res = await fetch('/api/surveys/specific', {
           method: 'PUT',
           headers: await getAuthHeaders(),
-          body: JSON.stringify({ surveyId: 0, completed: false, answers: formattedAnswers })
+          body: JSON.stringify({ surveyId: 0, completed: false, answers: formattedAnswers, productType: selectedProduct })
         });
+        
+        if (res.ok) {
+          setToast({ message: 'Borrador guardado correctamente', type: 'success' });
+        } else {
+          setToast({ message: 'Error al guardar borrador', type: 'error' });
+        }
       } else {
         const res = await fetch('/api/scoring', {
           method: "POST",
@@ -112,11 +137,17 @@ export default function ProductWizardPage() {
         });
         
         if (res.ok) {
-          router.push("/dashboard");
+          // Clear draft after successful submission
+          surveyStore.saveSpecificDraft(selectedProduct, {});
+          setToast({ message: 'Encuesta enviada correctamente', type: 'success' });
+          setTimeout(() => router.push("/dashboard"), 1500);
+        } else {
+          setToast({ message: 'Error al enviar encuesta', type: 'error' });
         }
       }
     } catch (error) {
       console.error('Error submitting product survey:', error);
+      setToast({ message: 'Error de conexión', type: 'error' });
     } finally {
       setSubmitting(false);
     }
@@ -188,6 +219,28 @@ export default function ProductWizardPage() {
   return (
     <AuthGuard>
       <main className="min-h-screen bg-gray-50 py-8">
+        {toast && (
+          <div className={`fixed top-4 right-4 p-4 rounded-lg border-2 shadow-lg z-50 ${
+            toast.type === 'success' ? 'bg-green-50 border-green-200 text-green-800' :
+            toast.type === 'error' ? 'bg-red-50 border-red-200 text-red-800' :
+            'bg-blue-50 border-blue-200 text-blue-800'
+          }`}>
+            <div className="flex items-center space-x-2">
+              <span className="font-medium">
+                {toast.type === 'success' && '✅'}
+                {toast.type === 'error' && '❌'}
+                {toast.type === 'info' && 'ℹ️'}
+              </span>
+              <span>{toast.message}</span>
+              <button
+                onClick={() => setToast(null)}
+                className="ml-2 text-gray-500 hover:text-gray-700"
+              >
+                ×
+              </button>
+            </div>
+          </div>
+        )}
         <div className="container mx-auto px-4 max-w-4xl">
           <div className="mb-6">
             <button

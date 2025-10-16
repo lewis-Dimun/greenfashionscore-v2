@@ -20,7 +20,7 @@ export async function GET(req: NextRequest) {
     // Fetch general survey and specifics
     const [{ data: general }, { data: specific }] = await Promise.all([
       supabase.from('general_surveys').select('id, completed, created_at').eq('user_id', user.id).limit(1),
-      supabase.from('specific_surveys').select('id, product_name, created_at').eq('user_id', user.id).order('created_at', { ascending: false })
+      supabase.from('specific_surveys').select('id, product_name, created_at, completed').eq('user_id', user.id).order('created_at', { ascending: false })
     ]);
 
     return NextResponse.json({ general: general?.[0] || null, specific: specific || [] });
