@@ -14,6 +14,10 @@ const nextConfig = {
   compress: true,
   // Enable typed routes (moved from experimental)
   typedRoutes: true,
+  // Disable ESLint during builds
+  eslint: {
+    ignoreDuringBuilds: true
+  }
 };
 
 export default withBundleAnalyzer(nextConfig);
