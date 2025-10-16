@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "../lib/supabase";
+import { useSurveyStore } from "../lib/state/surveyStore";
 
 interface AuthGuardProps {
   children: React.ReactNode;
@@ -29,6 +30,12 @@ export default function AuthGuard({
       } else if (!requireAuth && session?.user) {
         router.push("/dashboard" as any);
       }
+
+      // update survey namespace to current user (or anon)
+      try {
+        const userId = session?.user?.id || 'anon';
+        useSurveyStore.getState().setNamespace(userId);
+      } catch {}
     };
 
     checkAuth();
@@ -43,6 +50,12 @@ export default function AuthGuard({
         } else if (!requireAuth && session?.user) {
           router.push("/dashboard" as any);
         }
+
+        // update namespace on auth changes
+        try {
+          const userId = session?.user?.id || 'anon';
+          useSurveyStore.getState().setNamespace(userId);
+        } catch {}
       }
     );
 

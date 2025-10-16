@@ -49,19 +49,40 @@ export async function POST(request: NextRequest) {
     const surveyScore = calculateCompleteSurveyScore(answers, scope, product_type);
 
     if (scope === 'general') {
-      // Create or update general survey
-      const { data: survey, error: surveyError } = await supabase
+      // Create or update general survey without ON CONFLICT (avoid 42P10)
+      const { data: existingSurvey, error: fetchSurveyError } = await supabase
         .from('general_surveys')
-        .upsert({
-          user_id: user.id,
-          completed: true
-        }, { onConflict: 'user_id' })
-        .select()
-        .single();
+        .select('id, completed')
+        .eq('user_id', user.id)
+        .maybeSingle();
 
-      if (surveyError) {
-        console.error('Error creating/updating general survey:', surveyError);
-        return NextResponse.json({ error: 'Failed to save survey' }, { status: 500 });
+      if (fetchSurveyError && fetchSurveyError.code !== 'PGRST116') {
+        console.error('Error fetching general survey:', fetchSurveyError);
+        return NextResponse.json({ error: 'Failed to read survey' }, { status: 500 });
+      }
+
+      let surveyId: number;
+      if (!existingSurvey) {
+        const { data: created, error: createSurveyError } = await supabase
+          .from('general_surveys')
+          .insert({ user_id: user.id, completed: true })
+          .select('id')
+          .single();
+        if (createSurveyError) {
+          console.error('Error creating general survey:', createSurveyError);
+          return NextResponse.json({ error: 'Failed to save survey' }, { status: 500 });
+        }
+        surveyId = created.id;
+      } else {
+        const { error: updateSurveyError } = await supabase
+          .from('general_surveys')
+          .update({ completed: true })
+          .eq('id', existingSurvey.id);
+        if (updateSurveyError) {
+          console.error('Error updating general survey:', updateSurveyError);
+          return NextResponse.json({ error: 'Failed to update survey' }, { status: 500 });
+        }
+        surveyId = existingSurvey.id;
       }
 
       // Replace existing answers for this survey (avoid duplicates)
@@ -69,7 +90,7 @@ export async function POST(request: NextRequest) {
         .from('user_answers')
         .delete()
         .eq('user_id', user.id)
-        .eq('general_survey_id', survey.id);
+        .eq('general_survey_id', surveyId);
 
       // Save user answers (insert fresh)
       for (const answer of answers) {
@@ -80,7 +101,7 @@ export async function POST(request: NextRequest) {
             question_id: Number(answer.questionId),
             answer_id: Number(answer.answerId),
             points_obtained: answer.numericValue,
-            general_survey_id: survey.id
+            general_survey_id: surveyId
           });
 
         if (answerError) {
@@ -92,7 +113,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({
         success: true,
         status: 'completed',
-        surveyId: survey.id,
+        surveyId: surveyId,
         score: {
           people: surveyScore.scores.people,
           planet: surveyScore.scores.planet,

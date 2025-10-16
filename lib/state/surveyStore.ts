@@ -6,6 +6,7 @@ export type SurveyDraft = {
   isSubmitting: boolean;
   isSubmitted: boolean;
   submitError: string | null;
+  namespace: string; // userId or 'anon'
 };
 
 type Store = SurveyDraft & {
@@ -14,26 +15,30 @@ type Store = SurveyDraft & {
   setSubmitting: (val: boolean) => void;
   setSubmitted: (val: boolean) => void;
   setSubmitError: (err: string | null) => void;
+  setNamespace: (ns: string) => void;
   reset: () => void;
 };
 
-const KEY = "gfs_survey_draft";
+function keyFor(ns: string) {
+  return `gfs_survey_draft:${ns || 'anon'}`;
+}
 
-function loadDraft(): SurveyDraft {
-  if (typeof window === "undefined") return { stepIndex: 0, answers: {}, isSubmitting: false, isSubmitted: false, submitError: null };
+function loadDraft(ns = 'anon'): SurveyDraft {
+  if (typeof window === "undefined") return { stepIndex: 0, answers: {}, isSubmitting: false, isSubmitted: false, submitError: null, namespace: ns };
   try {
-    const raw = window.localStorage.getItem(KEY);
-    if (!raw) return { stepIndex: 0, answers: {}, isSubmitting: false, isSubmitted: false, submitError: null };
+    const raw = window.localStorage.getItem(keyFor(ns));
+    if (!raw) return { stepIndex: 0, answers: {}, isSubmitting: false, isSubmitted: false, submitError: null, namespace: ns };
     const parsed = JSON.parse(raw);
     return { 
       stepIndex: Number(parsed.stepIndex) || 0, 
       answers: parsed.answers || {},
       isSubmitting: false, // Never persist submitting state
       isSubmitted: false, // Never persist submitted state
-      submitError: null // Never persist error state
+      submitError: null, // Never persist error state
+      namespace: ns
     };
   } catch {
-    return { stepIndex: 0, answers: {}, isSubmitting: false, isSubmitted: false, submitError: null };
+    return { stepIndex: 0, answers: {}, isSubmitting: false, isSubmitted: false, submitError: null, namespace: ns };
   }
 }
 
@@ -41,7 +46,7 @@ function saveDraft(draft: SurveyDraft) {
   if (typeof window === "undefined") return;
   try {
     // Only save stepIndex and answers to localStorage, not submit states
-    window.localStorage.setItem(KEY, JSON.stringify({
+    window.localStorage.setItem(keyFor(draft.namespace), JSON.stringify({
       stepIndex: draft.stepIndex,
       answers: draft.answers
     }));
@@ -52,12 +57,13 @@ export const useSurveyStore = create<Store>((set, get) => ({
   ...loadDraft(),
   setStepIndex: (i) => {
     const next = { ...get(), stepIndex: i };
-    saveDraft({ stepIndex: next.stepIndex, answers: next.answers, isSubmitting: false, isSubmitted: false, submitError: null });
+    saveDraft({ stepIndex: next.stepIndex, answers: next.answers, isSubmitting: false, isSubmitted: false, submitError: null, namespace: next.namespace });
     set({ stepIndex: i });
   },
   setAnswer: (q, a) => {
     const next = { ...get().answers, [q]: a };
-    saveDraft({ stepIndex: get().stepIndex, answers: next, isSubmitting: false, isSubmitted: false, submitError: null });
+    const ns = get().namespace;
+    saveDraft({ stepIndex: get().stepIndex, answers: next, isSubmitting: false, isSubmitted: false, submitError: null, namespace: ns });
     set({ answers: next });
   },
   setSubmitting: (val) => {
@@ -69,8 +75,15 @@ export const useSurveyStore = create<Store>((set, get) => ({
   setSubmitError: (err) => {
     set({ submitError: err });
   },
+  setNamespace: (ns) => {
+    const current = get();
+    if (current.namespace === ns) return;
+    const nextDraft = loadDraft(ns);
+    set(nextDraft);
+  },
   reset: () => {
-    const empty = { stepIndex: 0, answers: {}, isSubmitting: false, isSubmitted: false, submitError: null };
+    const ns = get().namespace;
+    const empty = { stepIndex: 0, answers: {}, isSubmitting: false, isSubmitted: false, submitError: null, namespace: ns };
     saveDraft(empty);
     set(empty);
   }
