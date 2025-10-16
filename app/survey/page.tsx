@@ -20,6 +20,8 @@ export default function SurveyWizardPage() {
   const nextButtonRef = useRef<HTMLButtonElement | null>(null);
   const [questions, setQuestions] = useState<Record<string, any[]>>({});
   const [loading, setLoading] = useState(true);
+  const [hasCompletedSurvey, setHasCompletedSurvey] = useState(false);
+  const [isEditMode, setIsEditMode] = useState(false);
   const router = useRouter();
 
   // Load questions from database or fallback
@@ -77,6 +79,32 @@ export default function SurveyWizardPage() {
     loadQuestions();
   }, []);
 
+  // Check if user already completed the survey and prefill answers
+  useEffect(() => {
+    async function checkExistingSurvey() {
+      try {
+        const res = await fetch('/api/surveys/general', {
+          method: 'GET',
+          headers: await getAuthHeaders()
+        });
+        if (res.ok) {
+          const data = await res.json();
+          if (data && data.completed) {
+            setHasCompletedSurvey(true);
+            if (Array.isArray(data.answers)) {
+              data.answers.forEach((ans: any) => {
+                draft.setAnswer(String(ans.question_id), String(ans.answer_id));
+              });
+            }
+          }
+        }
+      } catch (e) {
+        console.warn('Failed to check existing survey:', e);
+      }
+    }
+    checkExistingSurvey();
+  }, []);
+
   useEffect(() => {
     nextButtonRef.current?.focus();
   }, [stepIndex]);
@@ -121,6 +149,46 @@ export default function SurveyWizardPage() {
             <p className="text-lg text-gray-600">{current.description}</p>
           </div>
           
+          {/* Completed banner and actions */}
+          {hasCompletedSurvey && !isEditMode && !draft.isSubmitted && (
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-6">
+              <h3 className="text-blue-900 font-bold text-xl mb-2">✅ Ya has completado esta encuesta</h3>
+              <p className="text-blue-800 mb-4">Puedes ver tus resultados, editar tus respuestas o crear una nueva encuesta.</p>
+              <div className="flex gap-3">
+                <button
+                  onClick={() => router.push('/dashboard')}
+                  className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                >
+                  Ver Resultados
+                </button>
+                <button
+                  onClick={() => setIsEditMode(true)}
+                  className="px-4 py-2 bg-emerald-600 text-white rounded-md hover:bg-emerald-700"
+                >
+                  Editar Respuestas
+                </button>
+                <button
+                  onClick={async () => {
+                    if (!confirm('¿Eliminar encuesta y empezar una nueva?')) return;
+                    try {
+                      const res = await fetch('/api/surveys/general', { method: 'DELETE', headers: await getAuthHeaders() });
+                      if (res.ok) {
+                        draft.reset();
+                        setHasCompletedSurvey(false);
+                        setIsEditMode(false);
+                      }
+                    } catch (err) {
+                      console.error('Delete survey error:', err);
+                    }
+                  }}
+                  className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
+                >
+                  Eliminar y Crear Nueva
+                </button>
+              </div>
+            </div>
+          )}
+
           {/* Feedback banners */}
           {draft.isSubmitted && (
             <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">

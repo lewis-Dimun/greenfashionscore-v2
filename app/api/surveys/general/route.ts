@@ -47,10 +47,10 @@ export async function GET(req: NextRequest) {
       }
     }
 
-    // Get or create general survey for user
+    // Get general survey for user
     const { data: existingSurvey, error: surveyError } = await supabase
       .from('general_surveys')
-      .select('*')
+      .select('id, completed, created_at')
       .eq('user_id', user.id)
       .single();
 
@@ -59,26 +59,22 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: 'Failed to fetch survey' }, { status: 500 });
     }
 
-    if (existingSurvey) {
-      return NextResponse.json(existingSurvey);
+    if (!existingSurvey) {
+      return NextResponse.json({ completed: false });
     }
 
-    // Create new general survey
-    const { data: newSurvey, error: createError } = await supabase
-      .from('general_surveys')
-      .insert({
-        user_id: user.id,
-        completed: false
-      })
-      .select()
-      .single();
+    // Load existing answers for edit mode
+    const { data: answers } = await supabase
+      .from('user_answers')
+      .select('question_id, answer_id, points_obtained')
+      .eq('user_id', user.id)
+      .eq('general_survey_id', existingSurvey.id);
 
-    if (createError) {
-      console.error('Error creating general survey:', createError);
-      return NextResponse.json({ error: 'Failed to create survey' }, { status: 500 });
-    }
-
-    return NextResponse.json(newSurvey);
+    return NextResponse.json({
+      completed: existingSurvey.completed,
+      surveyId: existingSurvey.id,
+      answers: answers || []
+    });
   } catch (error) {
     console.error('General survey API error:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
@@ -198,20 +194,26 @@ export async function PUT(req: NextRequest) {
       surveyId = created.id;
     }
 
-    // Upsert user answers for draft save
+    // Replace existing answers for this survey (avoid duplicates)
     if (Array.isArray(answers)) {
+      await supabase
+        .from('user_answers')
+        .delete()
+        .eq('user_id', user.id)
+        .eq('general_survey_id', surveyId);
+
       for (const a of answers) {
-        const { error: upsertError } = await supabase
+        const { error: insertError } = await supabase
           .from('user_answers')
-          .upsert({
+          .insert({
             user_id: user.id,
             question_id: Number(a.questionId),
             answer_id: Number(a.answerId),
             points_obtained: Number(a.numericValue) || 0,
             general_survey_id: surveyId
-          }, { onConflict: 'user_id,question_id,general_survey_id' });
-        if (upsertError) {
-          console.error('Error upserting answer:', upsertError);
+          });
+        if (insertError) {
+          console.error('Error inserting answer:', insertError);
           return NextResponse.json({ error: 'Failed to save answers' }, { status: 500 });
         }
       }
@@ -228,9 +230,60 @@ export async function PUT(req: NextRequest) {
       return NextResponse.json({ error: 'Failed to update survey' }, { status: 500 });
     }
 
-    return NextResponse.json({ id: surveyId, completed: !!completed });
+    return NextResponse.json({ success: true, status: completed ? 'completed' : 'draft', id: surveyId, completed: !!completed });
   } catch (error) {
     console.error('General survey PUT error:', error);
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+  }
+}
+
+export async function DELETE(req: NextRequest) {
+  try {
+    const supabase = createServerSupabaseClient();
+
+    const authHeader = req.headers.get('authorization');
+    if (!authHeader?.startsWith('Bearer ')) {
+      return NextResponse.json({ error: 'Missing or invalid authorization header' }, { status: 401 });
+    }
+
+    const token = authHeader.split(' ')[1];
+    const { data: { user }, error: authError } = await supabase.auth.getUser(token);
+    if (authError || !user) {
+      return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
+    }
+
+    // Find user's general survey
+    const { data: survey } = await supabase
+      .from('general_surveys')
+      .select('id')
+      .eq('user_id', user.id)
+      .single();
+
+    if (!survey) {
+      return NextResponse.json({ success: true });
+    }
+
+    // Delete answers first to satisfy foreign keys
+    await supabase
+      .from('user_answers')
+      .delete()
+      .eq('user_id', user.id)
+      .eq('general_survey_id', survey.id);
+
+    // Delete general survey
+    const { error: deleteError } = await supabase
+      .from('general_surveys')
+      .delete()
+      .eq('id', survey.id)
+      .eq('user_id', user.id);
+
+    if (deleteError) {
+      return NextResponse.json({ error: 'Failed to delete survey' }, { status: 500 });
+    }
+
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error('General survey DELETE error:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }

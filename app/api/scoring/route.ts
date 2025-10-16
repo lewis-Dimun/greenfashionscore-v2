@@ -64,17 +64,24 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ error: 'Failed to save survey' }, { status: 500 });
       }
 
-      // Save user answers
+      // Replace existing answers for this survey (avoid duplicates)
+      await supabase
+        .from('user_answers')
+        .delete()
+        .eq('user_id', user.id)
+        .eq('general_survey_id', survey.id);
+
+      // Save user answers (insert fresh)
       for (const answer of answers) {
         const { error: answerError } = await supabase
           .from('user_answers')
-          .upsert({
+          .insert({
             user_id: user.id,
             question_id: Number(answer.questionId),
             answer_id: Number(answer.answerId),
             points_obtained: answer.numericValue,
             general_survey_id: survey.id
-          }, { onConflict: 'user_id,question_id,general_survey_id' });
+          });
 
         if (answerError) {
           console.error('Error saving user answer:', answerError);
@@ -125,7 +132,14 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ error: 'Failed to create specific survey' }, { status: 500 });
       }
 
-      // Save user answers for specific survey
+      // Replace existing answers for this specific survey
+      await supabase
+        .from('user_answers')
+        .delete()
+        .eq('user_id', user.id)
+        .eq('specific_survey_id', specificSurvey.id);
+
+      // Save user answers for specific survey (insert fresh)
       for (const answer of answers) {
         const { error: answerError } = await supabase
           .from('user_answers')
