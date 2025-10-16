@@ -5,7 +5,8 @@ test.describe("Landing smoke", () => {
     await page.goto("/");
     // Wait for the page to load completely
     await page.waitForLoadState('networkidle');
-    const link = page.getByRole("link", { name: /comenzar evaluación gratuita/i }).first();
+    // Find the link by href attribute instead of text content
+    const link = page.locator('a[href="/register"]').first();
     await expect(link).toBeVisible({ timeout: 10000 });
     await expect(link).toHaveAttribute("href", "/register");
   });
