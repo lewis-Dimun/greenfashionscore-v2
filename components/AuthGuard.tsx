@@ -25,9 +25,9 @@ export default function AuthGuard({
       setLoading(false);
 
       if (requireAuth && !session?.user) {
-        router.push(redirectTo);
+        router.push(redirectTo as any);
       } else if (!requireAuth && session?.user) {
-        router.push("/dashboard");
+        router.push("/dashboard" as any);
       }
     };
 
@@ -39,9 +39,9 @@ export default function AuthGuard({
         setLoading(false);
         
         if (requireAuth && !session?.user) {
-          router.push(redirectTo);
+          router.push(redirectTo as any);
         } else if (!requireAuth && session?.user) {
-          router.push("/dashboard");
+          router.push("/dashboard" as any);
         }
       }
     );

@@ -1,10 +1,8 @@
 import 'server-only';
-import { createClient } from '@supabase/supabase-js';
+import { createServerSupabaseClient } from '../supabase-server';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
-
-const supabase = createClient(supabaseUrl, supabaseServiceKey);
+// Use server client for guards as they need to check user-specific data
+const supabase = createServerSupabaseClient();
 
 export async function hasCompletedGeneralSurvey(userId: string): Promise<boolean> {
   const { data, error } = await supabase

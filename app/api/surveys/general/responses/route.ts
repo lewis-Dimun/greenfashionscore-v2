@@ -71,20 +71,22 @@ export async function GET(req: NextRequest) {
     const responsesByDimension: Record<string, any[]> = {};
     
     userAnswers.forEach(answer => {
-      const dimensionName = answer.question.dimension.name;
+      const dimension = (answer.question as any).dimension;
+      const dimensionName = Array.isArray(dimension) ? dimension[0]?.name : dimension?.name;
+      if (!dimensionName) return; // Skip if no dimension
       if (!responsesByDimension[dimensionName]) {
         responsesByDimension[dimensionName] = [];
       }
       
       responsesByDimension[dimensionName].push({
         id: answer.id,
-        questionId: answer.question.id,
-        questionText: answer.question.text,
-        answerId: answer.answer.id,
-        answerText: answer.answer.text,
+        questionId: (answer.question as any).id,
+        questionText: (answer.question as any).text,
+        answerId: (answer.answer as any).id,
+        answerText: (answer.answer as any).text,
         points: answer.points_obtained,
-        maxPoints: answer.question.dimension.max_points,
-        weightPercent: answer.question.dimension.weight_percent
+        maxPoints: dimension?.max_points,
+        weightPercent: dimension?.weight_percent
       });
     });
 

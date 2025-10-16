@@ -1,4 +1,12 @@
-import { computeCategoryPercent, computeTotalScore, gradeFromTotal, combineGeneralAndSpecifics } from "../lib/scoring/engine";
+import { 
+  computeRawCategorySum,
+  normalizeCategory,
+  computeDisplayTotal,
+  gradeFromTotal,
+  calculateSurveyScore,
+  aggregateScores,
+  calculateCompleteSurveyScore
+} from "../lib/scoring/engine";
 
 describe("Scoring engine (GFS)", () => {
   const DIMS = {

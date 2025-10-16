@@ -1,13 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
-
-const supabase = createClient(supabaseUrl, supabaseServiceKey);
+import { createServerSupabaseClient } from '../../../../lib/supabase-server';
 
 export async function GET(req: NextRequest) {
   try {
+    const supabase = createServerSupabaseClient();
+    
     // Get user ID from JWT token
     const authHeader = req.headers.get('authorization');
     if (!authHeader?.startsWith('Bearer ')) {
@@ -51,14 +48,14 @@ export async function GET(req: NextRequest) {
     }
 
     // Get or create general survey for user
-    const { data: existingSurvey, error: fetchError } = await supabase
+    const { data: existingSurvey, error: surveyError } = await supabase
       .from('general_surveys')
       .select('*')
       .eq('user_id', user.id)
       .single();
 
-    if (fetchError && fetchError.code !== 'PGRST116') { // PGRST116 = no rows returned
-      console.error('Error fetching general survey:', fetchError);
+    if (surveyError && surveyError.code !== 'PGRST116') { // PGRST116 = no rows returned
+      console.error('Error fetching general survey:', surveyError);
       return NextResponse.json({ error: 'Failed to fetch survey' }, { status: 500 });
     }
 
@@ -90,6 +87,8 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
   try {
+    const supabase = createServerSupabaseClient();
+    
     // Get user ID from JWT token
     const authHeader = req.headers.get('authorization');
     if (!authHeader?.startsWith('Bearer ')) {
@@ -127,6 +126,8 @@ export async function POST(req: NextRequest) {
 
 export async function PUT(req: NextRequest) {
   try {
+    const supabase = createServerSupabaseClient();
+    
     const authHeader = req.headers.get('authorization');
     if (!authHeader?.startsWith('Bearer ')) {
       return NextResponse.json({ error: 'Missing or invalid authorization header' }, { status: 401 });

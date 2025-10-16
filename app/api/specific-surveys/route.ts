@@ -93,6 +93,10 @@ export async function POST(req: NextRequest) {
       .eq('completed', true)
       .single();
 
+    if (!generalSurvey) {
+      return NextResponse.json({ error: 'No completed general survey found' }, { status: 400 });
+    }
+
     const { data: newSurvey, error: createError } = await supabase
       .from('specific_surveys')
       .insert({

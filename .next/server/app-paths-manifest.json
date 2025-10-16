@@ -1,5 +1,25 @@
 {
+  "/api/dashboard/route": "app/api/dashboard/route.js",
+  "/api/questions/options/route": "app/api/questions/options/route.js",
+  "/api/scoring/route": "app/api/scoring/route.js",
+  "/api/questions/product/route": "app/api/questions/product/route.js",
+  "/api/questions/general/route": "app/api/questions/general/route.js",
+  "/api/results/route": "app/api/results/route.js",
+  "/api/surveys/general/complete/route": "app/api/surveys/general/complete/route.js",
+  "/api/specific-surveys/route": "app/api/specific-surveys/route.js",
+  "/api/surveys/general/responses/route": "app/api/surveys/general/responses/route.js",
+  "/api/surveys/specific/route": "app/api/surveys/specific/route.js",
+  "/api/surveys/general/route": "app/api/surveys/general/route.js",
+  "/api/users/ensure/route": "app/api/users/ensure/route.js",
+  "/api/surveys/me/route": "app/api/surveys/me/route.js",
+  "/_not-found/page": "app/_not-found/page.js",
+  "/dashboard/page": "app/dashboard/page.js",
+  "/product/new/page": "app/product/new/page.js",
   "/login/page": "app/login/page.js",
+  "/register/page": "app/register/page.js",
   "/page": "app/page.js",
-  "/survey/page": "app/survey/page.js"
+  "/survey/index/page": "app/survey/index/page.js",
+  "/survey/page": "app/survey/page.js",
+  "/surveys/page": "app/surveys/page.js",
+  "/survey/responses/page": "app/survey/responses/page.js"
 }

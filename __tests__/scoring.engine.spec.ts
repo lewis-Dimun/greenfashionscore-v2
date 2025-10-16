@@ -1,7 +1,7 @@
 import { describe, it, expect } from '@jest/globals';
 import {
-  computeCategoryScore,
-  computeTotalScore,
+  computeRawCategorySum,
+  computeDisplayTotal,
   gradeFromTotal,
   aggregateScores,
   calculateCompleteSurveyScore,
@@ -10,28 +10,28 @@ import {
 } from '../lib/scoring/engine';
 
 describe('Scoring Engine', () => {
-  describe('computeCategoryScore', () => {
+  describe('computeRawCategorySum', () => {
     it('should calculate category score with cap', () => {
       // People: max 20
-      expect(computeCategoryScore([5, 10, 8], 'people')).toBe(20); // Capped at 20
-      expect(computeCategoryScore([5, 10], 'people')).toBe(15); // Not capped
+      expect(computeRawCategorySum([5, 10, 8], 'people')).toBe(20); // Capped at 20
+      expect(computeRawCategorySum([5, 10], 'people')).toBe(15); // Not capped
       
       // Materials: max 40
-      expect(computeCategoryScore([20, 25], 'materials')).toBe(40); // Capped at 40
-      expect(computeCategoryScore([10, 15], 'materials')).toBe(25); // Not capped
+      expect(computeRawCategorySum([20, 25], 'materials')).toBe(40); // Capped at 40
+      expect(computeRawCategorySum([10, 15], 'materials')).toBe(25); // Not capped
     });
 
     it('should handle empty scores array', () => {
-      expect(computeCategoryScore([], 'people')).toBe(0);
-      expect(computeCategoryScore([], 'materials')).toBe(0);
+      expect(computeRawCategorySum([], 'people')).toBe(0);
+      expect(computeRawCategorySum([], 'materials')).toBe(0);
     });
 
     it('should handle negative scores', () => {
-      expect(computeCategoryScore([-5, 10], 'people')).toBe(5);
+      expect(computeRawCategorySum([-5, 10], 'people')).toBe(5);
     });
   });
 
-  describe('computeTotalScore', () => {
+  describe('computeDisplayTotal', () => {
     it('should calculate total score with cap', () => {
       const scores: CategoryScores = {
         people: 20,
@@ -39,7 +39,7 @@ describe('Scoring Engine', () => {
         materials: 40,
         circularity: 20
       };
-      expect(computeTotalScore(scores)).toBe(100); // Max total
+      expect(computeDisplayTotal(scores)).toBe(100); // Max total
     });
 
     it('should cap total at 100', () => {

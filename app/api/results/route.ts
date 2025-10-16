@@ -1,18 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
+import { createServerSupabaseClient } from '../../../lib/supabase-server';
 import { computeScoresForSurvey } from '../../../lib/scoring/compute';
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
-
-// Use anon key for user token verification
-const supabase = createClient(supabaseUrl, supabaseAnonKey);
-// Use service key for database operations
-const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey);
 
 export async function GET(req: NextRequest) {
   try {
+    const supabase = createServerSupabaseClient();
+    
     // Get user ID from JWT token
     const authHeader = req.headers.get('authorization');
     if (!authHeader?.startsWith('Bearer ')) {
@@ -43,7 +36,7 @@ export async function GET(req: NextRequest) {
     }
 
     // Compute scores for the survey
-    const scores = await computeScoresForSurvey(supabaseAdmin, user.id, parseInt(surveyId), type);
+    const scores = await computeScoresForSurvey(supabase, user.id, parseInt(surveyId), type);
 
     return NextResponse.json(scores);
   } catch (error) {

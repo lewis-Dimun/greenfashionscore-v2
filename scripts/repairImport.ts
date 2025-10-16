@@ -80,8 +80,7 @@ function isSpecificQuestion(especifica: string): boolean {
   return especifica?.toLowerCase().includes('sí') || 
          especifica?.toLowerCase().includes('si') ||  // Add "si" without accent
          especifica?.toLowerCase().includes('yes') ||
-         especifica === '1' ||
-         especifica === 1;
+         especifica === '1';
 }
 
 async function repairImport(): Promise<RepairReport> {
@@ -240,7 +239,7 @@ async function repairImport(): Promise<RepairReport> {
           // Process actual answers
           for (const answer of questionAnswers) {
             const answerText = answer.Respuesta?.trim();
-            const points = answer.puntos_respuesta || answer.Puntos || 0;
+            const points = answer.puntos_respuesta || (answer as any).Puntos || 0;
             const answerExcelId = answer.Id_Respuesta?.toString() || 'unknown';
             
             if (!answerText) {
@@ -295,7 +294,7 @@ async function repairImport(): Promise<RepairReport> {
         }
         
       } catch (error) {
-        report.errors.push(`Error processing question ${question.Id_pregunta}: ${error.message}`);
+        report.errors.push(`Error processing question ${question.Id_pregunta}: ${error instanceof Error ? error.message : String(error)}`);
       }
     }
     
@@ -303,7 +302,7 @@ async function repairImport(): Promise<RepairReport> {
     return report;
     
   } catch (error) {
-    report.errors.push(`Fatal error: ${error.message}`);
+    report.errors.push(`Fatal error: ${error instanceof Error ? error.message : String(error)}`);
     return report;
   }
 }

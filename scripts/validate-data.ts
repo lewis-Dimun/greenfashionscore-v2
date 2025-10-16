@@ -213,7 +213,7 @@ async function validateData(): Promise<ValidationReport> {
     return report;
     
   } catch (error) {
-    report.anomalies.push(`Fatal validation error: ${error.message}`);
+    report.anomalies.push(`Fatal validation error: ${error instanceof Error ? error.message : String(error)}`);
     return report;
   }
 }

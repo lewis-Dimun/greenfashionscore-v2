@@ -86,7 +86,7 @@ export default function ProductWizardPage() {
       // Convert answers to new format
       const formattedAnswers = Object.entries(answers).map(([questionId, answerId]) => {
         const question = questions.find(q => q.id === questionId);
-        const answer = question?.answers?.find(a => a.id === answerId);
+        const answer = question?.answers?.find((a: any) => a.id === answerId);
         return {
           questionId,
           answerId,

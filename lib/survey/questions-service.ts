@@ -1,11 +1,9 @@
 import 'server-only';
-import { createClient } from '@supabase/supabase-js';
-// import { db } from '../../db';
+import { createAdminSupabaseClient } from '../supabase-server';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
-
-const supabase = createClient(supabaseUrl, supabaseServiceKey);
+// Use admin client for questions service as it needs to read all questions
+// regardless of user authentication state
+const supabase = createAdminSupabaseClient();
 
 export interface QuestionWithAnswers {
   id: number;
@@ -52,11 +50,13 @@ export async function getAllQuestionsByCategory(): Promise<QuestionsByCategory> 
     const grouped: QuestionsByCategory = {};
 
     questions.forEach(question => {
-      const dimensionName = question.dimension.name;
+      const dimension = (question as any).dimension;
+      const dimensionName = Array.isArray(dimension) ? dimension[0]?.name : dimension?.name;
+      if (!dimensionName) return; // Skip if no dimension
       if (!grouped[dimensionName]) {
         grouped[dimensionName] = [];
       }
-      grouped[dimensionName].push(question);
+      grouped[dimensionName].push(question as any);
     });
 
     return grouped;
@@ -90,11 +90,13 @@ export async function getGeneralQuestionsByCategory(): Promise<QuestionsByCatego
     const grouped: QuestionsByCategory = {};
     
     questions.forEach(question => {
-      const dimensionName = question.dimension.name;
+      const dimension = (question as any).dimension;
+      const dimensionName = Array.isArray(dimension) ? dimension[0]?.name : dimension?.name;
+      if (!dimensionName) return; // Skip if no dimension
       if (!grouped[dimensionName]) {
         grouped[dimensionName] = [];
       }
-      grouped[dimensionName].push(question);
+      grouped[dimensionName].push(question as any);
     });
 
     return grouped;
@@ -128,11 +130,13 @@ export async function getProductQuestionsByCategory(): Promise<QuestionsByCatego
     const grouped: QuestionsByCategory = {};
     
     questions.forEach(question => {
-      const dimensionName = question.dimension.name;
+      const dimension = (question as any).dimension;
+      const dimensionName = Array.isArray(dimension) ? dimension[0]?.name : dimension?.name;
+      if (!dimensionName) return; // Skip if no dimension
       if (!grouped[dimensionName]) {
         grouped[dimensionName] = [];
       }
-      grouped[dimensionName].push(question);
+      grouped[dimensionName].push(question as any);
     });
 
     return grouped;
@@ -162,7 +166,7 @@ export async function getQuestionById(questionId: number): Promise<QuestionWithA
       return null;
     }
 
-    return question;
+    return question as any;
   } catch (error) {
     console.error('Error in getQuestionById:', error);
     return null;

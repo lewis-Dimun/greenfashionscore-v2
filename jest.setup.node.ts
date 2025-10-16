@@ -13,10 +13,10 @@ if (!global.structuredClone) {
 }
 
 // Mock Deno environment for Edge Functions
-global.Deno = {
+(global as any).Deno = {
   env: {
     get: (key: string) => process.env[key]
   }
-} as any;
+};
 
 

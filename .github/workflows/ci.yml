@@ -31,8 +31,27 @@ jobs:
         NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
         NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
 
+    - name: Production Build Check
+      run: npm run build
+      env:
+        NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+        NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+        SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        DATABASE_URL: ${{ secrets.DATABASE_URL }}
+
     - name: Install Playwright browsers
       run: npx playwright install --with-deps
+
+    - name: Start server for E2E tests
+      run: npm start &
+      env:
+        NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+        NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+        SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        DATABASE_URL: ${{ secrets.DATABASE_URL }}
+
+    - name: Wait for server
+      run: npx wait-on http://localhost:3000
 
     - name: Run Playwright tests
       run: npm run test:e2e
@@ -40,3 +59,29 @@ jobs:
         NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
         NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
         PLAYWRIGHT_BASE_URL: http://localhost:3000
+
+    - name: Environment Variables Validation
+      run: |
+        echo "Validating required environment variables..."
+        if [ -z "$NEXT_PUBLIC_SUPABASE_URL" ]; then
+          echo "❌ NEXT_PUBLIC_SUPABASE_URL is missing"
+          exit 1
+        fi
+        if [ -z "$NEXT_PUBLIC_SUPABASE_ANON_KEY" ]; then
+          echo "❌ NEXT_PUBLIC_SUPABASE_ANON_KEY is missing"
+          exit 1
+        fi
+        if [ -z "$SUPABASE_SERVICE_ROLE_KEY" ]; then
+          echo "❌ SUPABASE_SERVICE_ROLE_KEY is missing"
+          exit 1
+        fi
+        if [ -z "$DATABASE_URL" ]; then
+          echo "❌ DATABASE_URL is missing"
+          exit 1
+        fi
+        echo "✅ All required environment variables are present"
+      env:
+        NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+        NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+        SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        DATABASE_URL: ${{ secrets.DATABASE_URL }}

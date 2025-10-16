@@ -1,19 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
+import { createServerSupabaseClient } from '../../../lib/supabase-server';
 import { computeUserDashboardScores } from '../../../lib/scoring/compute';
 import { hasCompletedGeneralSurvey } from '../../../lib/survey/guards';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
-
-// Use anon key for user token verification
-const supabase = createClient(supabaseUrl, supabaseAnonKey);
-// Use service key for database operations
-const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey);
-
 export async function GET(request: NextRequest) {
   try {
+    const supabase = createServerSupabaseClient();
+    
     // Get the authorization header
     const authHeader = request.headers.get('authorization');
     
@@ -44,8 +37,8 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ hasGeneralSurvey: false });
     }
 
-    // Compute dashboard scores using admin client
-    const scores = await computeUserDashboardScores(user.id, supabaseAdmin);
+    // Compute dashboard scores using server client
+    const scores = await computeUserDashboardScores(user.id, supabase);
 
     // Format response for dashboard
     const response = {

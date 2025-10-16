@@ -11,7 +11,7 @@ jest.mock('next/navigation', () => ({
 
 // Mock the questions service
 jest.mock('../lib/survey/questions-service', () => ({
-  getProductQuestions: jest.fn().mockResolvedValue([
+  getProductQuestionsByCategory: jest.fn().mockResolvedValue([
     {
       id: 'product_q1',
       text: '¿Qué materiales utiliza en este producto?',
@@ -150,8 +150,8 @@ describe('Product Wizard', () => {
 
   it('should show loading state while fetching questions', async () => {
     // Mock a delayed response
-    const { getProductQuestions } = await import('../lib/survey/questions-service');
-    getProductQuestions.mockImplementation(() => 
+    const { getProductQuestionsByCategory } = await import('../lib/survey/questions-service');
+    getProductQuestionsByCategory.mockImplementation(() => 
       new Promise(resolve => setTimeout(() => resolve([]), 100))
     );
     
@@ -164,8 +164,8 @@ describe('Product Wizard', () => {
   });
 
   it('should handle fallback questions when DB fails', async () => {
-    const { getProductQuestions } = await import('../lib/survey/questions-service');
-    getProductQuestions.mockRejectedValue(new Error('DB Error'));
+    const { getProductQuestionsByCategory } = await import('../lib/survey/questions-service');
+    getProductQuestionsByCategory.mockRejectedValue(new Error('DB Error'));
     
     render(<ProductWizardPage />);
     

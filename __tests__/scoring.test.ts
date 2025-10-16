@@ -71,7 +71,7 @@ describe('Scoring Tests', () => {
   });
 
   test('should return zero score for empty survey', async () => {
-    const score = await computeScoresForSurvey(testUserId, generalSurveyId, 'general');
+    const score = await computeScoresForSurvey(supabase, testUserId, generalSurveyId, 'general');
     
     expect(score.total).toBe(0);
     expect(score.category).toBe('E');
@@ -114,6 +114,9 @@ describe('Scoring Tests', () => {
     // Calculate expected scores
     const expectedScores = questions.map(q => {
       const dimension = q.dimension;
+      if (!dimension) {
+        throw new Error('Dimension is null');
+      }
       const obtained = q.answers[0].points;
       const weighted = (parseFloat(dimension.weight_percent) / dimension.max_points) * obtained;
       return {
@@ -128,7 +131,7 @@ describe('Scoring Tests', () => {
     const expectedTotal = expectedScores.reduce((sum, score) => sum + score.weighted, 0);
 
     // Test the scoring function
-    const score = await computeScoresForSurvey(testUserId, generalSurveyId, 'general');
+    const score = await computeScoresForSurvey(supabase, testUserId, generalSurveyId, 'general');
     
     expect(score.total).toBeCloseTo(expectedTotal, 2);
     expect(score.breakdown).toHaveLength(4);
@@ -169,7 +172,7 @@ describe('Scoring Tests', () => {
   });
 
   test('should return scores between 0 and 100', async () => {
-    const score = await computeScoresForSurvey(testUserId, generalSurveyId, 'general');
+    const score = await computeScoresForSurvey(supabase, testUserId, generalSurveyId, 'general');
     
     expect(score.total).toBeGreaterThanOrEqual(0);
     expect(score.total).toBeLessThanOrEqual(100);

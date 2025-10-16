@@ -1,5 +1,8 @@
 # 🔧 Configuración de Variables de Entorno
 
+⚠️ **SECURITY WARNING**: This file previously contained actual production secrets. 
+**NEVER commit real secrets to version control!**
+
 ## Paso 1: Crear archivo `.env.local`
 
 Crea un archivo llamado `.env.local` en la raíz del proyecto con el siguiente contenido:
@@ -8,28 +11,19 @@ Crea un archivo llamado `.env.local` en la raíz del proyecto con el siguiente c
 # =============================================================================
 # DATABASE - PostgreSQL (Supabase)
 # =============================================================================
-DATABASE_URL="postgresql://postgres.jwvqlmxvegirmurjhcdd:YOUR_PASSWORD@aws-1-eu-west-1.pooler.supabase.com:6543/postgres?pgbouncer=true"
+DATABASE_URL="postgresql://postgres.YOUR_PROJECT_ID:YOUR_PASSWORD@aws-1-eu-west-1.pooler.supabase.com:6543/postgres?pgbouncer=true"
 
 # =============================================================================
 # SUPABASE - Backend as a Service
 # =============================================================================
-NEXT_PUBLIC_SUPABASE_URL=https://jwvqlmxvegirmurjhcdd.supabase.co
+NEXT_PUBLIC_SUPABASE_URL=https://YOUR_PROJECT_ID.supabase.co
 
-NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp3dnFsbXh2ZWdpcm11cmpoY2RkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg3MDUzODgsImV4cCI6MjA3NDI4MTM4OH0.pmxYWzomqpJTg_RoK_c7U-q2EisVgyZHHmsmIC_GYrQ
-
-# =============================================================================
-# NEW API KEYS (Usa estas keys)
-# =============================================================================
-SUPABASE_PUBLISHABLE_KEY=sb_publishable_I8MTDtOES989o25ZmCzTkw_GvuRIoVT
-
-SUPABASE_SECRET_KEY=sb_secret_BE9QLEjpN9Cg2nIvHef6UA_qwKdQjdR
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key-here
 
 # =============================================================================
-# LEGACY (Mantener por compatibilidad)
+# SUPABASE - Service Role Key (Server-side only)
 # =============================================================================
-SUPABASE_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp3dnFsbXh2ZWdpcm11cmpoY2RkIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1ODcwNTM4OCwiZXhwIjoyMDc0MjgxMzg4fQ.pmxYWzomqpJTg_RoK_c7U-q2EisVgyZHHmsmIC_GYrQ
-
-LEGACY_JWT_SECRET=YInbp3w8eCO7YzKSbE4BmIPw5owvw2paDaALKEWN18BzBiuYOLPsGkvxQULwEAAsp642ticZ1to9/OawQpCksA==
+SUPABASE_SERVICE_ROLE_KEY=your-service-role-key-here
 ```
 
 ---
@@ -42,10 +36,10 @@ LEGACY_JWT_SECRET=YInbp3w8eCO7YzKSbE4BmIPw5owvw2paDaALKEWN18BzBiuYOLPsGkvxQULwEA
 # Edita el archivo .env.local y actualiza las siguientes líneas:
 
 # Quita las comillas de NEXT_PUBLIC_SUPABASE_URL si las tiene
-NEXT_PUBLIC_SUPABASE_URL=https://jwvqlmxvegirmurjhcdd.supabase.co
+NEXT_PUBLIC_SUPABASE_URL=https://YOUR_PROJECT_ID.supabase.co
 
 # Asegúrate de que SUPABASE_SERVICE_ROLE_KEY no tenga comillas
-SUPABASE_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp3dnFsbXh2ZWdpcm11cmpoY2RkIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1ODcwNTM4OCwiZXhwIjoyMDc0MjgxMzg4fQ.pmxYWzomqpJTg_RoK_c7U-q2EisVgyZHHmsmIC_GYrQ
+SUPABASE_SERVICE_ROLE_KEY=your-service-role-key-here
 ```
 
 ### 2. Crear Schema Limpio en Supabase

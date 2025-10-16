@@ -52,7 +52,7 @@ export async function computeScoresForSurvey(
         )
       `)
       .eq('user_id', userId)
-      .eq(surveyWhere);
+      .eq(Object.keys(surveyWhere)[0], Object.values(surveyWhere)[0]);
 
     if (answersError) {
       throw new Error(`Failed to fetch answers: ${answersError.message}`);
@@ -71,15 +71,15 @@ export async function computeScoresForSurvey(
     const dimensionInfo = new Map<number, { name: string; weightPercent: number; maxPoints: number }>();
 
     answers.forEach(answer => {
-      const dimension = answer.question.dimension;
-      const dimId = dimension.id;
+      const dimension = (answer.question as any).dimension;
+      const dimId = dimension?.id;
       
       // Initialize dimension info
       if (!dimensionInfo.has(dimId)) {
         dimensionInfo.set(dimId, {
-          name: dimension.name,
-          weightPercent: parseFloat(dimension.weight_percent),
-          maxPoints: dimension.max_points
+          name: dimension?.name || '',
+          weightPercent: parseFloat(dimension?.weight_percent || '0'),
+          maxPoints: dimension?.max_points || 0
         });
       }
       

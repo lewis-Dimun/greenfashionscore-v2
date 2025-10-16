@@ -25,37 +25,45 @@ export default function Home() {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            <Card className="text-center group hover:scale-105 transition-transform">
-              <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-emerald-200 transition-colors">
-                <span className="text-2xl">👥</span>
-              </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-2">People</h3>
-              <p className="text-gray-600">Condiciones laborales, salarios justos y bienestar de los trabajadores</p>
-            </Card>
+            <div className="text-center group hover:scale-105 transition-transform">
+              <Card>
+                <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-emerald-200 transition-colors">
+                  <span className="text-2xl">👥</span>
+                </div>
+                <h3 className="text-xl font-bold text-gray-900 mb-2">People</h3>
+                <p className="text-gray-600">Condiciones laborales, salarios justos y bienestar de los trabajadores</p>
+              </Card>
+            </div>
             
-            <Card className="text-center group hover:scale-105 transition-transform">
+            <div className="text-center group hover:scale-105 transition-transform">
+              <Card>
               <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-blue-200 transition-colors">
                 <span className="text-2xl">🌍</span>
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-2">Planet</h3>
               <p className="text-gray-600">Impacto ambiental, emisiones de CO₂ y uso de recursos naturales</p>
-            </Card>
+              </Card>
+            </div>
             
-            <Card className="text-center group hover:scale-105 transition-transform">
+            <div className="text-center group hover:scale-105 transition-transform">
+              <Card>
               <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-purple-200 transition-colors">
                 <span className="text-2xl">🧵</span>
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-2">Materials</h3>
               <p className="text-gray-600">Sostenibilidad de materiales, fibras orgánicas y químicos seguros</p>
-            </Card>
+              </Card>
+            </div>
             
-            <Card className="text-center group hover:scale-105 transition-transform">
+            <div className="text-center group hover:scale-105 transition-transform">
+              <Card>
               <div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-orange-200 transition-colors">
                 <span className="text-2xl">♻️</span>
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-2">Circularity</h3>
               <p className="text-gray-600">Economía circular, reciclaje y diseño para la durabilidad</p>
-            </Card>
+              </Card>
+            </div>
           </div>
         </div>
       </section>
