@@ -49,6 +49,10 @@ module.exports = async () => {
     ],
     testEnvironment: 'jest-environment-jsdom',
     setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
+    transform: {
+      '^.+\\.tsx?$': ['ts-jest', { useESM: true, isolatedModules: true }],
+    },
+    extensionsToTreatAsEsm: ['.ts', '.tsx'],
     moduleNameMapper: {
       ...base.moduleNameMapper,
       '^@/components/AuthGuard$': '<rootDir>/__mocks__/components/AuthGuard.tsx',

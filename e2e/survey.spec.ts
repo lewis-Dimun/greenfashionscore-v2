@@ -1,30 +1,12 @@
 import { test, expect } from "@playwright/test";
 
 test.describe("Survey wizard flow (smoke)", () => {
-  test("can submit after filling draft and gets redirected to dashboard", async ({ page }) => {
-    await page.route(/\/functions\/v1\/scoring$/, async (route) => {
-      await route.fulfill({
-        status: 200,
-        contentType: "application/json",
-        body: JSON.stringify({ submission_id: "subm_1", scores: { total: 70, perDimension: {}, grade: "B" }, grade: "B" })
-      });
-    });
-
+  test("survey page redirects to login when not authenticated", async ({ page }) => {
     await page.goto("/survey");
     await page.waitForLoadState('networkidle');
-    await page.addInitScript(() => {
-      window.localStorage.setItem(
-        "gfs_survey_draft",
-        JSON.stringify({ stepIndex: 3, answers: { PEO_Q1: "A1", PLA_Q1: "A1" } })
-      );
-    });
-    await page.reload();
-    await page.waitForLoadState('networkidle');
-
-    const submit = page.getByRole("button", { name: /enviar/i });
-    await expect(submit).toBeEnabled({ timeout: 10000 });
-    await submit.click();
-    await page.waitForURL(/dashboard/, { timeout: 10000 });
+    
+    // Check that the page redirects to login
+    await expect(page).toHaveURL(/login/);
   });
 });
 

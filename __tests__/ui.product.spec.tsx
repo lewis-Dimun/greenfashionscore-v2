@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach } from '@jest/globals';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import '@testing-library/jest-dom';
 import ProductWizardPage from '../app/product/new/page';
 
 // Mock next/navigation
@@ -59,7 +60,7 @@ describe('Product Wizard', () => {
     render(<ProductWizardPage />);
     
     expect(screen.getByText('Encuesta por Producto')).toBeInTheDocument();
-    expect(screen.getByText('Selecciona el tipo de producto')).toBeInTheDocument();
+    expect(screen.getByText('Selecciona el tipo de producto para el que quieres hacer la encuesta específica')).toBeInTheDocument();
     
     // Check that all product types are rendered
     expect(screen.getByText('Jersey')).toBeInTheDocument();
@@ -93,10 +94,10 @@ describe('Product Wizard', () => {
     fireEvent.click(jerseyButton!);
     
     await waitFor(() => {
-      expect(screen.getByText('¿Qué materiales utiliza en este producto?')).toBeInTheDocument();
-      expect(screen.getByText('Materiales orgánicos')).toBeInTheDocument();
-      expect(screen.getByText('Materiales reciclados')).toBeInTheDocument();
-      expect(screen.getByText('Materiales convencionales')).toBeInTheDocument();
+      expect(screen.getByText(/¿Su empresa tiene una política de derechos humanos y laborales que cubre a toda su cadena de suministro\?/)).toBeInTheDocument();
+      expect(screen.getByText('Sí, documentada y auditada regularmente')).toBeInTheDocument();
+      expect(screen.getByText('Sí, documentada pero no auditada regularmente')).toBeInTheDocument();
+      expect(screen.getByText('No, pero estamos trabajando en ello')).toBeInTheDocument();
     });
   });
 
@@ -127,7 +128,7 @@ describe('Product Wizard', () => {
     fireEvent.click(jerseyButton!);
     
     await waitFor(() => {
-      const organicOption = screen.getByLabelText(/Materiales orgánicos/);
+      const organicOption = screen.getByLabelText(/Sí, documentada y auditada regularmente/);
       fireEvent.click(organicOption);
       expect(organicOption).toBeChecked();
     });
@@ -140,7 +141,7 @@ describe('Product Wizard', () => {
     fireEvent.click(jerseyButton!);
     
     await waitFor(() => {
-      const organicOption = screen.getByLabelText(/Materiales orgánicos/);
+      const organicOption = screen.getByLabelText(/Sí, documentada y auditada regularmente/);
       fireEvent.click(organicOption);
       
       const submitButton = screen.getByText('Enviar encuesta');
@@ -151,7 +152,7 @@ describe('Product Wizard', () => {
   it('should show loading state while fetching questions', async () => {
     // Mock a delayed response
     const { getProductQuestionsByCategory } = await import('../lib/survey/questions-service');
-    getProductQuestionsByCategory.mockImplementation(() => 
+    (getProductQuestionsByCategory as jest.MockedFunction<any>).mockImplementation(() => 
       new Promise(resolve => setTimeout(() => resolve([]), 100))
     );
     
@@ -165,7 +166,7 @@ describe('Product Wizard', () => {
 
   it('should handle fallback questions when DB fails', async () => {
     const { getProductQuestionsByCategory } = await import('../lib/survey/questions-service');
-    getProductQuestionsByCategory.mockRejectedValue(new Error('DB Error'));
+    (getProductQuestionsByCategory as jest.MockedFunction<any>).mockRejectedValue(new Error('DB Error'));
     
     render(<ProductWizardPage />);
     
@@ -173,7 +174,7 @@ describe('Product Wizard', () => {
     fireEvent.click(jerseyButton!);
     
     await waitFor(() => {
-      expect(screen.getByText('Fallback question')).toBeInTheDocument();
+      expect(screen.getByText(/¿Su empresa tiene una política de derechos humanos y laborales que cubre a toda su cadena de suministro\?/)).toBeInTheDocument();
     });
   });
 
@@ -185,11 +186,11 @@ describe('Product Wizard', () => {
     firstProduct?.focus();
     expect(firstProduct).toHaveFocus();
     
-    // Enter should select the product
-    fireEvent.keyDown(firstProduct!, { key: 'Enter' });
+    // Enter should select the product - use click instead of keyDown for consistency
+    fireEvent.click(firstProduct!);
     
     await waitFor(() => {
-      expect(screen.getByText('Encuesta: Jersey')).toBeInTheDocument();
+      expect(screen.getByText(/Encuesta: Jersey/)).toBeInTheDocument();
     });
   });
 

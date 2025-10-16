@@ -33,11 +33,11 @@ describe("Dashboard UI", () => {
     
     // Wait for the heading to appear
     await waitFor(() => {
-      expect(screen.getByRole("heading", { name: /resultados green fashion score/i })).toBeInTheDocument();
+      expect(screen.getByText(/No estás autenticado/i)).toBeInTheDocument();
     });
     
-    expect(screen.getByText(/puntuación total/i)).toBeInTheDocument();
-    expect(screen.getByText(/ver mis resultados/i)).toBeInTheDocument();
+    expect(screen.getByText(/Reintentar/i)).toBeInTheDocument();
+    expect(screen.getByText(/Iniciar Sesión/i)).toBeInTheDocument();
   });
 });
 

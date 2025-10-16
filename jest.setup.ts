@@ -52,7 +52,7 @@ jest.mock('@supabase/supabase-js', () => ({
 
 // Mock AuthGuard globally to avoid auth state side-effects
 // This will catch all imports of AuthGuard regardless of the path
-jest.mock('../components/AuthGuard', () => {
+jest.mock('./components/AuthGuard', () => {
   return function MockAuthGuard({ children }: { children: any }) {
     return children;
   };
@@ -64,17 +64,9 @@ jest.mock('@/components/AuthGuard', () => {
   };
 });
 
-jest.mock('../../components/AuthGuard', () => {
-  return function MockAuthGuard({ children }: { children: any }) {
-    return children;
-  };
-});
+// Removed problematic AuthGuard mock
 
-jest.mock('../../../components/AuthGuard', () => {
-  return function MockAuthGuard({ children }: { children: any }) {
-    return children;
-  };
-});
+// Removed problematic AuthGuard mock
 
 // Polyfill ResizeObserver for Recharts
 class ResizeObserver {

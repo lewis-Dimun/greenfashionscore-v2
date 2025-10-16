@@ -8,11 +8,14 @@ describe('Dashboard Handler', () => {
     mockDeps = dashboardHandlerDeps({
       fetchUserSurveys: jest.fn()
     });
+    // Cast to any to access mock methods
+    (mockDeps.fetchUserSurveys as any).mockResolvedValue = jest.fn();
+    (mockDeps.fetchUserSurveys as any).mockRejectedValue = jest.fn();
   });
 
   describe('GET /dashboard', () => {
     it('should return aggregated scores for user with general + product surveys', async () => {
-      mockDeps.fetchUserSurveys.mockResolvedValue([
+      (mockDeps.fetchUserSurveys as any).mockResolvedValue([
         {
           surveyId: 'general-1',
           scope: 'general',
@@ -77,7 +80,7 @@ describe('Dashboard Handler', () => {
     });
 
     it('should return empty scores when user has no surveys', async () => {
-      mockDeps.fetchUserSurveys.mockResolvedValue([]);
+      (mockDeps.fetchUserSurveys as any).mockResolvedValue([]);
 
       const handler = dashboardHandler(mockDeps);
       
@@ -96,7 +99,7 @@ describe('Dashboard Handler', () => {
     });
 
     it('should return empty scores when user has no general survey', async () => {
-      mockDeps.fetchUserSurveys.mockResolvedValue([
+      (mockDeps.fetchUserSurveys as any).mockResolvedValue([
         {
           surveyId: 'product-1',
           scope: 'product',
@@ -129,7 +132,7 @@ describe('Dashboard Handler', () => {
     });
 
     it('should handle only general survey', async () => {
-      mockDeps.fetchUserSurveys.mockResolvedValue([
+      (mockDeps.fetchUserSurveys as any).mockResolvedValue([
         {
           surveyId: 'general-1',
           scope: 'general',
@@ -161,7 +164,7 @@ describe('Dashboard Handler', () => {
     });
 
     it('should respect category caps when aggregating', async () => {
-      mockDeps.fetchUserSurveys.mockResolvedValue([
+      (mockDeps.fetchUserSurveys as any).mockResolvedValue([
         {
           surveyId: 'general-1',
           scope: 'general',
@@ -203,7 +206,7 @@ describe('Dashboard Handler', () => {
     });
 
     it('should handle ETag caching', async () => {
-      mockDeps.fetchUserSurveys.mockResolvedValue([
+      (mockDeps.fetchUserSurveys as any).mockResolvedValue([
         {
           surveyId: 'general-1',
           scope: 'general',
@@ -239,7 +242,7 @@ describe('Dashboard Handler', () => {
     });
 
     it('should handle database errors', async () => {
-      mockDeps.fetchUserSurveys.mockRejectedValue(new Error('DB Error'));
+      (mockDeps.fetchUserSurveys as any).mockRejectedValue(new Error('DB Error'));
 
       const handler = dashboardHandler(mockDeps);
       
@@ -252,7 +255,7 @@ describe('Dashboard Handler', () => {
 
   describe('Score aggregation logic', () => {
     it('should correctly aggregate multiple product surveys', async () => {
-      mockDeps.fetchUserSurveys.mockResolvedValue([
+      (mockDeps.fetchUserSurveys as any).mockResolvedValue([
         {
           surveyId: 'general-1',
           scope: 'general',

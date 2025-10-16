@@ -5,6 +5,7 @@ import {
   gradeFromTotal,
   aggregateScores,
   calculateCompleteSurveyScore,
+  computeTotalScore,
   type CategoryScores,
   type SurveyScore
 } from '../lib/scoring/engine';

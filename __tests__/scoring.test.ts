@@ -114,17 +114,18 @@ describe('Scoring Tests', () => {
     // Calculate expected scores
     const expectedScores = questions.map(q => {
       const dimension = q.dimension;
-      if (!dimension) {
-        throw new Error('Dimension is null');
+      if (!dimension || !Array.isArray(dimension) || dimension.length === 0) {
+        throw new Error('Dimension is null or empty array');
       }
+      const dim = dimension[0]; // Get first dimension object
       const obtained = q.answers[0].points;
-      const weighted = (parseFloat(dimension.weight_percent) / dimension.max_points) * obtained;
+      const weighted = (parseFloat(dim.weight_percent) / dim.max_points) * obtained;
       return {
-        name: dimension.name,
+        name: dim.name,
         obtained,
         weighted: Math.round(weighted * 100) / 100,
-        maxPoints: dimension.max_points,
-        weightPercent: parseFloat(dimension.weight_percent)
+        maxPoints: dim.max_points,
+        weightPercent: parseFloat(dim.weight_percent)
       };
     });
 
@@ -210,7 +211,7 @@ describe('Scoring Tests', () => {
       throw new Error(`Failed to insert specific answers: ${answersError.message}`);
     }
 
-    const score = await computeScoresForSurvey(testUserId, specificSurveyId, 'specific');
+    const score = await computeScoresForSurvey(supabase, testUserId, specificSurveyId, 'specific');
     
     expect(score.total).toBeGreaterThanOrEqual(0);
     expect(score.total).toBeLessThanOrEqual(100);
@@ -220,7 +221,7 @@ describe('Scoring Tests', () => {
   test('should handle missing survey gracefully', async () => {
     const nonExistentSurveyId = 99999;
     
-    const score = await computeScoresForSurvey(testUserId, nonExistentSurveyId, 'general');
+    const score = await computeScoresForSurvey(supabase, testUserId, nonExistentSurveyId, 'general');
     
     expect(score.total).toBe(0);
     expect(score.category).toBe('E');
@@ -234,7 +235,7 @@ describe('Scoring Tests', () => {
 
     expect(error).toBeNull();
     
-    const totalWeight = dimensions.reduce((sum, d) => sum + parseFloat(d.weight_percent), 0);
+    const totalWeight = dimensions?.reduce((sum, d) => sum + parseFloat(d.weight_percent), 0) || 0;
     expect(totalWeight).toBeCloseTo(100, 2);
   });
 });

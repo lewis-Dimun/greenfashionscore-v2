@@ -75,9 +75,9 @@ describe("Landing GFS - Home", () => {
     const evaluationButtons = screen.getAllByRole("link", { name: /comenzar evaluación gratuita/i });
     expect(evaluationButtons[0]).toHaveAttribute("href", "/register");
     
-    // Verificar que existe el botón de iniciar sesión
-    const loginButton = screen.getByRole("link", { name: /iniciar sesión/i });
-    expect(loginButton).toHaveAttribute("href", "/login");
+    // Verificar que existe el botón de iniciar sesión (hay múltiples, tomamos el primero)
+    const loginButtons = screen.getAllByRole("link", { name: /iniciar sesión/i });
+    expect(loginButtons[0]).toHaveAttribute("href", "/login");
   });
 });
 
