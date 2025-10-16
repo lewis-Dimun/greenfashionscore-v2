@@ -1,0 +1,31 @@
+﻿2025-10-16T08:54:28.6650013Z ##[group]Run npm ci
+2025-10-16T08:54:28.6650392Z [36;1mnpm ci[0m
+2025-10-16T08:54:28.6693512Z shell: /usr/bin/bash -e {0}
+2025-10-16T08:54:28.6693844Z ##[endgroup]
+2025-10-16T08:54:33.4001688Z npm warn deprecated rimraf@3.0.2: Rimraf versions prior to v4 are no longer supported
+2025-10-16T08:54:34.2546338Z npm warn deprecated inflight@1.0.6: This module is not supported, and leaks memory. Do not use it. Check out lru-cache if you want a good and tested way to coalesce async requests by a key value, which is much more comprehensive and powerful.
+2025-10-16T08:54:34.4697547Z npm warn deprecated glob@7.2.3: Glob versions prior to v9 are no longer supported
+2025-10-16T08:54:34.7626646Z npm warn deprecated domexception@4.0.0: Use your platform's native DOMException instead
+2025-10-16T08:54:35.1678994Z npm warn deprecated abab@2.0.6: Use your platform's native atob() and btoa() methods instead
+2025-10-16T08:54:35.7160509Z npm warn deprecated @supabase/auth-helpers-shared@0.7.0: This package is now deprecated - please use the @supabase/ssr package instead.
+2025-10-16T08:54:35.9756832Z npm warn deprecated @humanwhocodes/config-array@0.11.14: Use @eslint/config-array instead
+2025-10-16T08:54:35.9759947Z npm warn deprecated @humanwhocodes/object-schema@2.0.3: Use @eslint/object-schema instead
+2025-10-16T08:54:36.0677000Z npm warn deprecated @esbuild-kit/esm-loader@2.6.5: Merged into tsx: https://tsx.is
+2025-10-16T08:54:36.1759160Z npm warn deprecated @esbuild-kit/core-utils@3.3.2: Merged into tsx: https://tsx.is
+2025-10-16T08:54:36.2936834Z npm warn deprecated @supabase/auth-helpers-nextjs@0.10.0: This package is now deprecated - please use the @supabase/ssr package instead.
+2025-10-16T08:54:39.5381371Z npm warn deprecated eslint@8.57.0: This version is no longer supported. Please see https://eslint.org/version-support for other options.
+2025-10-16T08:54:44.8614856Z 
+2025-10-16T08:54:44.8615662Z added 875 packages, and audited 876 packages in 16s
+2025-10-16T08:54:44.8616205Z 
+2025-10-16T08:54:44.8616461Z 181 packages are looking for funding
+2025-10-16T08:54:44.8616929Z   run `npm fund` for details
+2025-10-16T08:54:44.8923317Z 
+2025-10-16T08:54:44.8923849Z 7 vulnerabilities (2 low, 4 moderate, 1 high)
+2025-10-16T08:54:44.8924308Z 
+2025-10-16T08:54:44.8924873Z To address all issues possible (including breaking changes), run:
+2025-10-16T08:54:44.8925669Z   npm audit fix --force
+2025-10-16T08:54:44.8925998Z 
+2025-10-16T08:54:44.8926412Z Some issues need review, and may require choosing
+2025-10-16T08:54:44.8927107Z a different dependency.
+2025-10-16T08:54:44.8927424Z 
+2025-10-16T08:54:44.8927659Z Run `npm audit` for details.

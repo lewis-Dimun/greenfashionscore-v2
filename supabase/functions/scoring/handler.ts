@@ -44,8 +44,13 @@ export function scoringHandler(deps: ScoringDeps) {
       const rl = await rateLimitCheck("scoring:" + clientIp);
       if (!rl.allowed) return errorResponse(429, "Too Many Requests");
 
-      // Parse request
-      const json = await (req as any).json();
+      // Parse request with JSON error handling
+      let json;
+      try {
+        json = await (req as any).json();
+      } catch (jsonError) {
+        return errorResponse(400, "Invalid JSON");
+      }
       const parsed = payloadSchema.safeParse(json);
       if (!parsed.success) {
         return errorResponse(400, "Bad Request", parsed.error.flatten());

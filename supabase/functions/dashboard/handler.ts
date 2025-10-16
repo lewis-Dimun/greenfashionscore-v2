@@ -28,9 +28,9 @@ export function dashboardHandler(deps: DashboardDeps) {
       const userId = "user-id-from-jwt"; // Placeholder
 
       // Fetch all user surveys with scores
-      const surveys = await deps.fetchUserSurveys({ userId });
+      const surveys = await deps.fetchUserSurveys({ userId }) || [];
 
-      if (surveys.length === 0) {
+      if (!Array.isArray(surveys) || surveys.length === 0) {
         return jsonResponse({
           people: 0,
           planet: 0,

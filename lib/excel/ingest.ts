@@ -155,8 +155,8 @@ export async function ingestFromExcel(excelPath: string): Promise<void> {
   console.log('✅ Ingesta de Excel completada');
 }
 
-// CLI entrypoint
-if (import.meta.url === `file://${process.argv[1]}`) {
+// CLI entrypoint - only execute when run directly, not in Jest
+if (typeof import.meta !== 'undefined' && import.meta.url === `file://${process.argv[1]}`) {
   const [, , excel] = process.argv;
   ingestFromExcel(excel)
     .then(() => {

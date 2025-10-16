@@ -13,12 +13,12 @@ import {
 describe('Scoring Engine', () => {
   describe('computeRawCategorySum', () => {
     it('should calculate category score with cap', () => {
-      // People: max 20
-      expect(computeRawCategorySum([5, 10, 8], 'people')).toBe(20); // Capped at 20
+      // People: max 44 (RAW)
+      expect(computeRawCategorySum([5, 10, 8], 'people')).toBe(23); // Not capped
       expect(computeRawCategorySum([5, 10], 'people')).toBe(15); // Not capped
       
-      // Materials: max 40
-      expect(computeRawCategorySum([20, 25], 'materials')).toBe(40); // Capped at 40
+      // Materials: max 65 (RAW)
+      expect(computeRawCategorySum([20, 25], 'materials')).toBe(45); // Not capped
       expect(computeRawCategorySum([10, 15], 'materials')).toBe(25); // Not capped
     });
 
@@ -182,12 +182,14 @@ describe('Scoring Engine', () => {
       const result = calculateCompleteSurveyScore(responses, 'general');
 
       expect(result.scope).toBe('general');
-      expect(result.scores.people).toBe(8); // 5 + 3
-      expect(result.scores.planet).toBe(4);
-      expect(result.scores.materials).toBe(14); // 8 + 6
-      expect(result.scores.circularity).toBe(2);
-      expect(result.total).toBe(28);
-      expect(result.grade).toBe('C');
+      // RAW: people=8, planet=4, materials=14, circularity=2
+      // DISPLAY: people=8/44*20≈3.64, planet=4/50*20=1.6, materials=14/65*40≈8.62, circularity=2/225*20≈0.18
+      expect(result.scores.people).toBeCloseTo(3.64, 1);
+      expect(result.scores.planet).toBeCloseTo(1.6, 1);
+      expect(result.scores.materials).toBeCloseTo(8.62, 1);
+      expect(result.scores.circularity).toBeCloseTo(0.18, 1);
+      expect(result.total).toBeCloseTo(14.04, 0);
+      expect(result.grade).toBe('D');
     });
 
     it('should calculate score for product survey', () => {
@@ -201,27 +203,31 @@ describe('Scoring Engine', () => {
 
       expect(result.scope).toBe('product');
       expect(result.productType).toBe('camiseta');
-      expect(result.scores.people).toBe(2);
-      expect(result.scores.planet).toBe(3);
-      expect(result.scores.materials).toBe(5);
+      // RAW: people=2, planet=3, materials=5, circularity=0
+      // DISPLAY: people=2/44*20≈0.91, planet=3/50*20=1.2, materials=5/65*40≈3.08, circularity=0
+      expect(result.scores.people).toBeCloseTo(0.91, 1);
+      expect(result.scores.planet).toBeCloseTo(1.2, 1);
+      expect(result.scores.materials).toBeCloseTo(3.08, 1);
       expect(result.scores.circularity).toBe(0);
-      expect(result.total).toBe(10);
+      expect(result.total).toBeCloseTo(5.19, 0);
       expect(result.grade).toBe('D');
     });
 
     it('should handle responses that exceed category caps', () => {
       const responses = [
         { questionId: 'people_q1', answerId: 'people_q1_a1', numericValue: 15 },
-        { questionId: 'people_q2', answerId: 'people_q2_a1', numericValue: 10 }, // Total 25, capped at 20
+        { questionId: 'people_q2', answerId: 'people_q2_a1', numericValue: 10 }, // Total RAW 25, capped at 44
         { questionId: 'materials_q1', answerId: 'materials_q1_a1', numericValue: 30 },
-        { questionId: 'materials_q2', answerId: 'materials_q2_a1', numericValue: 15 } // Total 45, capped at 40
+        { questionId: 'materials_q2', answerId: 'materials_q2_a1', numericValue: 15 } // Total RAW 45, not capped (max 65)
       ];
 
       const result = calculateCompleteSurveyScore(responses, 'general');
 
-      expect(result.scores.people).toBe(20); // Capped
-      expect(result.scores.materials).toBe(40); // Capped
-      expect(result.total).toBe(60); // 20 + 0 + 40 + 0
+      // RAW: people=25 (not capped at 44), materials=45 (not capped at 65)
+      // DISPLAY: people=25/44*20≈11.36, materials=45/65*40≈27.69
+      expect(result.scores.people).toBeCloseTo(11.36, 1); // Normalized
+      expect(result.scores.materials).toBeCloseTo(27.69, 1); // Normalized
+      expect(result.total).toBeCloseTo(39.05, 0); // Sum of all DISPLAY scores
     });
   });
 

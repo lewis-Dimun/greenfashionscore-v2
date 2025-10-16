@@ -1,0 +1,109 @@
+﻿2025-10-16T08:54:44.9388687Z ##[group]Run npm run lint
+2025-10-16T08:54:44.9388978Z [36;1mnpm run lint[0m
+2025-10-16T08:54:44.9429444Z shell: /usr/bin/bash -e {0}
+2025-10-16T08:54:44.9429702Z ##[endgroup]
+2025-10-16T08:54:45.0565826Z 
+2025-10-16T08:54:45.0566437Z > greenfashionscore-v2@0.1.0 lint
+2025-10-16T08:54:45.0566988Z > eslint .
+2025-10-16T08:54:45.0567172Z 
+2025-10-16T08:54:50.0098597Z 
+2025-10-16T08:54:50.0099802Z /home/runner/work/greenfashionscore-v2/greenfashionscore-v2/app/api/dashboard/route.ts
+2025-10-16T08:54:50.0125664Z ##[warning]  20:5   warning  Unexpected console statement              no-console
+2025-10-16T08:54:50.0133662Z ##[warning]  54:32  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+2025-10-16T08:54:50.0134543Z 
+2025-10-16T08:54:50.0135026Z /home/runner/work/greenfashionscore-v2/greenfashionscore-v2/app/api/surveys/general/complete/route.ts
+2025-10-16T08:54:50.0136230Z ##[warning]  49:46  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+2025-10-16T08:54:50.0137022Z 
+2025-10-16T08:54:50.0137474Z /home/runner/work/greenfashionscore-v2/greenfashionscore-v2/app/api/surveys/general/responses/route.ts
+2025-10-16T08:54:50.0138499Z ##[warning]  71:48  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+2025-10-16T08:54:50.0140118Z ##[warning]  74:45  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+2025-10-16T08:54:50.0141362Z ##[warning]  83:41  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+2025-10-16T08:54:50.0142578Z ##[warning]  84:43  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+2025-10-16T08:54:50.0143990Z ##[warning]  85:37  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+2025-10-16T08:54:50.0145262Z ##[warning]  86:39  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+2025-10-16T08:54:50.0145998Z 
+2025-10-16T08:54:50.0146353Z /home/runner/work/greenfashionscore-v2/greenfashionscore-v2/app/dashboard/page.tsx
+2025-10-16T08:54:50.0147285Z ##[warning]  293:46  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+2025-10-16T08:54:50.0148206Z 
+2025-10-16T08:54:50.0148576Z /home/runner/work/greenfashionscore-v2/greenfashionscore-v2/app/product/new/page.tsx
+2025-10-16T08:54:50.0149561Z ##[warning]   24:46  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+2025-10-16T08:54:50.0150795Z ##[warning]   89:52  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+2025-10-16T08:54:50.0151993Z ##[warning]  221:54  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+2025-10-16T08:54:50.0152944Z 
+2025-10-16T08:54:50.0153356Z /home/runner/work/greenfashionscore-v2/greenfashionscore-v2/app/survey/page.tsx
+2025-10-16T08:54:50.0154526Z ##[warning]   22:61  warning  Unexpected any. Specify a different type                                                                  @typescript-eslint/no-explicit-any
+2025-10-16T08:54:50.0156091Z ##[warning]   38:42  warning  Unexpected any. Specify a different type                                                                  @typescript-eslint/no-explicit-any
+2025-10-16T08:54:50.0157595Z ##[warning]   41:66  warning  Unexpected any. Specify a different type                                                                  @typescript-eslint/no-explicit-any
+2025-10-16T08:54:50.0159083Z ##[warning]   45:44  warning  Unexpected any. Specify a different type                                                                  @typescript-eslint/no-explicit-any
+2025-10-16T08:54:50.0160557Z ##[warning]   57:41  warning  Unexpected any. Specify a different type                                                                  @typescript-eslint/no-explicit-any
+2025-10-16T08:54:50.0162026Z ##[warning]   58:31  warning  Unexpected any. Specify a different type                                                                  @typescript-eslint/no-explicit-any
+2025-10-16T08:54:50.0164273Z ##[warning]   90:6   warning  React Hook useEffect has a missing dependency: 'draft'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+2025-10-16T08:54:50.0165895Z ##[warning]  138:66  warning  Unexpected any. Specify a different type                                                                  @typescript-eslint/no-explicit-any
+2025-10-16T08:54:50.0167380Z ##[warning]  197:79  warning  Unexpected any. Specify a different type                                                                  @typescript-eslint/no-explicit-any
+2025-10-16T08:54:50.0168915Z ##[warning]  198:64  warning  Unexpected any. Specify a different type                                                                  @typescript-eslint/no-explicit-any
+2025-10-16T08:54:50.0170448Z ##[warning]  228:87  warning  Unexpected any. Specify a different type                                                                  @typescript-eslint/no-explicit-any
+2025-10-16T08:54:50.0171903Z ##[warning]  229:72  warning  Unexpected any. Specify a different type                                                                  @typescript-eslint/no-explicit-any
+2025-10-16T08:54:50.0172864Z 
+2025-10-16T08:54:50.0173421Z /home/runner/work/greenfashionscore-v2/greenfashionscore-v2/app/survey/responses/page.tsx
+2025-10-16T08:54:50.0174427Z ##[warning]   49:69  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+2025-10-16T08:54:50.0175704Z ##[warning]  106:35  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+2025-10-16T08:54:50.0176450Z 
+2025-10-16T08:54:50.0176837Z /home/runner/work/greenfashionscore-v2/greenfashionscore-v2/components/AuthGuard.tsx
+2025-10-16T08:54:50.0177734Z ##[warning]  18:36  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+2025-10-16T08:54:50.0178968Z ##[warning]  28:35  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+2025-10-16T08:54:50.0180192Z ##[warning]  30:37  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+2025-10-16T08:54:50.0181427Z ##[warning]  42:37  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+2025-10-16T08:54:50.0182753Z ##[warning]  44:39  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+2025-10-16T08:54:50.0183502Z 
+2025-10-16T08:54:50.0183842Z /home/runner/work/greenfashionscore-v2/greenfashionscore-v2/components/Card.tsx
+2025-10-16T08:54:50.0184651Z ##[warning]  4:20  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+2025-10-16T08:54:50.0185401Z 
+2025-10-16T08:54:50.0185730Z /home/runner/work/greenfashionscore-v2/greenfashionscore-v2/components/Header.tsx
+2025-10-16T08:54:50.0186524Z ##[warning]  8:36  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+2025-10-16T08:54:50.0187290Z 
+2025-10-16T08:54:50.0187612Z /home/runner/work/greenfashionscore-v2/greenfashionscore-v2/jest.setup.node.ts
+2025-10-16T08:54:50.0188402Z ##[warning]   3:21  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+2025-10-16T08:54:50.0189648Z ##[warning]   4:21  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+2025-10-16T08:54:50.0190885Z ##[warning]   5:21  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+2025-10-16T08:54:50.0192082Z ##[warning]   6:21  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+2025-10-16T08:54:50.0193632Z ##[warning]   7:21  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+2025-10-16T08:54:50.0194840Z ##[warning]   8:21  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+2025-10-16T08:54:50.0196040Z ##[warning]  16:12  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+2025-10-16T08:54:50.0196990Z 
+2025-10-16T08:54:50.0197300Z /home/runner/work/greenfashionscore-v2/greenfashionscore-v2/jest.setup.ts
+2025-10-16T08:54:50.0198087Z ##[warning]  11:20  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+2025-10-16T08:54:50.0199302Z ##[warning]  56:59  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+2025-10-16T08:54:50.0200507Z ##[warning]  62:59  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+2025-10-16T08:54:50.0201692Z ##[warning]  77:36  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+2025-10-16T08:54:50.0203008Z ##[warning]  83:19  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+2025-10-16T08:54:50.0204228Z ##[warning]  83:42  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+2025-10-16T08:54:50.0205427Z ##[warning]  84:19  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+2025-10-16T08:54:50.0206620Z ##[warning]  84:44  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+2025-10-16T08:54:50.0207811Z ##[warning]  85:19  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+2025-10-16T08:54:50.0209191Z ##[warning]  85:44  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+2025-10-16T08:54:50.0210388Z ##[warning]  86:19  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+2025-10-16T08:54:50.0211582Z ##[warning]  86:45  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+2025-10-16T08:54:50.0212366Z 
+2025-10-16T08:54:50.0212800Z /home/runner/work/greenfashionscore-v2/greenfashionscore-v2/lib/auth/roles.ts
+2025-10-16T08:54:50.0213798Z ##[warning]  6:46  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+2025-10-16T08:54:50.0214583Z 
+2025-10-16T08:54:50.0214867Z /home/runner/work/greenfashionscore-v2/greenfashionscore-v2/lib/db.ts
+2025-10-16T08:54:50.0215645Z ##[warning]  11:22  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+2025-10-16T08:54:50.0216392Z 
+2025-10-16T08:54:50.0216693Z /home/runner/work/greenfashionscore-v2/greenfashionscore-v2/lib/logger.ts
+2025-10-16T08:54:50.0217472Z ##[warning]  6:18  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+2025-10-16T08:54:50.0218214Z 
+2025-10-16T08:54:50.0218546Z /home/runner/work/greenfashionscore-v2/greenfashionscore-v2/lib/scoring/compute.ts
+2025-10-16T08:54:50.0219425Z ##[warning]  74:45  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+2025-10-16T08:54:50.0220178Z 
+2025-10-16T08:54:50.0220555Z /home/runner/work/greenfashionscore-v2/greenfashionscore-v2/lib/survey/questions-service.ts
+2025-10-16T08:54:50.0221475Z ##[warning]   53:38  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+2025-10-16T08:54:50.0222824Z ##[warning]   59:47  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+2025-10-16T08:54:50.0224068Z ##[warning]   93:38  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+2025-10-16T08:54:50.0225292Z ##[warning]   99:47  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+2025-10-16T08:54:50.0226502Z ##[warning]  133:38  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+2025-10-16T08:54:50.0227764Z ##[warning]  139:47  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+2025-10-16T08:54:50.0228998Z ##[warning]  169:24  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+2025-10-16T08:54:50.0229734Z 
+2025-10-16T08:54:50.0230119Z ✖ 64 problems (0 errors, 64 warnings)
+2025-10-16T08:54:50.0230473Z 

@@ -1,0 +1,69 @@
+﻿2025-10-16T08:54:25.2398919Z ##[group]Run actions/checkout@v4
+2025-10-16T08:54:25.2399787Z with:
+2025-10-16T08:54:25.2400276Z   repository: lewis-Dimun/greenfashionscore-v2
+2025-10-16T08:54:25.2401017Z   token: ***
+2025-10-16T08:54:25.2401456Z   ssh-strict: true
+2025-10-16T08:54:25.2401878Z   ssh-user: git
+2025-10-16T08:54:25.2402303Z   persist-credentials: true
+2025-10-16T08:54:25.2402937Z   clean: true
+2025-10-16T08:54:25.2403367Z   sparse-checkout-cone-mode: true
+2025-10-16T08:54:25.2403871Z   fetch-depth: 1
+2025-10-16T08:54:25.2404280Z   fetch-tags: false
+2025-10-16T08:54:25.2404706Z   show-progress: true
+2025-10-16T08:54:25.2405137Z   lfs: false
+2025-10-16T08:54:25.2405534Z   submodules: false
+2025-10-16T08:54:25.2405966Z   set-safe-directory: true
+2025-10-16T08:54:25.2406664Z ##[endgroup]
+2025-10-16T08:54:25.3457364Z Syncing repository: lewis-Dimun/greenfashionscore-v2
+2025-10-16T08:54:25.3459312Z ##[group]Getting Git version info
+2025-10-16T08:54:25.3460199Z Working directory is '/home/runner/work/greenfashionscore-v2/greenfashionscore-v2'
+2025-10-16T08:54:25.3461386Z [command]/usr/bin/git version
+2025-10-16T08:54:25.3557649Z git version 2.51.0
+2025-10-16T08:54:25.3583867Z ##[endgroup]
+2025-10-16T08:54:25.3604846Z Temporarily overriding HOME='/home/runner/work/_temp/1ba88016-5487-49c4-a8c8-a3cb1a9a5c64' before making global git config changes
+2025-10-16T08:54:25.3607310Z Adding repository directory to the temporary git global config as a safe directory
+2025-10-16T08:54:25.3611289Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/greenfashionscore-v2/greenfashionscore-v2
+2025-10-16T08:54:25.3649216Z Deleting the contents of '/home/runner/work/greenfashionscore-v2/greenfashionscore-v2'
+2025-10-16T08:54:25.3652886Z ##[group]Initializing the repository
+2025-10-16T08:54:25.3658089Z [command]/usr/bin/git init /home/runner/work/greenfashionscore-v2/greenfashionscore-v2
+2025-10-16T08:54:25.3756350Z hint: Using 'master' as the name for the initial branch. This default branch name
+2025-10-16T08:54:25.3757748Z hint: is subject to change. To configure the initial branch name to use in all
+2025-10-16T08:54:25.3758703Z hint: of your new repositories, which will suppress this warning, call:
+2025-10-16T08:54:25.3759400Z hint:
+2025-10-16T08:54:25.3760156Z hint: 	git config --global init.defaultBranch <name>
+2025-10-16T08:54:25.3760880Z hint:
+2025-10-16T08:54:25.3761858Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2025-10-16T08:54:25.3763275Z hint: 'development'. The just-created branch can be renamed via this command:
+2025-10-16T08:54:25.3764442Z hint:
+2025-10-16T08:54:25.3765203Z hint: 	git branch -m <name>
+2025-10-16T08:54:25.3766062Z hint:
+2025-10-16T08:54:25.3767173Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2025-10-16T08:54:25.3769295Z Initialized empty Git repository in /home/runner/work/greenfashionscore-v2/greenfashionscore-v2/.git/
+2025-10-16T08:54:25.3776313Z [command]/usr/bin/git remote add origin https://github.com/lewis-Dimun/greenfashionscore-v2
+2025-10-16T08:54:25.3813937Z ##[endgroup]
+2025-10-16T08:54:25.3815191Z ##[group]Disabling automatic garbage collection
+2025-10-16T08:54:25.3818551Z [command]/usr/bin/git config --local gc.auto 0
+2025-10-16T08:54:25.3846968Z ##[endgroup]
+2025-10-16T08:54:25.3848259Z ##[group]Setting up auth
+2025-10-16T08:54:25.3854660Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2025-10-16T08:54:25.3885081Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2025-10-16T08:54:25.4234322Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2025-10-16T08:54:25.4264043Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2025-10-16T08:54:25.4496195Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2025-10-16T08:54:25.4538711Z ##[endgroup]
+2025-10-16T08:54:25.4539493Z ##[group]Fetching the repository
+2025-10-16T08:54:25.4547272Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +db9f5eaaed1463c7152c04dddd333128cdc51ddb:refs/remotes/origin/main
+2025-10-16T08:54:26.1661818Z From https://github.com/lewis-Dimun/greenfashionscore-v2
+2025-10-16T08:54:26.1663963Z  * [new ref]         db9f5eaaed1463c7152c04dddd333128cdc51ddb -> origin/main
+2025-10-16T08:54:26.1696477Z ##[endgroup]
+2025-10-16T08:54:26.1697825Z ##[group]Determining the checkout info
+2025-10-16T08:54:26.1700902Z ##[endgroup]
+2025-10-16T08:54:26.1705023Z [command]/usr/bin/git sparse-checkout disable
+2025-10-16T08:54:26.1747601Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2025-10-16T08:54:26.1776740Z ##[group]Checking out the ref
+2025-10-16T08:54:26.1780208Z [command]/usr/bin/git checkout --progress --force -B main refs/remotes/origin/main
+2025-10-16T08:54:26.2479301Z Switched to a new branch 'main'
+2025-10-16T08:54:26.2480800Z branch 'main' set up to track 'origin/main'.
+2025-10-16T08:54:26.2494558Z ##[endgroup]
+2025-10-16T08:54:26.2534586Z [command]/usr/bin/git log -1 --format=%H
+2025-10-16T08:54:26.2557074Z db9f5eaaed1463c7152c04dddd333128cdc51ddb

@@ -1,0 +1,834 @@
+﻿2025-10-16T08:54:50.0749308Z ##[group]Run npm run test
+2025-10-16T08:54:50.0749591Z [36;1mnpm run test[0m
+2025-10-16T08:54:50.0782435Z shell: /usr/bin/bash -e {0}
+2025-10-16T08:54:50.0782856Z env:
+2025-10-16T08:54:50.0783383Z   NEXT_PUBLIC_SUPABASE_URL: ***
+2025-10-16T08:54:50.0783759Z   NEXT_PUBLIC_SUPABASE_ANON_KEY: ***
+2025-10-16T08:54:50.0784018Z ##[endgroup]
+2025-10-16T08:54:50.1848762Z 
+2025-10-16T08:54:50.1849240Z > greenfashionscore-v2@0.1.0 test
+2025-10-16T08:54:50.1849832Z > jest --passWithNoTests --config jest.config.cjs
+2025-10-16T08:54:50.1850072Z 
+2025-10-16T08:54:52.3574452Z FAIL api __tests__/scoring.engine.spec.ts
+2025-10-16T08:54:52.3580482Z   ● Scoring Engine › computeRawCategorySum › should calculate category score with cap
+2025-10-16T08:54:52.3581062Z 
+2025-10-16T08:54:52.3581367Z     expect(received).toBe(expected) // Object.is equality
+2025-10-16T08:54:52.3581733Z 
+2025-10-16T08:54:52.3581865Z     Expected: 20
+2025-10-16T08:54:52.3582180Z     Received: 23
+2025-10-16T08:54:52.3582374Z 
+2025-10-16T08:54:52.3583357Z     [0m [90m 15 |[39m     it([32m'should calculate category score with cap'[39m[33m,[39m () [33m=>[39m {
+2025-10-16T08:54:52.3584234Z      [90m 16 |[39m       [90m// People: max 20[39m
+2025-10-16T08:54:52.3585879Z     [31m[1m>[22m[39m[90m 17 |[39m       expect(computeRawCategorySum([[35m5[39m[33m,[39m [35m10[39m[33m,[39m [35m8[39m][33m,[39m [32m'people'[39m))[33m.[39mtoBe([35m20[39m)[33m;[39m [90m// Capped at 20[39m
+2025-10-16T08:54:52.3587656Z      [90m    |[39m                                                           [31m[1m^[22m[39m
+2025-10-16T08:54:52.3588997Z      [90m 18 |[39m       expect(computeRawCategorySum([[35m5[39m[33m,[39m [35m10[39m][33m,[39m [32m'people'[39m))[33m.[39mtoBe([35m15[39m)[33m;[39m [90m// Not capped[39m
+2025-10-16T08:54:52.3589938Z      [90m 19 |[39m       
+2025-10-16T08:54:52.3590474Z      [90m 20 |[39m       [90m// Materials: max 40[39m[0m
+2025-10-16T08:54:52.3590801Z 
+2025-10-16T08:54:52.3591137Z       at Object.<anonymous> (__tests__/scoring.engine.spec.ts:17:59)
+2025-10-16T08:54:52.3591548Z 
+2025-10-16T08:54:52.3592178Z   ● Scoring Engine › calculateCompleteSurveyScore › should calculate score for general survey
+2025-10-16T08:54:52.3592905Z 
+2025-10-16T08:54:52.3593211Z     expect(received).toBe(expected) // Object.is equality
+2025-10-16T08:54:52.3593561Z 
+2025-10-16T08:54:52.3593689Z     Expected: 8
+2025-10-16T08:54:52.3594033Z     Received: 3.6363636363636367
+2025-10-16T08:54:52.3594278Z 
+2025-10-16T08:54:52.3594469Z     [0m [90m 183 |[39m
+2025-10-16T08:54:52.3595246Z      [90m 184 |[39m       expect(result[33m.[39mscope)[33m.[39mtoBe([32m'general'[39m)[33m;[39m
+2025-10-16T08:54:52.3596529Z     [31m[1m>[22m[39m[90m 185 |[39m       expect(result[33m.[39mscores[33m.[39mpeople)[33m.[39mtoBe([35m8[39m)[33m;[39m [90m// 5 + 3[39m
+2025-10-16T08:54:52.3597517Z      [90m     |[39m                                    [31m[1m^[22m[39m
+2025-10-16T08:54:52.3598455Z      [90m 186 |[39m       expect(result[33m.[39mscores[33m.[39mplanet)[33m.[39mtoBe([35m4[39m)[33m;[39m
+2025-10-16T08:54:52.3599756Z      [90m 187 |[39m       expect(result[33m.[39mscores[33m.[39mmaterials)[33m.[39mtoBe([35m14[39m)[33m;[39m [90m// 8 + 6[39m
+2025-10-16T08:54:52.3601086Z      [90m 188 |[39m       expect(result[33m.[39mscores[33m.[39mcircularity)[33m.[39mtoBe([35m2[39m)[33m;[39m[0m
+2025-10-16T08:54:52.3601664Z 
+2025-10-16T08:54:52.3633493Z       at Object.<anonymous> (__tests__/scoring.engine.spec.ts:185:36)
+2025-10-16T08:54:52.3646386Z 
+2025-10-16T08:54:52.3647761Z   ● Scoring Engine › calculateCompleteSurveyScore › should calculate score for product survey
+2025-10-16T08:54:52.3648655Z 
+2025-10-16T08:54:52.3649137Z     expect(received).toBe(expected) // Object.is equality
+2025-10-16T08:54:52.3649708Z 
+2025-10-16T08:54:52.3650007Z     Expected: 2
+2025-10-16T08:54:52.3650528Z     Received: 0.9090909090909092
+2025-10-16T08:54:52.3650988Z 
+2025-10-16T08:54:52.3652007Z     [0m [90m 202 |[39m       expect(result[33m.[39mscope)[33m.[39mtoBe([32m'product'[39m)[33m;[39m
+2025-10-16T08:54:52.3654151Z      [90m 203 |[39m       expect(result[33m.[39mproductType)[33m.[39mtoBe([32m'camiseta'[39m)[33m;[39m
+2025-10-16T08:54:52.3655742Z     [31m[1m>[22m[39m[90m 204 |[39m       expect(result[33m.[39mscores[33m.[39mpeople)[33m.[39mtoBe([35m2[39m)[33m;[39m
+2025-10-16T08:54:52.3705292Z      [90m     |[39m                                    [31m[1m^[22m[39m
+2025-10-16T08:54:52.3706831Z      [90m 205 |[39m       expect(result[33m.[39mscores[33m.[39mplanet)[33m.[39mtoBe([35m3[39m)[33m;[39m
+2025-10-16T08:54:52.3708290Z      [90m 206 |[39m       expect(result[33m.[39mscores[33m.[39mmaterials)[33m.[39mtoBe([35m5[39m)[33m;[39m
+2025-10-16T08:54:52.3709799Z      [90m 207 |[39m       expect(result[33m.[39mscores[33m.[39mcircularity)[33m.[39mtoBe([35m0[39m)[33m;[39m[0m
+2025-10-16T08:54:52.3710687Z 
+2025-10-16T08:54:52.3711237Z       at Object.<anonymous> (__tests__/scoring.engine.spec.ts:204:36)
+2025-10-16T08:54:52.3711897Z 
+2025-10-16T08:54:52.3713024Z   ● Scoring Engine › calculateCompleteSurveyScore › should handle responses that exceed category caps
+2025-10-16T08:54:52.3713919Z 
+2025-10-16T08:54:52.3714692Z     expect(received).toBe(expected) // Object.is equality
+2025-10-16T08:54:52.3715264Z 
+2025-10-16T08:54:52.3715571Z     Expected: 20
+2025-10-16T08:54:52.3716139Z     Received: 11.363636363636365
+2025-10-16T08:54:52.3716569Z 
+2025-10-16T08:54:52.3717680Z     [0m [90m 220 |[39m       [36mconst[39m result [33m=[39m calculateCompleteSurveyScore(responses[33m,[39m [32m'general'[39m)[33m;[39m
+2025-10-16T08:54:52.3718805Z      [90m 221 |[39m
+2025-10-16T08:54:52.3720097Z     [31m[1m>[22m[39m[90m 222 |[39m       expect(result[33m.[39mscores[33m.[39mpeople)[33m.[39mtoBe([35m20[39m)[33m;[39m [90m// Capped[39m
+2025-10-16T08:54:52.3721415Z      [90m     |[39m                                    [31m[1m^[22m[39m
+2025-10-16T08:54:52.3723011Z      [90m 223 |[39m       expect(result[33m.[39mscores[33m.[39mmaterials)[33m.[39mtoBe([35m40[39m)[33m;[39m [90m// Capped[39m
+2025-10-16T08:54:52.3724677Z      [90m 224 |[39m       expect(result[33m.[39mtotal)[33m.[39mtoBe([35m60[39m)[33m;[39m [90m// 20 + 0 + 40 + 0[39m
+2025-10-16T08:54:52.3725937Z      [90m 225 |[39m     })[33m;[39m[0m
+2025-10-16T08:54:52.3726512Z 
+2025-10-16T08:54:52.3727141Z       at Object.<anonymous> (__tests__/scoring.engine.spec.ts:222:36)
+2025-10-16T08:54:52.3727804Z 
+2025-10-16T08:54:52.4681894Z FAIL api __tests__/api.scoring.spec.ts
+2025-10-16T08:54:52.4959407Z   ● Console
+2025-10-16T08:54:52.4959965Z 
+2025-10-16T08:54:52.4960382Z     console.error
+2025-10-16T08:54:52.4961205Z       Scoring handler error: SyntaxError: Unexpected token 'i', "invalid json" is not valid JSON
+2025-10-16T08:54:52.4961951Z           at JSON.parse (<anonymous>)
+2025-10-16T08:54:52.4962572Z           at parseJSONFromBytes (node:internal/deps/undici/undici:5738:19)
+2025-10-16T08:54:52.4963485Z           at successSteps (node:internal/deps/undici/undici:5719:27)
+2025-10-16T08:54:52.4964131Z           at fullyReadBody (node:internal/deps/undici/undici:4609:9)
+2025-10-16T08:54:52.4964940Z           at processTicksAndRejections (node:internal/process/task_queues:95:5)
+2025-10-16T08:54:52.4965815Z           at consumeBody (node:internal/deps/undici/undici:5728:7)
+2025-10-16T08:54:52.4967009Z           at handler (/home/runner/work/greenfashionscore-v2/greenfashionscore-v2/supabase/functions/scoring/handler.ts:48:20)
+2025-10-16T08:54:52.4968613Z           at Object.<anonymous> (/home/runner/work/greenfashionscore-v2/greenfashionscore-v2/__tests__/api.scoring.spec.ts:134:24)
+2025-10-16T08:54:52.4969411Z 
+2025-10-16T08:54:52.4969781Z     [0m [90m  99 |[39m       })[33m;[39m
+2025-10-16T08:54:52.4970379Z      [90m 100 |[39m     } [36mcatch[39m (e) {
+2025-10-16T08:54:52.4971440Z     [31m[1m>[22m[39m[90m 101 |[39m       console[33m.[39merror([32m"Scoring handler error:"[39m[33m,[39m e)[33m;[39m
+2025-10-16T08:54:52.4973048Z      [90m     |[39m               [31m[1m^[22m[39m
+2025-10-16T08:54:52.4974180Z      [90m 102 |[39m       [36mreturn[39m errorResponse([35m500[39m[33m,[39m [32m"Internal Server Error"[39m)[33m;[39m
+2025-10-16T08:54:52.4975072Z      [90m 103 |[39m     }
+2025-10-16T08:54:52.4975613Z      [90m 104 |[39m   }[33m;[39m[0m
+2025-10-16T08:54:52.4975917Z 
+2025-10-16T08:54:52.4976264Z       at handler (supabase/functions/scoring/handler.ts:101:15)
+2025-10-16T08:54:52.4977039Z       at Object.<anonymous> (__tests__/api.scoring.spec.ts:134:24)
+2025-10-16T08:54:52.4977489Z 
+2025-10-16T08:54:52.4977648Z     console.error
+2025-10-16T08:54:52.4978100Z       Scoring handler error: Error: DB Error
+2025-10-16T08:54:52.4979253Z           at Object.<anonymous> (/home/runner/work/greenfashionscore-v2/greenfashionscore-v2/__tests__/api.scoring.spec.ts:140:51)
+2025-10-16T08:54:52.4981072Z           at Promise.then.completed (/home/runner/work/greenfashionscore-v2/greenfashionscore-v2/node_modules/jest-circus/build/utils.js:298:28)
+2025-10-16T08:54:52.4982293Z           at new Promise (<anonymous>)
+2025-10-16T08:54:52.4983730Z           at callAsyncCircusFn (/home/runner/work/greenfashionscore-v2/greenfashionscore-v2/node_modules/jest-circus/build/utils.js:231:10)
+2025-10-16T08:54:52.4985913Z           at _callCircusTest (/home/runner/work/greenfashionscore-v2/greenfashionscore-v2/node_modules/jest-circus/build/run.js:316:40)
+2025-10-16T08:54:52.4987244Z           at processTicksAndRejections (node:internal/process/task_queues:95:5)
+2025-10-16T08:54:52.4988561Z           at _runTest (/home/runner/work/greenfashionscore-v2/greenfashionscore-v2/node_modules/jest-circus/build/run.js:252:3)
+2025-10-16T08:54:52.4990316Z           at _runTestsForDescribeBlock (/home/runner/work/greenfashionscore-v2/greenfashionscore-v2/node_modules/jest-circus/build/run.js:126:9)
+2025-10-16T08:54:52.4992185Z           at _runTestsForDescribeBlock (/home/runner/work/greenfashionscore-v2/greenfashionscore-v2/node_modules/jest-circus/build/run.js:121:9)
+2025-10-16T08:54:52.4994266Z           at _runTestsForDescribeBlock (/home/runner/work/greenfashionscore-v2/greenfashionscore-v2/node_modules/jest-circus/build/run.js:121:9)
+2025-10-16T08:54:52.4995990Z           at run (/home/runner/work/greenfashionscore-v2/greenfashionscore-v2/node_modules/jest-circus/build/run.js:71:3)
+2025-10-16T08:54:52.4998150Z           at runAndTransformResultsToJestFormat (/home/runner/work/greenfashionscore-v2/greenfashionscore-v2/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
+2025-10-16T08:54:52.5000547Z           at jestAdapter (/home/runner/work/greenfashionscore-v2/greenfashionscore-v2/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
+2025-10-16T08:54:52.5002502Z           at runTestInternal (/home/runner/work/greenfashionscore-v2/greenfashionscore-v2/node_modules/jest-runner/build/runTest.js:367:16)
+2025-10-16T08:54:52.5004465Z           at runTest (/home/runner/work/greenfashionscore-v2/greenfashionscore-v2/node_modules/jest-runner/build/runTest.js:444:34)
+2025-10-16T08:54:52.5006167Z           at Object.worker (/home/runner/work/greenfashionscore-v2/greenfashionscore-v2/node_modules/jest-runner/build/testWorker.js:106:12)
+2025-10-16T08:54:52.5007090Z 
+2025-10-16T08:54:52.5007454Z     [0m [90m  99 |[39m       })[33m;[39m
+2025-10-16T08:54:52.5008058Z      [90m 100 |[39m     } [36mcatch[39m (e) {
+2025-10-16T08:54:52.5009131Z     [31m[1m>[22m[39m[90m 101 |[39m       console[33m.[39merror([32m"Scoring handler error:"[39m[33m,[39m e)[33m;[39m
+2025-10-16T08:54:52.5010089Z      [90m     |[39m               [31m[1m^[22m[39m
+2025-10-16T08:54:52.5011245Z      [90m 102 |[39m       [36mreturn[39m errorResponse([35m500[39m[33m,[39m [32m"Internal Server Error"[39m)[33m;[39m
+2025-10-16T08:54:52.5012119Z      [90m 103 |[39m     }
+2025-10-16T08:54:52.5042908Z      [90m 104 |[39m   }[33m;[39m[0m
+2025-10-16T08:54:52.5043523Z 
+2025-10-16T08:54:52.5043854Z       at handler (supabase/functions/scoring/handler.ts:101:15)
+2025-10-16T08:54:52.5044527Z       at Object.<anonymous> (__tests__/api.scoring.spec.ts:158:24)
+2025-10-16T08:54:52.5044902Z 
+2025-10-16T08:54:52.5045368Z   ● Scoring Handler › Rate limiting › should handle rate limiting
+2025-10-16T08:54:52.5045727Z 
+2025-10-16T08:54:52.5045987Z     expect(received).toBe(expected) // Object.is equality
+2025-10-16T08:54:52.5046317Z 
+2025-10-16T08:54:52.5046448Z     Expected: 429
+2025-10-16T08:54:52.5046743Z     Received: 200
+2025-10-16T08:54:52.5046912Z 
+2025-10-16T08:54:52.5047106Z     [0m [90m 183 |[39m
+2025-10-16T08:54:52.5047901Z      [90m 184 |[39m       [36mconst[39m response [33m=[39m [36mawait[39m handler(request)[33m;[39m
+2025-10-16T08:54:52.5048983Z     [31m[1m>[22m[39m[90m 185 |[39m       expect(response[33m.[39mstatus)[33m.[39mtoBe([35m429[39m)[33m;[39m
+2025-10-16T08:54:52.5049767Z      [90m     |[39m                               [31m[1m^[22m[39m
+2025-10-16T08:54:52.5050302Z      [90m 186 |[39m     })[33m;[39m
+2025-10-16T08:54:52.5050784Z      [90m 187 |[39m   })[33m;[39m
+2025-10-16T08:54:52.5051206Z      [90m 188 |[39m[0m
+2025-10-16T08:54:52.5051646Z 
+2025-10-16T08:54:52.5051950Z       at Object.<anonymous> (__tests__/api.scoring.spec.ts:185:31)
+2025-10-16T08:54:52.5052332Z 
+2025-10-16T08:54:52.5053127Z   ● Scoring Handler › Score calculation › should calculate correct scores for different categories
+2025-10-16T08:54:52.5053669Z 
+2025-10-16T08:54:52.5053918Z     expect(received).toBe(expected) // Object.is equality
+2025-10-16T08:54:52.5054250Z 
+2025-10-16T08:54:52.5054376Z     Expected: 18
+2025-10-16T08:54:52.5054716Z     Received: 8.181818181818182
+2025-10-16T08:54:52.5054953Z 
+2025-10-16T08:54:52.5055135Z     [0m [90m 211 |[39m
+2025-10-16T08:54:52.5055848Z      [90m 212 |[39m       expect(response[33m.[39mstatus)[33m.[39mtoBe([35m200[39m)[33m;[39m
+2025-10-16T08:54:52.5057223Z     [31m[1m>[22m[39m[90m 213 |[39m       expect(data[33m.[39mscore[33m.[39mpeople)[33m.[39mtoBe([35m18[39m)[33m;[39m [90m// 10 + 8, not capped[39m
+2025-10-16T08:54:52.5058246Z      [90m     |[39m                                 [31m[1m^[22m[39m
+2025-10-16T08:54:52.5059142Z      [90m 214 |[39m       expect(data[33m.[39mscore[33m.[39mplanet)[33m.[39mtoBe([35m5[39m)[33m;[39m
+2025-10-16T08:54:52.5060435Z      [90m 215 |[39m       expect(data[33m.[39mscore[33m.[39mmaterials)[33m.[39mtoBe([35m35[39m)[33m;[39m [90m// 20 + 15, not capped[39m
+2025-10-16T08:54:52.5061709Z      [90m 216 |[39m       expect(data[33m.[39mscore[33m.[39mcircularity)[33m.[39mtoBe([35m3[39m)[33m;[39m[0m
+2025-10-16T08:54:52.5062215Z 
+2025-10-16T08:54:52.5062516Z       at Object.<anonymous> (__tests__/api.scoring.spec.ts:213:33)
+2025-10-16T08:54:52.5063047Z 
+2025-10-16T08:54:52.5063541Z   ● Scoring Handler › Score calculation › should apply category caps correctly
+2025-10-16T08:54:52.5064014Z 
+2025-10-16T08:54:52.5064285Z     expect(received).toBe(expected) // Object.is equality
+2025-10-16T08:54:52.5064601Z 
+2025-10-16T08:54:52.5064731Z     Expected: 20
+2025-10-16T08:54:52.5065057Z     Received: 11.363636363636365
+2025-10-16T08:54:52.5065287Z 
+2025-10-16T08:54:52.5065463Z     [0m [90m 239 |[39m
+2025-10-16T08:54:52.5066190Z      [90m 240 |[39m       expect(response[33m.[39mstatus)[33m.[39mtoBe([35m200[39m)[33m;[39m
+2025-10-16T08:54:52.5067538Z     [31m[1m>[22m[39m[90m 241 |[39m       expect(data[33m.[39mscore[33m.[39mpeople)[33m.[39mtoBe([35m20[39m)[33m;[39m [90m// Capped at 20[39m
+2025-10-16T08:54:52.5068682Z      [90m     |[39m                                 [31m[1m^[22m[39m
+2025-10-16T08:54:52.5069896Z      [90m 242 |[39m       expect(data[33m.[39mscore[33m.[39mmaterials)[33m.[39mtoBe([35m40[39m)[33m;[39m [90m// Capped at 40[39m
+2025-10-16T08:54:52.5070873Z      [90m 243 |[39m     })[33m;[39m
+2025-10-16T08:54:52.5071453Z      [90m 244 |[39m   })[33m;[39m[0m
+2025-10-16T08:54:52.5072016Z 
+2025-10-16T08:54:52.5072377Z       at Object.<anonymous> (__tests__/api.scoring.spec.ts:241:33)
+2025-10-16T08:54:52.5086751Z 
+2025-10-16T08:54:52.5346271Z FAIL api __tests__/api.dashboard.spec.ts
+2025-10-16T08:54:52.5704157Z   ● Console
+2025-10-16T08:54:52.5713685Z 
+2025-10-16T08:54:52.5714083Z     console.error
+2025-10-16T08:54:52.5715136Z       Dashboard handler error: TypeError: Cannot read properties of undefined (reading 'length')
+2025-10-16T08:54:52.5716527Z           at handler (/home/runner/work/greenfashionscore-v2/greenfashionscore-v2/supabase/functions/dashboard/handler.ts:33:19)
+2025-10-16T08:54:52.5717751Z           at processTicksAndRejections (node:internal/process/task_queues:95:5)
+2025-10-16T08:54:52.5719016Z           at Object.<anonymous> (/home/runner/work/greenfashionscore-v2/greenfashionscore-v2/__tests__/api.dashboard.spec.ts:62:24)
+2025-10-16T08:54:52.5719809Z 
+2025-10-16T08:54:52.5720187Z     [0m [90m 94 |[39m       })[33m;[39m
+2025-10-16T08:54:52.5720810Z      [90m 95 |[39m     } [36mcatch[39m (e) {
+2025-10-16T08:54:52.5721928Z     [31m[1m>[22m[39m[90m 96 |[39m       console[33m.[39merror([32m"Dashboard handler error:"[39m[33m,[39m e)[33m;[39m
+2025-10-16T08:54:52.5723643Z      [90m    |[39m               [31m[1m^[22m[39m
+2025-10-16T08:54:52.5725058Z      [90m 97 |[39m       [36mreturn[39m [36mnew[39m [33mResponse[39m([33mJSON[39m[33m.[39mstringify({ error[33m:[39m [32m"Internal Server Error"[39m })[33m,[39m {
+2025-10-16T08:54:52.5726289Z      [90m 98 |[39m         status[33m:[39m [35m500[39m[33m,[39m
+2025-10-16T08:54:52.5727334Z      [90m 99 |[39m         headers[33m:[39m { [32m"Content-Type"[39m[33m:[39m [32m"application/json"[39m }[0m
+2025-10-16T08:54:52.5727889Z 
+2025-10-16T08:54:52.5728234Z       at handler (supabase/functions/dashboard/handler.ts:96:15)
+2025-10-16T08:54:52.5728994Z       at Object.<anonymous> (__tests__/api.dashboard.spec.ts:62:24)
+2025-10-16T08:54:52.5729506Z 
+2025-10-16T08:54:52.5729649Z     console.error
+2025-10-16T08:54:52.5730452Z       Dashboard handler error: TypeError: Cannot read properties of undefined (reading 'length')
+2025-10-16T08:54:52.5731860Z           at handler (/home/runner/work/greenfashionscore-v2/greenfashionscore-v2/supabase/functions/dashboard/handler.ts:33:19)
+2025-10-16T08:54:52.5733238Z           at processTicksAndRejections (node:internal/process/task_queues:95:5)
+2025-10-16T08:54:52.5734351Z           at Object.<anonymous> (/home/runner/work/greenfashionscore-v2/greenfashionscore-v2/__tests__/api.dashboard.spec.ts:88:24)
+2025-10-16T08:54:52.5735049Z 
+2025-10-16T08:54:52.5735342Z     [0m [90m 94 |[39m       })[33m;[39m
+2025-10-16T08:54:52.5735860Z      [90m 95 |[39m     } [36mcatch[39m (e) {
+2025-10-16T08:54:52.5736785Z     [31m[1m>[22m[39m[90m 96 |[39m       console[33m.[39merror([32m"Dashboard handler error:"[39m[33m,[39m e)[33m;[39m
+2025-10-16T08:54:52.5737603Z      [90m    |[39m               [31m[1m^[22m[39m
+2025-10-16T08:54:52.5738782Z      [90m 97 |[39m       [36mreturn[39m [36mnew[39m [33mResponse[39m([33mJSON[39m[33m.[39mstringify({ error[33m:[39m [32m"Internal Server Error"[39m })[33m,[39m {
+2025-10-16T08:54:52.5739931Z      [90m 98 |[39m         status[33m:[39m [35m500[39m[33m,[39m
+2025-10-16T08:54:52.5740973Z      [90m 99 |[39m         headers[33m:[39m { [32m"Content-Type"[39m[33m:[39m [32m"application/json"[39m }[0m
+2025-10-16T08:54:52.5741537Z 
+2025-10-16T08:54:52.5741866Z       at handler (supabase/functions/dashboard/handler.ts:96:15)
+2025-10-16T08:54:52.5742775Z       at Object.<anonymous> (__tests__/api.dashboard.spec.ts:88:24)
+2025-10-16T08:54:52.5743209Z 
+2025-10-16T08:54:52.5743357Z     console.error
+2025-10-16T08:54:52.5744089Z       Dashboard handler error: TypeError: Cannot read properties of undefined (reading 'length')
+2025-10-16T08:54:52.5745470Z           at handler (/home/runner/work/greenfashionscore-v2/greenfashionscore-v2/supabase/functions/dashboard/handler.ts:33:19)
+2025-10-16T08:54:52.5747028Z           at processTicksAndRejections (node:internal/process/task_queues:95:5)
+2025-10-16T08:54:52.5748322Z           at Object.<anonymous> (/home/runner/work/greenfashionscore-v2/greenfashionscore-v2/__tests__/api.dashboard.spec.ts:121:24)
+2025-10-16T08:54:52.5749021Z 
+2025-10-16T08:54:52.5749321Z     [0m [90m 94 |[39m       })[33m;[39m
+2025-10-16T08:54:52.5749909Z      [90m 95 |[39m     } [36mcatch[39m (e) {
+2025-10-16T08:54:52.5750946Z     [31m[1m>[22m[39m[90m 96 |[39m       console[33m.[39merror([32m"Dashboard handler error:"[39m[33m,[39m e)[33m;[39m
+2025-10-16T08:54:52.5751827Z      [90m    |[39m               [31m[1m^[22m[39m
+2025-10-16T08:54:52.5753332Z      [90m 97 |[39m       [36mreturn[39m [36mnew[39m [33mResponse[39m([33mJSON[39m[33m.[39mstringify({ error[33m:[39m [32m"Internal Server Error"[39m })[33m,[39m {
+2025-10-16T08:54:52.5754515Z      [90m 98 |[39m         status[33m:[39m [35m500[39m[33m,[39m
+2025-10-16T08:54:52.5755524Z      [90m 99 |[39m         headers[33m:[39m { [32m"Content-Type"[39m[33m:[39m [32m"application/json"[39m }[0m
+2025-10-16T08:54:52.5756024Z 
+2025-10-16T08:54:52.5756301Z       at handler (supabase/functions/dashboard/handler.ts:96:15)
+2025-10-16T08:54:52.5757204Z       at Object.<anonymous> (__tests__/api.dashboard.spec.ts:121:24)
+2025-10-16T08:54:52.5757575Z 
+2025-10-16T08:54:52.5757700Z     console.error
+2025-10-16T08:54:52.5758418Z       Dashboard handler error: TypeError: Cannot read properties of undefined (reading 'length')
+2025-10-16T08:54:52.5759587Z           at handler (/home/runner/work/greenfashionscore-v2/greenfashionscore-v2/supabase/functions/dashboard/handler.ts:33:19)
+2025-10-16T08:54:52.5760643Z           at processTicksAndRejections (node:internal/process/task_queues:95:5)
+2025-10-16T08:54:52.5761730Z           at Object.<anonymous> (/home/runner/work/greenfashionscore-v2/greenfashionscore-v2/__tests__/api.dashboard.spec.ts:153:24)
+2025-10-16T08:54:52.5762426Z 
+2025-10-16T08:54:52.5762869Z     [0m [90m 94 |[39m       })[33m;[39m
+2025-10-16T08:54:52.5763386Z      [90m 95 |[39m     } [36mcatch[39m (e) {
+2025-10-16T08:54:52.5764295Z     [31m[1m>[22m[39m[90m 96 |[39m       console[33m.[39merror([32m"Dashboard handler error:"[39m[33m,[39m e)[33m;[39m
+2025-10-16T08:54:52.5765103Z      [90m    |[39m               [31m[1m^[22m[39m
+2025-10-16T08:54:52.5766277Z      [90m 97 |[39m       [36mreturn[39m [36mnew[39m [33mResponse[39m([33mJSON[39m[33m.[39mstringify({ error[33m:[39m [32m"Internal Server Error"[39m })[33m,[39m {
+2025-10-16T08:54:52.5767325Z      [90m 98 |[39m         status[33m:[39m [35m500[39m[33m,[39m
+2025-10-16T08:54:52.5768300Z      [90m 99 |[39m         headers[33m:[39m { [32m"Content-Type"[39m[33m:[39m [32m"application/json"[39m }[0m
+2025-10-16T08:54:52.5768806Z 
+2025-10-16T08:54:52.5769113Z       at handler (supabase/functions/dashboard/handler.ts:96:15)
+2025-10-16T08:54:52.5769792Z       at Object.<anonymous> (__tests__/api.dashboard.spec.ts:153:24)
+2025-10-16T08:54:52.5770208Z 
+2025-10-16T08:54:52.5770359Z     console.error
+2025-10-16T08:54:52.5771119Z       Dashboard handler error: TypeError: Cannot read properties of undefined (reading 'length')
+2025-10-16T08:54:52.5772521Z           at handler (/home/runner/work/greenfashionscore-v2/greenfashionscore-v2/supabase/functions/dashboard/handler.ts:33:19)
+2025-10-16T08:54:52.5773879Z           at processTicksAndRejections (node:internal/process/task_queues:95:5)
+2025-10-16T08:54:52.5775150Z           at Object.<anonymous> (/home/runner/work/greenfashionscore-v2/greenfashionscore-v2/__tests__/api.dashboard.spec.ts:198:24)
+2025-10-16T08:54:52.5775905Z 
+2025-10-16T08:54:52.5776226Z     [0m [90m 94 |[39m       })[33m;[39m
+2025-10-16T08:54:52.5776771Z      [90m 95 |[39m     } [36mcatch[39m (e) {
+2025-10-16T08:54:52.5777735Z     [31m[1m>[22m[39m[90m 96 |[39m       console[33m.[39merror([32m"Dashboard handler error:"[39m[33m,[39m e)[33m;[39m
+2025-10-16T08:54:52.5779124Z      [90m    |[39m               [31m[1m^[22m[39m
+2025-10-16T08:54:52.5780463Z      [90m 97 |[39m       [36mreturn[39m [36mnew[39m [33mResponse[39m([33mJSON[39m[33m.[39mstringify({ error[33m:[39m [32m"Internal Server Error"[39m })[33m,[39m {
+2025-10-16T08:54:52.5781623Z      [90m 98 |[39m         status[33m:[39m [35m500[39m[33m,[39m
+2025-10-16T08:54:52.5782603Z      [90m 99 |[39m         headers[33m:[39m { [32m"Content-Type"[39m[33m:[39m [32m"application/json"[39m }[0m
+2025-10-16T08:54:52.5783322Z 
+2025-10-16T08:54:52.5783628Z       at handler (supabase/functions/dashboard/handler.ts:96:15)
+2025-10-16T08:54:52.5784336Z       at Object.<anonymous> (__tests__/api.dashboard.spec.ts:198:24)
+2025-10-16T08:54:52.5784743Z 
+2025-10-16T08:54:52.5784871Z     console.error
+2025-10-16T08:54:52.5785553Z       Dashboard handler error: TypeError: Cannot read properties of undefined (reading 'length')
+2025-10-16T08:54:52.5786872Z           at handler (/home/runner/work/greenfashionscore-v2/greenfashionscore-v2/supabase/functions/dashboard/handler.ts:33:19)
+2025-10-16T08:54:52.5788069Z           at processTicksAndRejections (node:internal/process/task_queues:95:5)
+2025-10-16T08:54:52.5789498Z           at Object.<anonymous> (/home/runner/work/greenfashionscore-v2/greenfashionscore-v2/__tests__/api.dashboard.spec.ts:228:25)
+2025-10-16T08:54:52.5790299Z 
+2025-10-16T08:54:52.5790573Z     [0m [90m 94 |[39m       })[33m;[39m
+2025-10-16T08:54:52.5791125Z      [90m 95 |[39m     } [36mcatch[39m (e) {
+2025-10-16T08:54:52.5792122Z     [31m[1m>[22m[39m[90m 96 |[39m       console[33m.[39merror([32m"Dashboard handler error:"[39m[33m,[39m e)[33m;[39m
+2025-10-16T08:54:52.5793161Z      [90m    |[39m               [31m[1m^[22m[39m
+2025-10-16T08:54:52.5794537Z      [90m 97 |[39m       [36mreturn[39m [36mnew[39m [33mResponse[39m([33mJSON[39m[33m.[39mstringify({ error[33m:[39m [32m"Internal Server Error"[39m })[33m,[39m {
+2025-10-16T08:54:52.5795708Z      [90m 98 |[39m         status[33m:[39m [35m500[39m[33m,[39m
+2025-10-16T08:54:52.5796707Z      [90m 99 |[39m         headers[33m:[39m { [32m"Content-Type"[39m[33m:[39m [32m"application/json"[39m }[0m
+2025-10-16T08:54:52.5797235Z 
+2025-10-16T08:54:52.5797554Z       at handler (supabase/functions/dashboard/handler.ts:96:15)
+2025-10-16T08:54:52.5798268Z       at Object.<anonymous> (__tests__/api.dashboard.spec.ts:228:25)
+2025-10-16T08:54:52.5798680Z 
+2025-10-16T08:54:52.5798819Z     console.error
+2025-10-16T08:54:52.5799520Z       Dashboard handler error: TypeError: Cannot read properties of undefined (reading 'length')
+2025-10-16T08:54:52.5800826Z           at handler (/home/runner/work/greenfashionscore-v2/greenfashionscore-v2/supabase/functions/dashboard/handler.ts:33:19)
+2025-10-16T08:54:52.5802007Z           at processTicksAndRejections (node:internal/process/task_queues:95:5)
+2025-10-16T08:54:52.5803401Z           at Object.<anonymous> (/home/runner/work/greenfashionscore-v2/greenfashionscore-v2/__tests__/api.dashboard.spec.ts:250:24)
+2025-10-16T08:54:52.5804195Z 
+2025-10-16T08:54:52.5804473Z     [0m [90m 94 |[39m       })[33m;[39m
+2025-10-16T08:54:52.5805036Z      [90m 95 |[39m     } [36mcatch[39m (e) {
+2025-10-16T08:54:52.5806060Z     [31m[1m>[22m[39m[90m 96 |[39m       console[33m.[39merror([32m"Dashboard handler error:"[39m[33m,[39m e)[33m;[39m
+2025-10-16T08:54:52.5806929Z      [90m    |[39m               [31m[1m^[22m[39m
+2025-10-16T08:54:52.5808262Z      [90m 97 |[39m       [36mreturn[39m [36mnew[39m [33mResponse[39m([33mJSON[39m[33m.[39mstringify({ error[33m:[39m [32m"Internal Server Error"[39m })[33m,[39m {
+2025-10-16T08:54:52.5809430Z      [90m 98 |[39m         status[33m:[39m [35m500[39m[33m,[39m
+2025-10-16T08:54:52.5810418Z      [90m 99 |[39m         headers[33m:[39m { [32m"Content-Type"[39m[33m:[39m [32m"application/json"[39m }[0m
+2025-10-16T08:54:52.5811143Z 
+2025-10-16T08:54:52.5811451Z       at handler (supabase/functions/dashboard/handler.ts:96:15)
+2025-10-16T08:54:52.5812135Z       at Object.<anonymous> (__tests__/api.dashboard.spec.ts:250:24)
+2025-10-16T08:54:52.5812541Z 
+2025-10-16T08:54:52.5812837Z     console.error
+2025-10-16T08:54:52.5813539Z       Dashboard handler error: TypeError: Cannot read properties of undefined (reading 'length')
+2025-10-16T08:54:52.5814849Z           at handler (/home/runner/work/greenfashionscore-v2/greenfashionscore-v2/supabase/functions/dashboard/handler.ts:33:19)
+2025-10-16T08:54:52.5816038Z           at processTicksAndRejections (node:internal/process/task_queues:95:5)
+2025-10-16T08:54:52.5817286Z           at Object.<anonymous> (/home/runner/work/greenfashionscore-v2/greenfashionscore-v2/__tests__/api.dashboard.spec.ts:315:24)
+2025-10-16T08:54:52.5818060Z 
+2025-10-16T08:54:52.5818374Z     [0m [90m 94 |[39m       })[33m;[39m
+2025-10-16T08:54:52.5818969Z      [90m 95 |[39m     } [36mcatch[39m (e) {
+2025-10-16T08:54:52.5819964Z     [31m[1m>[22m[39m[90m 96 |[39m       console[33m.[39merror([32m"Dashboard handler error:"[39m[33m,[39m e)[33m;[39m
+2025-10-16T08:54:52.5820838Z      [90m    |[39m               [31m[1m^[22m[39m
+2025-10-16T08:54:52.5822351Z      [90m 97 |[39m       [36mreturn[39m [36mnew[39m [33mResponse[39m([33mJSON[39m[33m.[39mstringify({ error[33m:[39m [32m"Internal Server Error"[39m })[33m,[39m {
+2025-10-16T08:54:52.5823672Z      [90m 98 |[39m         status[33m:[39m [35m500[39m[33m,[39m
+2025-10-16T08:54:52.5824670Z      [90m 99 |[39m         headers[33m:[39m { [32m"Content-Type"[39m[33m:[39m [32m"application/json"[39m }[0m
+2025-10-16T08:54:52.5825195Z 
+2025-10-16T08:54:52.5825498Z       at handler (supabase/functions/dashboard/handler.ts:96:15)
+2025-10-16T08:54:52.5826210Z       at Object.<anonymous> (__tests__/api.dashboard.spec.ts:315:24)
+2025-10-16T08:54:52.5826597Z 
+2025-10-16T08:54:52.5827393Z   ● Dashboard Handler › GET /dashboard › should return aggregated scores for user with general + product surveys
+2025-10-16T08:54:52.5828054Z 
+2025-10-16T08:54:52.5828339Z     expect(received).toBe(expected) // Object.is equality
+2025-10-16T08:54:52.5828700Z 
+2025-10-16T08:54:52.5828837Z     Expected: 200
+2025-10-16T08:54:52.5829161Z     Received: 500
+2025-10-16T08:54:52.5829341Z 
+2025-10-16T08:54:52.5829969Z     [0m [90m 63 |[39m       [36mconst[39m data [33m=[39m [36mawait[39m response[33m.[39mjson()[33m;[39m
+2025-10-16T08:54:52.5830654Z      [90m 64 |[39m
+2025-10-16T08:54:52.5831507Z     [31m[1m>[22m[39m[90m 65 |[39m       expect(response[33m.[39mstatus)[33m.[39mtoBe([35m200[39m)[33m;[39m
+2025-10-16T08:54:52.5832402Z      [90m    |[39m                               [31m[1m^[22m[39m
+2025-10-16T08:54:52.5833585Z      [90m 66 |[39m       expect(data[33m.[39mpeople)[33m.[39mtoBe([35m18[39m)[33m;[39m [90m// 10 + 5 + 3, capped at 20[39m
+2025-10-16T08:54:52.5834899Z      [90m 67 |[39m       expect(data[33m.[39mplanet)[33m.[39mtoBe([35m13[39m)[33m;[39m [90m// 8 + 3 + 2, capped at 20[39m
+2025-10-16T08:54:52.5836353Z      [90m 68 |[39m       expect(data[33m.[39mmaterials)[33m.[39mtoBe([35m38[39m)[33m;[39m [90m// 20 + 10 + 8, capped at 40[39m[0m
+2025-10-16T08:54:52.5837009Z 
+2025-10-16T08:54:52.5837364Z       at Object.<anonymous> (__tests__/api.dashboard.spec.ts:65:31)
+2025-10-16T08:54:52.5837803Z 
+2025-10-16T08:54:52.5838507Z   ● Dashboard Handler › GET /dashboard › should return empty scores when user has no surveys
+2025-10-16T08:54:52.5839110Z 
+2025-10-16T08:54:52.5839436Z     expect(received).toBe(expected) // Object.is equality
+2025-10-16T08:54:52.5839831Z 
+2025-10-16T08:54:52.5839975Z     Expected: 200
+2025-10-16T08:54:52.5840314Z     Received: 500
+2025-10-16T08:54:52.5840512Z 
+2025-10-16T08:54:52.5841196Z     [0m [90m 89 |[39m       [36mconst[39m data [33m=[39m [36mawait[39m response[33m.[39mjson()[33m;[39m
+2025-10-16T08:54:52.5841917Z      [90m 90 |[39m
+2025-10-16T08:54:52.5843325Z     [31m[1m>[22m[39m[90m 91 |[39m       expect(response[33m.[39mstatus)[33m.[39mtoBe([35m200[39m)[33m;[39m
+2025-10-16T08:54:52.5844288Z      [90m    |[39m                               [31m[1m^[22m[39m
+2025-10-16T08:54:52.5845151Z      [90m 92 |[39m       expect(data[33m.[39mpeople)[33m.[39mtoBe([35m0[39m)[33m;[39m
+2025-10-16T08:54:52.5846151Z      [90m 93 |[39m       expect(data[33m.[39mplanet)[33m.[39mtoBe([35m0[39m)[33m;[39m
+2025-10-16T08:54:52.5847246Z      [90m 94 |[39m       expect(data[33m.[39mmaterials)[33m.[39mtoBe([35m0[39m)[33m;[39m[0m
+2025-10-16T08:54:52.5847781Z 
+2025-10-16T08:54:52.5848136Z       at Object.<anonymous> (__tests__/api.dashboard.spec.ts:91:31)
+2025-10-16T08:54:52.5848592Z 
+2025-10-16T08:54:52.5849422Z   ● Dashboard Handler › GET /dashboard › should return empty scores when user has no general survey
+2025-10-16T08:54:52.5850077Z 
+2025-10-16T08:54:52.5850405Z     expect(received).toBe(expected) // Object.is equality
+2025-10-16T08:54:52.5850836Z 
+2025-10-16T08:54:52.5850989Z     Expected: 200
+2025-10-16T08:54:52.5851339Z     Received: 500
+2025-10-16T08:54:52.5851551Z 
+2025-10-16T08:54:52.5852270Z     [0m [90m 122 |[39m       [36mconst[39m data [33m=[39m [36mawait[39m response[33m.[39mjson()[33m;[39m
+2025-10-16T08:54:52.5853642Z      [90m 123 |[39m
+2025-10-16T08:54:52.5854594Z     [31m[1m>[22m[39m[90m 124 |[39m       expect(response[33m.[39mstatus)[33m.[39mtoBe([35m200[39m)[33m;[39m
+2025-10-16T08:54:52.5855567Z      [90m     |[39m                               [31m[1m^[22m[39m
+2025-10-16T08:54:52.5856495Z      [90m 125 |[39m       expect(data[33m.[39mpeople)[33m.[39mtoBe([35m0[39m)[33m;[39m
+2025-10-16T08:54:52.5857551Z      [90m 126 |[39m       expect(data[33m.[39mplanet)[33m.[39mtoBe([35m0[39m)[33m;[39m
+2025-10-16T08:54:52.5858657Z      [90m 127 |[39m       expect(data[33m.[39mmaterials)[33m.[39mtoBe([35m0[39m)[33m;[39m[0m
+2025-10-16T08:54:52.5859123Z 
+2025-10-16T08:54:52.5859474Z       at Object.<anonymous> (__tests__/api.dashboard.spec.ts:124:31)
+2025-10-16T08:54:52.5859921Z 
+2025-10-16T08:54:52.5860474Z   ● Dashboard Handler › GET /dashboard › should handle only general survey
+2025-10-16T08:54:52.5861058Z 
+2025-10-16T08:54:52.5861414Z     expect(received).toBe(expected) // Object.is equality
+2025-10-16T08:54:52.5861820Z 
+2025-10-16T08:54:52.5861977Z     Expected: 200
+2025-10-16T08:54:52.5862341Z     Received: 500
+2025-10-16T08:54:52.5862547Z 
+2025-10-16T08:54:52.5863493Z     [0m [90m 154 |[39m       [36mconst[39m data [33m=[39m [36mawait[39m response[33m.[39mjson()[33m;[39m
+2025-10-16T08:54:52.5864236Z      [90m 155 |[39m
+2025-10-16T08:54:52.5865149Z     [31m[1m>[22m[39m[90m 156 |[39m       expect(response[33m.[39mstatus)[33m.[39mtoBe([35m200[39m)[33m;[39m
+2025-10-16T08:54:52.5866083Z      [90m     |[39m                               [31m[1m^[22m[39m
+2025-10-16T08:54:52.5866978Z      [90m 157 |[39m       expect(data[33m.[39mpeople)[33m.[39mtoBe([35m15[39m)[33m;[39m
+2025-10-16T08:54:52.5867986Z      [90m 158 |[39m       expect(data[33m.[39mplanet)[33m.[39mtoBe([35m12[39m)[33m;[39m
+2025-10-16T08:54:52.5869017Z      [90m 159 |[39m       expect(data[33m.[39mmaterials)[33m.[39mtoBe([35m25[39m)[33m;[39m[0m
+2025-10-16T08:54:52.5869524Z 
+2025-10-16T08:54:52.5869860Z       at Object.<anonymous> (__tests__/api.dashboard.spec.ts:156:31)
+2025-10-16T08:54:52.5870274Z 
+2025-10-16T08:54:52.5870844Z   ● Dashboard Handler › GET /dashboard › should respect category caps when aggregating
+2025-10-16T08:54:52.5871373Z 
+2025-10-16T08:54:52.5871638Z     expect(received).toBe(expected) // Object.is equality
+2025-10-16T08:54:52.5872007Z 
+2025-10-16T08:54:52.5872136Z     Expected: 200
+2025-10-16T08:54:52.5872455Z     Received: 500
+2025-10-16T08:54:52.5872797Z 
+2025-10-16T08:54:52.5873432Z     [0m [90m 199 |[39m       [36mconst[39m data [33m=[39m [36mawait[39m response[33m.[39mjson()[33m;[39m
+2025-10-16T08:54:52.5874357Z      [90m 200 |[39m
+2025-10-16T08:54:52.5875215Z     [31m[1m>[22m[39m[90m 201 |[39m       expect(response[33m.[39mstatus)[33m.[39mtoBe([35m200[39m)[33m;[39m
+2025-10-16T08:54:52.5876105Z      [90m     |[39m                               [31m[1m^[22m[39m
+2025-10-16T08:54:52.5877181Z      [90m 202 |[39m       expect(data[33m.[39mpeople)[33m.[39mtoBe([35m20[39m)[33m;[39m [90m// 18 + 5 = 23, capped at 20[39m
+2025-10-16T08:54:52.5878507Z      [90m 203 |[39m       expect(data[33m.[39mplanet)[33m.[39mtoBe([35m20[39m)[33m;[39m [90m// 15 + 8 = 23, capped at 20[39m
+2025-10-16T08:54:52.5879903Z      [90m 204 |[39m       expect(data[33m.[39mmaterials)[33m.[39mtoBe([35m40[39m)[33m;[39m [90m// 35 + 10 = 45, capped at 40[39m[0m
+2025-10-16T08:54:52.5880557Z 
+2025-10-16T08:54:52.5880888Z       at Object.<anonymous> (__tests__/api.dashboard.spec.ts:201:31)
+2025-10-16T08:54:52.5881307Z 
+2025-10-16T08:54:52.5881753Z   ● Dashboard Handler › GET /dashboard › should handle ETag caching
+2025-10-16T08:54:52.5882195Z 
+2025-10-16T08:54:52.5882471Z     expect(received).toBe(expected) // Object.is equality
+2025-10-16T08:54:52.5882985Z 
+2025-10-16T08:54:52.5883115Z     Expected: 200
+2025-10-16T08:54:52.5883432Z     Received: 500
+2025-10-16T08:54:52.5883798Z 
+2025-10-16T08:54:52.5884620Z     [0m [90m 230 |[39m       [36mconst[39m etag [33m=[39m response1[33m.[39mheaders[33m.[39m[36mget[39m([32m'ETag'[39m)[33m;[39m
+2025-10-16T08:54:52.5885437Z      [90m 231 |[39m
+2025-10-16T08:54:52.5912189Z     [31m[1m>[22m[39m[90m 232 |[39m       expect(response1[33m.[39mstatus)[33m.[39mtoBe([35m200[39m)[33m;[39m
+2025-10-16T08:54:52.5913537Z      [90m     |[39m                                [31m[1m^[22m[39m
+2025-10-16T08:54:52.5914416Z      [90m 233 |[39m       expect(etag)[33m.[39mtoBeTruthy()[33m;[39m
+2025-10-16T08:54:52.5915024Z      [90m 234 |[39m
+2025-10-16T08:54:52.5915686Z      [90m 235 |[39m       [90m// Second request with matching ETag[39m[0m
+2025-10-16T08:54:52.5916140Z 
+2025-10-16T08:54:52.5916518Z       at Object.<anonymous> (__tests__/api.dashboard.spec.ts:232:32)
+2025-10-16T08:54:52.5916974Z 
+2025-10-16T08:54:52.5917752Z   ● Dashboard Handler › Score aggregation logic › should correctly aggregate multiple product surveys
+2025-10-16T08:54:52.5918464Z 
+2025-10-16T08:54:52.5918791Z     expect(received).toBe(expected) // Object.is equality
+2025-10-16T08:54:52.5919199Z 
+2025-10-16T08:54:52.5919351Z     Expected: 200
+2025-10-16T08:54:52.5919725Z     Received: 500
+2025-10-16T08:54:52.5919949Z 
+2025-10-16T08:54:52.5920678Z     [0m [90m 316 |[39m       [36mconst[39m data [33m=[39m [36mawait[39m response[33m.[39mjson()[33m;[39m
+2025-10-16T08:54:52.5921403Z      [90m 317 |[39m
+2025-10-16T08:54:52.5922315Z     [31m[1m>[22m[39m[90m 318 |[39m       expect(response[33m.[39mstatus)[33m.[39mtoBe([35m200[39m)[33m;[39m
+2025-10-16T08:54:52.5923552Z      [90m     |[39m                               [31m[1m^[22m[39m
+2025-10-16T08:54:52.5924671Z      [90m 319 |[39m       expect(data[33m.[39mpeople)[33m.[39mtoBe([35m17[39m)[33m;[39m [90m// 8 + 3 + 2 + 4[39m
+2025-10-16T08:54:52.5926015Z      [90m 320 |[39m       expect(data[33m.[39mplanet)[33m.[39mtoBe([35m12[39m)[33m;[39m [90m// 6 + 2 + 1 + 3[39m
+2025-10-16T08:54:52.5927572Z      [90m 321 |[39m       expect(data[33m.[39mmaterials)[33m.[39mtoBe([35m40[39m)[33m;[39m [90m// 15 + 8 + 5 + 12 = 40, capped at 40[39m[0m
+2025-10-16T08:54:52.5928326Z 
+2025-10-16T08:54:52.5928709Z       at Object.<anonymous> (__tests__/api.dashboard.spec.ts:318:31)
+2025-10-16T08:54:52.5929177Z 
+2025-10-16T08:54:52.6746469Z FAIL api __tests__/excel.ingest.spec.ts
+2025-10-16T08:54:52.6747876Z   ● Test suite failed to run
+2025-10-16T08:54:52.6748185Z 
+2025-10-16T08:54:52.6748416Z     Jest encountered an unexpected token
+2025-10-16T08:54:52.6748730Z 
+2025-10-16T08:54:52.6749696Z     Jest failed to parse a file. This happens e.g. when your code or its dependencies use non-standard JavaScript syntax, or when Jest is not configured to support such syntax.
+2025-10-16T08:54:52.6751144Z 
+2025-10-16T08:54:52.6751920Z     Out of the box Jest supports Babel, which will be used to transform your files into valid JS based on your Babel configuration.
+2025-10-16T08:54:52.6752919Z 
+2025-10-16T08:54:52.6753279Z     By default "node_modules" folder is ignored by transformers.
+2025-10-16T08:54:52.6753711Z 
+2025-10-16T08:54:52.6753866Z     Here's what you can do:
+2025-10-16T08:54:52.6755031Z      • If you are trying to use ECMAScript Modules, see https://jestjs.io/docs/ecmascript-modules for how to enable it.
+2025-10-16T08:54:52.6756477Z      • If you are trying to use TypeScript, see https://jestjs.io/docs/getting-started#using-typescript
+2025-10-16T08:54:52.6757988Z      • To have some of your "node_modules" files transformed, you can specify a custom "transformIgnorePatterns" in your config.
+2025-10-16T08:54:52.6759329Z      • If you need a custom transformation specify a "transform" option in your config.
+2025-10-16T08:54:52.6760859Z      • If you simply want to mock your non-JS modules (e.g. binary assets) you can stub them out with the "moduleNameMapper" config option.
+2025-10-16T08:54:52.6761635Z 
+2025-10-16T08:54:52.6762066Z     You'll find more details and examples of these config options in the docs:
+2025-10-16T08:54:52.6763231Z     https://jestjs.io/docs/configuration
+2025-10-16T08:54:52.6763860Z     For information about custom transformations, see:
+2025-10-16T08:54:52.6764496Z     https://jestjs.io/docs/code-transformation
+2025-10-16T08:54:52.6764850Z 
+2025-10-16T08:54:52.6764998Z     Details:
+2025-10-16T08:54:52.6765183Z 
+2025-10-16T08:54:52.6765735Z     /home/runner/work/greenfashionscore-v2/greenfashionscore-v2/lib/excel/ingest.ts:139
+2025-10-16T08:54:52.6766666Z     if (import.meta.url === `file://${process.argv[1]}`) {
+2025-10-16T08:54:52.6767200Z                ^^^^
+2025-10-16T08:54:52.6767404Z 
+2025-10-16T08:54:52.6767719Z     SyntaxError: Cannot use 'import.meta' outside a module
+2025-10-16T08:54:52.6768129Z 
+2025-10-16T08:54:52.6769288Z     [0m [90m 1 |[39m [36mimport[39m { describe[33m,[39m it[33m,[39m expect[33m,[39m beforeEach[33m,[39m afterEach } [36mfrom[39m [32m'@jest/globals'[39m[33m;[39m
+2025-10-16T08:54:52.6771375Z     [31m[1m>[22m[39m[90m 2 |[39m [36mimport[39m { ingestFromExcel[33m,[39m upsertQuestions[33m,[39m upsertAnswers } [36mfrom[39m [32m'../lib/excel/ingest'[39m[33m;[39m
+2025-10-16T08:54:52.6772764Z      [90m   |[39m [31m[1m^[22m[39m
+2025-10-16T08:54:52.6773706Z      [90m 3 |[39m [36mimport[39m { withClient } [36mfrom[39m [32m'../lib/db'[39m[33m;[39m
+2025-10-16T08:54:52.6774437Z      [90m 4 |[39m
+2025-10-16T08:54:52.6774982Z      [90m 5 |[39m [90m// Mock de withClient[39m[0m
+2025-10-16T08:54:52.6780410Z 
+2025-10-16T08:54:52.6780907Z       at Runtime.createScriptFromCode (node_modules/jest-runtime/build/index.js:1505:14)
+2025-10-16T08:54:52.6781754Z       at Object.<anonymous> (__tests__/excel.ingest.spec.ts:2:1)
+2025-10-16T08:54:52.6782187Z 
+2025-10-16T08:54:52.8593336Z FAIL api __tests__/domain.scoring.spec.ts
+2025-10-16T08:54:52.8595051Z   ● Scoring engine (GFS) › proporcionalidad correcta
+2025-10-16T08:54:52.8595744Z 
+2025-10-16T08:54:52.8596237Z     expect(received).toBeCloseTo(expected)
+2025-10-16T08:54:52.8596774Z 
+2025-10-16T08:54:52.8597081Z     Expected: 14
+2025-10-16T08:54:52.8597658Z     Received: 15.909090909090908
+2025-10-16T08:54:52.8598116Z 
+2025-10-16T08:54:52.8598471Z     Expected precision:    2
+2025-10-16T08:54:52.8599126Z     Expected difference: < 0.005
+2025-10-16T08:54:52.8599836Z     Received difference:   1.9090909090909083
+2025-10-16T08:54:52.8600363Z 
+2025-10-16T08:54:52.8601245Z     [0m [90m 27 |[39m   it([32m"proporcionalidad correcta"[39m[33m,[39m () [33m=>[39m {
+2025-10-16T08:54:52.8603076Z      [90m 28 |[39m     [36mconst[39m pct [33m=[39m computeCategoryPercent([35m35[39m[33m,[39m [32m'people'[39m)[33m;[39m
+2025-10-16T08:54:52.8604704Z     [31m[1m>[22m[39m[90m 29 |[39m     expect(pct)[33m.[39mtoBeCloseTo([35m14[39m)[33m;[39m
+2025-10-16T08:54:52.8606320Z      [90m    |[39m                 [31m[1m^[22m[39m
+2025-10-16T08:54:52.8607177Z      [90m 30 |[39m   })[33m;[39m
+2025-10-16T08:54:52.8607869Z      [90m 31 |[39m
+2025-10-16T08:54:52.8608848Z      [90m 32 |[39m   it([32m"total 0 cuando todos 0"[39m[33m,[39m () [33m=>[39m {[0m
+2025-10-16T08:54:52.8609546Z 
+2025-10-16T08:54:52.8610069Z       at Object.<anonymous> (__tests__/domain.scoring.spec.ts:29:17)
+2025-10-16T08:54:52.8610708Z 
+2025-10-16T08:54:54.2769721Z PASS ui __tests__/ui.product.spec.tsx
+2025-10-16T08:54:54.3144422Z   ● Console
+2025-10-16T08:54:54.3145789Z 
+2025-10-16T08:54:54.3147019Z     console.warn
+2025-10-16T08:54:54.3149075Z       Failed to load product questions from DB, using fallback: Error: No authentication token available
+2025-10-16T08:54:54.3150410Z           at getAuthHeaders (/home/runner/work/greenfashionscore-v2/greenfashionscore-v2/lib/auth/client.ts:6:11)
+2025-10-16T08:54:54.3151634Z           at processTicksAndRejections (node:internal/process/task_queues:95:5)
+2025-10-16T08:54:54.3153038Z           at loadQuestions (/home/runner/work/greenfashionscore-v2/greenfashionscore-v2/app/product/new/page.tsx:38:76)
+2025-10-16T08:54:54.3154303Z 
+2025-10-16T08:54:54.3155637Z     [0m [90m 101 |[39m           body[33m:[39m [33mJSON[39m[33m.[39mstringify({ surveyId[33m:[39m [35m0[39m[33m,[39m completed[33m:[39m [36mfalse[39m[33m,[39m answers[33m:[39m formattedAnswers })
+2025-10-16T08:54:54.3156876Z      [90m 102 |[39m         })[33m;[39m
+2025-10-16T08:54:54.3157577Z     [31m[1m>[22m[39m[90m 103 |[39m       } [36melse[39m {
+2025-10-16T08:54:54.3158321Z      [90m     |[39m                         [31m[1m^[22m[39m
+2025-10-16T08:54:54.3159351Z      [90m 104 |[39m         [36mconst[39m res [33m=[39m [36mawait[39m fetch([32m'/api/scoring'[39m[33m,[39m {
+2025-10-16T08:54:54.3160422Z      [90m 105 |[39m           method[33m:[39m [32m"POST"[39m[33m,[39m
+2025-10-16T08:54:54.3161442Z      [90m 106 |[39m           headers[33m:[39m [36mawait[39m getAuthHeaders()[33m,[39m[0m
+2025-10-16T08:54:54.3161957Z 
+2025-10-16T08:54:54.3162294Z       at loadQuestions (app/product/new/page.tsx:103:29)
+2025-10-16T08:54:54.3162993Z 
+2025-10-16T08:54:54.3163149Z     console.warn
+2025-10-16T08:54:54.3163920Z       Failed to load product questions from DB, using fallback: Error: No authentication token available
+2025-10-16T08:54:54.3165219Z           at getAuthHeaders (/home/runner/work/greenfashionscore-v2/greenfashionscore-v2/lib/auth/client.ts:6:11)
+2025-10-16T08:54:54.3166259Z           at runNextTicks (node:internal/process/task_queues:60:5)
+2025-10-16T08:54:54.3166908Z           at listOnTimeout (node:internal/timers:545:9)
+2025-10-16T08:54:54.3167498Z           at processTimers (node:internal/timers:519:7)
+2025-10-16T08:54:54.3168568Z           at loadQuestions (/home/runner/work/greenfashionscore-v2/greenfashionscore-v2/app/product/new/page.tsx:38:76)
+2025-10-16T08:54:54.3169310Z 
+2025-10-16T08:54:54.3170597Z     [0m [90m 101 |[39m           body[33m:[39m [33mJSON[39m[33m.[39mstringify({ surveyId[33m:[39m [35m0[39m[33m,[39m completed[33m:[39m [36mfalse[39m[33m,[39m answers[33m:[39m formattedAnswers })
+2025-10-16T08:54:54.3171879Z      [90m 102 |[39m         })[33m;[39m
+2025-10-16T08:54:54.3172575Z     [31m[1m>[22m[39m[90m 103 |[39m       } [36melse[39m {
+2025-10-16T08:54:54.3173672Z      [90m     |[39m                         [31m[1m^[22m[39m
+2025-10-16T08:54:54.3174728Z      [90m 104 |[39m         [36mconst[39m res [33m=[39m [36mawait[39m fetch([32m'/api/scoring'[39m[33m,[39m {
+2025-10-16T08:54:54.3175738Z      [90m 105 |[39m           method[33m:[39m [32m"POST"[39m[33m,[39m
+2025-10-16T08:54:54.3176712Z      [90m 106 |[39m           headers[33m:[39m [36mawait[39m getAuthHeaders()[33m,[39m[0m
+2025-10-16T08:54:54.3177211Z 
+2025-10-16T08:54:54.3177818Z       at loadQuestions (app/product/new/page.tsx:103:29)
+2025-10-16T08:54:54.3178224Z 
+2025-10-16T08:54:54.3178366Z     console.warn
+2025-10-16T08:54:54.3179127Z       Failed to load product questions from DB, using fallback: Error: No authentication token available
+2025-10-16T08:54:54.3180480Z           at getAuthHeaders (/home/runner/work/greenfashionscore-v2/greenfashionscore-v2/lib/auth/client.ts:6:11)
+2025-10-16T08:54:54.3213684Z           at loadQuestions (/home/runner/work/greenfashionscore-v2/greenfashionscore-v2/app/product/new/page.tsx:38:76)
+2025-10-16T08:54:54.3214499Z 
+2025-10-16T08:54:54.3215830Z     [0m [90m 101 |[39m           body[33m:[39m [33mJSON[39m[33m.[39mstringify({ surveyId[33m:[39m [35m0[39m[33m,[39m completed[33m:[39m [36mfalse[39m[33m,[39m answers[33m:[39m formattedAnswers })
+2025-10-16T08:54:54.3217045Z      [90m 102 |[39m         })[33m;[39m
+2025-10-16T08:54:54.3217732Z     [31m[1m>[22m[39m[90m 103 |[39m       } [36melse[39m {
+2025-10-16T08:54:54.3218475Z      [90m     |[39m                         [31m[1m^[22m[39m
+2025-10-16T08:54:54.3219513Z      [90m 104 |[39m         [36mconst[39m res [33m=[39m [36mawait[39m fetch([32m'/api/scoring'[39m[33m,[39m {
+2025-10-16T08:54:54.3220505Z      [90m 105 |[39m           method[33m:[39m [32m"POST"[39m[33m,[39m
+2025-10-16T08:54:54.3221815Z      [90m 106 |[39m           headers[33m:[39m [36mawait[39m getAuthHeaders()[33m,[39m[0m
+2025-10-16T08:54:54.3222300Z 
+2025-10-16T08:54:54.3222603Z       at loadQuestions (app/product/new/page.tsx:103:29)
+2025-10-16T08:54:54.3223167Z 
+2025-10-16T08:54:54.3223330Z     console.warn
+2025-10-16T08:54:54.3224097Z       Failed to load product questions from DB, using fallback: Error: No authentication token available
+2025-10-16T08:54:54.3225480Z           at getAuthHeaders (/home/runner/work/greenfashionscore-v2/greenfashionscore-v2/lib/auth/client.ts:6:11)
+2025-10-16T08:54:54.3226908Z           at loadQuestions (/home/runner/work/greenfashionscore-v2/greenfashionscore-v2/app/product/new/page.tsx:38:76)
+2025-10-16T08:54:54.3227651Z 
+2025-10-16T08:54:54.3242884Z     [0m [90m 101 |[39m           body[33m:[39m [33mJSON[39m[33m.[39mstringify({ surveyId[33m:[39m [35m0[39m[33m,[39m completed[33m:[39m [36mfalse[39m[33m,[39m answers[33m:[39m formattedAnswers })
+2025-10-16T08:54:54.3244206Z      [90m 102 |[39m         })[33m;[39m
+2025-10-16T08:54:54.3244897Z     [31m[1m>[22m[39m[90m 103 |[39m       } [36melse[39m {
+2025-10-16T08:54:54.3245585Z      [90m     |[39m                         [31m[1m^[22m[39m
+2025-10-16T08:54:54.3246620Z      [90m 104 |[39m         [36mconst[39m res [33m=[39m [36mawait[39m fetch([32m'/api/scoring'[39m[33m,[39m {
+2025-10-16T08:54:54.3247610Z      [90m 105 |[39m           method[33m:[39m [32m"POST"[39m[33m,[39m
+2025-10-16T08:54:54.3248512Z      [90m 106 |[39m           headers[33m:[39m [36mawait[39m getAuthHeaders()[33m,[39m[0m
+2025-10-16T08:54:54.3248977Z 
+2025-10-16T08:54:54.3249304Z       at loadQuestions (app/product/new/page.tsx:103:29)
+2025-10-16T08:54:54.3249676Z 
+2025-10-16T08:54:54.3249828Z     console.warn
+2025-10-16T08:54:54.3250591Z       Failed to load product questions from DB, using fallback: Error: No authentication token available
+2025-10-16T08:54:54.3251873Z           at getAuthHeaders (/home/runner/work/greenfashionscore-v2/greenfashionscore-v2/lib/auth/client.ts:6:11)
+2025-10-16T08:54:54.3253536Z           at loadQuestions (/home/runner/work/greenfashionscore-v2/greenfashionscore-v2/app/product/new/page.tsx:38:76)
+2025-10-16T08:54:54.3254314Z 
+2025-10-16T08:54:54.3255625Z     [0m [90m 101 |[39m           body[33m:[39m [33mJSON[39m[33m.[39mstringify({ surveyId[33m:[39m [35m0[39m[33m,[39m completed[33m:[39m [36mfalse[39m[33m,[39m answers[33m:[39m formattedAnswers })
+2025-10-16T08:54:54.3256825Z      [90m 102 |[39m         })[33m;[39m
+2025-10-16T08:54:54.3257487Z     [31m[1m>[22m[39m[90m 103 |[39m       } [36melse[39m {
+2025-10-16T08:54:54.3258648Z      [90m     |[39m                         [31m[1m^[22m[39m
+2025-10-16T08:54:54.3259668Z      [90m 104 |[39m         [36mconst[39m res [33m=[39m [36mawait[39m fetch([32m'/api/scoring'[39m[33m,[39m {
+2025-10-16T08:54:54.3260674Z      [90m 105 |[39m           method[33m:[39m [32m"POST"[39m[33m,[39m
+2025-10-16T08:54:54.3261613Z      [90m 106 |[39m           headers[33m:[39m [36mawait[39m getAuthHeaders()[33m,[39m[0m
+2025-10-16T08:54:54.3262082Z 
+2025-10-16T08:54:54.3262377Z       at loadQuestions (app/product/new/page.tsx:103:29)
+2025-10-16T08:54:54.3262937Z 
+2025-10-16T08:54:54.3263090Z     console.warn
+2025-10-16T08:54:54.3263853Z       Failed to load product questions from DB, using fallback: Error: No authentication token available
+2025-10-16T08:54:54.3265158Z           at getAuthHeaders (/home/runner/work/greenfashionscore-v2/greenfashionscore-v2/lib/auth/client.ts:6:11)
+2025-10-16T08:54:54.3266599Z           at loadQuestions (/home/runner/work/greenfashionscore-v2/greenfashionscore-v2/app/product/new/page.tsx:38:76)
+2025-10-16T08:54:54.3267373Z 
+2025-10-16T08:54:54.3268694Z     [0m [90m 101 |[39m           body[33m:[39m [33mJSON[39m[33m.[39mstringify({ surveyId[33m:[39m [35m0[39m[33m,[39m completed[33m:[39m [36mfalse[39m[33m,[39m answers[33m:[39m formattedAnswers })
+2025-10-16T08:54:54.3270194Z      [90m 102 |[39m         })[33m;[39m
+2025-10-16T08:54:54.3270848Z     [31m[1m>[22m[39m[90m 103 |[39m       } [36melse[39m {
+2025-10-16T08:54:54.3271560Z      [90m     |[39m                         [31m[1m^[22m[39m
+2025-10-16T08:54:54.3272586Z      [90m 104 |[39m         [36mconst[39m res [33m=[39m [36mawait[39m fetch([32m'/api/scoring'[39m[33m,[39m {
+2025-10-16T08:54:54.3301287Z      [90m 105 |[39m           method[33m:[39m [32m"POST"[39m[33m,[39m
+2025-10-16T08:54:54.3302345Z      [90m 106 |[39m           headers[33m:[39m [36mawait[39m getAuthHeaders()[33m,[39m[0m
+2025-10-16T08:54:54.3303098Z 
+2025-10-16T08:54:54.3303433Z       at loadQuestions (app/product/new/page.tsx:103:29)
+2025-10-16T08:54:54.3303827Z 
+2025-10-16T08:54:54.3303999Z     console.error
+2025-10-16T08:54:54.3304875Z       Warning: An update to ProductWizardPage inside a test was not wrapped in act(...).
+2025-10-16T08:54:54.3305597Z       
+2025-10-16T08:54:54.3306262Z       When testing, code that causes React state updates should be wrapped into act(...):
+2025-10-16T08:54:54.3306951Z       
+2025-10-16T08:54:54.3307274Z       act(() => {
+2025-10-16T08:54:54.3307704Z         /* fire events that update state */
+2025-10-16T08:54:54.3308159Z       });
+2025-10-16T08:54:54.3308533Z       /* assert on the output */
+2025-10-16T08:54:54.3308928Z       
+2025-10-16T08:54:54.3309908Z       This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+2025-10-16T08:54:54.3311548Z           at ProductWizardPage (/home/runner/work/greenfashionscore-v2/greenfashionscore-v2/app/product/new/page.tsx:71:49)
+2025-10-16T08:54:54.3312475Z 
+2025-10-16T08:54:54.3313550Z     [0m [90m 104 |[39m         [36mconst[39m res [33m=[39m [36mawait[39m fetch([32m'/api/scoring'[39m[33m,[39m {
+2025-10-16T08:54:54.3314726Z      [90m 105 |[39m           method[33m:[39m [32m"POST"[39m[33m,[39m
+2025-10-16T08:54:54.3315843Z     [31m[1m>[22m[39m[90m 106 |[39m           headers[33m:[39m [36mawait[39m getAuthHeaders()[33m,[39m
+2025-10-16T08:54:54.3316790Z      [90m     |[39m                     [31m[1m^[22m[39m
+2025-10-16T08:54:54.3317673Z      [90m 107 |[39m           body[33m:[39m [33mJSON[39m[33m.[39mstringify({
+2025-10-16T08:54:54.3318601Z      [90m 108 |[39m             scope[33m:[39m [32m"product"[39m[33m,[39m
+2025-10-16T08:54:54.3319563Z      [90m 109 |[39m             product_type[33m:[39m selectedProduct[33m,[39m[0m
+2025-10-16T08:54:54.3320046Z 
+2025-10-16T08:54:54.3320515Z       at printWarning (node_modules/react-dom/cjs/react-dom.development.js:86:30)
+2025-10-16T08:54:54.3321735Z       at error (node_modules/react-dom/cjs/react-dom.development.js:60:7)
+2025-10-16T08:54:54.3353255Z       at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom.development.js:27628:9)
+2025-10-16T08:54:54.3354623Z       at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom.development.js:25547:5)
+2025-10-16T08:54:54.3355772Z       at dispatchSetState (node_modules/react-dom/cjs/react-dom.development.js:16708:7)
+2025-10-16T08:54:54.3356669Z       at loadQuestions (app/product/new/page.tsx:106:21)
+2025-10-16T08:54:54.3357067Z 
+2025-10-16T08:54:54.3357233Z     console.error
+2025-10-16T08:54:54.3358017Z       Warning: An update to ProductWizardPage inside a test was not wrapped in act(...).
+2025-10-16T08:54:54.3358711Z       
+2025-10-16T08:54:54.3359378Z       When testing, code that causes React state updates should be wrapped into act(...):
+2025-10-16T08:54:54.3360065Z       
+2025-10-16T08:54:54.3360371Z       act(() => {
+2025-10-16T08:54:54.3360798Z         /* fire events that update state */
+2025-10-16T08:54:54.3361242Z       });
+2025-10-16T08:54:54.3361600Z       /* assert on the output */
+2025-10-16T08:54:54.3361989Z       
+2025-10-16T08:54:54.3363181Z       This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+2025-10-16T08:54:54.3365096Z           at ProductWizardPage (/home/runner/work/greenfashionscore-v2/greenfashionscore-v2/app/product/new/page.tsx:71:49)
+2025-10-16T08:54:54.3365931Z 
+2025-10-16T08:54:54.3366558Z     [0m [90m 106 |[39m           headers[33m:[39m [36mawait[39m getAuthHeaders()[33m,[39m
+2025-10-16T08:54:54.3367514Z      [90m 107 |[39m           body[33m:[39m [33mJSON[39m[33m.[39mstringify({
+2025-10-16T08:54:54.3368474Z     [31m[1m>[22m[39m[90m 108 |[39m             scope[33m:[39m [32m"product"[39m[33m,[39m
+2025-10-16T08:54:54.3369328Z      [90m     |[39m                     [31m[1m^[22m[39m
+2025-10-16T08:54:54.3370221Z      [90m 109 |[39m             product_type[33m:[39m selectedProduct[33m,[39m
+2025-10-16T08:54:54.3371140Z      [90m 110 |[39m             answers[33m:[39m formattedAnswers
+2025-10-16T08:54:54.3371850Z      [90m 111 |[39m           })[0m
+2025-10-16T08:54:54.3372172Z 
+2025-10-16T08:54:54.3372843Z       at printWarning (node_modules/react-dom/cjs/react-dom.development.js:86:30)
+2025-10-16T08:54:54.3373805Z       at error (node_modules/react-dom/cjs/react-dom.development.js:60:7)
+2025-10-16T08:54:54.3374933Z       at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom.development.js:27628:9)
+2025-10-16T08:54:54.3376186Z       at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom.development.js:25547:5)
+2025-10-16T08:54:54.3377292Z       at dispatchSetState (node_modules/react-dom/cjs/react-dom.development.js:16708:7)
+2025-10-16T08:54:54.3378173Z       at loadQuestions (app/product/new/page.tsx:108:21)
+2025-10-16T08:54:54.3378577Z 
+2025-10-16T08:54:54.3378731Z     console.warn
+2025-10-16T08:54:54.3379540Z       Failed to load product questions from DB, using fallback: Error: No authentication token available
+2025-10-16T08:54:54.3380895Z           at getAuthHeaders (/home/runner/work/greenfashionscore-v2/greenfashionscore-v2/lib/auth/client.ts:6:11)
+2025-10-16T08:54:54.3382413Z           at loadQuestions (/home/runner/work/greenfashionscore-v2/greenfashionscore-v2/app/product/new/page.tsx:38:76)
+2025-10-16T08:54:54.3413595Z 
+2025-10-16T08:54:54.3414989Z     [0m [90m 101 |[39m           body[33m:[39m [33mJSON[39m[33m.[39mstringify({ surveyId[33m:[39m [35m0[39m[33m,[39m completed[33m:[39m [36mfalse[39m[33m,[39m answers[33m:[39m formattedAnswers })
+2025-10-16T08:54:54.3416327Z      [90m 102 |[39m         })[33m;[39m
+2025-10-16T08:54:54.3417078Z     [31m[1m>[22m[39m[90m 103 |[39m       } [36melse[39m {
+2025-10-16T08:54:54.3417866Z      [90m     |[39m                         [31m[1m^[22m[39m
+2025-10-16T08:54:54.3419260Z      [90m 104 |[39m         [36mconst[39m res [33m=[39m [36mawait[39m fetch([32m'/api/scoring'[39m[33m,[39m {
+2025-10-16T08:54:54.3420334Z      [90m 105 |[39m           method[33m:[39m [32m"POST"[39m[33m,[39m
+2025-10-16T08:54:54.3421382Z      [90m 106 |[39m           headers[33m:[39m [36mawait[39m getAuthHeaders()[33m,[39m[0m
+2025-10-16T08:54:54.3421897Z 
+2025-10-16T08:54:54.3422210Z       at loadQuestions (app/product/new/page.tsx:103:29)
+2025-10-16T08:54:54.3422804Z 
+2025-10-16T08:54:54.3422969Z     console.warn
+2025-10-16T08:54:54.3423776Z       Failed to load product questions from DB, using fallback: Error: No authentication token available
+2025-10-16T08:54:54.3425131Z           at getAuthHeaders (/home/runner/work/greenfashionscore-v2/greenfashionscore-v2/lib/auth/client.ts:6:11)
+2025-10-16T08:54:54.3426625Z           at loadQuestions (/home/runner/work/greenfashionscore-v2/greenfashionscore-v2/app/product/new/page.tsx:38:76)
+2025-10-16T08:54:54.3427437Z 
+2025-10-16T08:54:54.3428779Z     [0m [90m 101 |[39m           body[33m:[39m [33mJSON[39m[33m.[39mstringify({ surveyId[33m:[39m [35m0[39m[33m,[39m completed[33m:[39m [36mfalse[39m[33m,[39m answers[33m:[39m formattedAnswers })
+2025-10-16T08:54:54.3430350Z      [90m 102 |[39m         })[33m;[39m
+2025-10-16T08:54:54.3431068Z     [31m[1m>[22m[39m[90m 103 |[39m       } [36melse[39m {
+2025-10-16T08:54:54.3431853Z      [90m     |[39m                         [31m[1m^[22m[39m
+2025-10-16T08:54:54.3433124Z      [90m 104 |[39m         [36mconst[39m res [33m=[39m [36mawait[39m fetch([32m'/api/scoring'[39m[33m,[39m {
+2025-10-16T08:54:54.3434215Z      [90m 105 |[39m           method[33m:[39m [32m"POST"[39m[33m,[39m
+2025-10-16T08:54:54.3435240Z      [90m 106 |[39m           headers[33m:[39m [36mawait[39m getAuthHeaders()[33m,[39m[0m
+2025-10-16T08:54:54.3435743Z 
+2025-10-16T08:54:54.3436072Z       at loadQuestions (app/product/new/page.tsx:103:29)
+2025-10-16T08:54:54.3436480Z 
+2025-10-16T08:54:54.3604811Z PASS ui __tests__/ui.survey.spec.tsx
+2025-10-16T08:54:54.3624682Z   ● Console
+2025-10-16T08:54:54.3626868Z 
+2025-10-16T08:54:54.3627045Z     console.warn
+2025-10-16T08:54:54.3627778Z       Failed to load questions from DB, using fallback: Error: No authentication token available
+2025-10-16T08:54:54.3629062Z           at getAuthHeaders (/home/runner/work/greenfashionscore-v2/greenfashionscore-v2/lib/auth/client.ts:6:11)
+2025-10-16T08:54:54.3630193Z           at processTicksAndRejections (node:internal/process/task_queues:95:5)
+2025-10-16T08:54:54.3631326Z           at loadQuestions (/home/runner/work/greenfashionscore-v2/greenfashionscore-v2/app/survey/page.tsx:31:20)
+2025-10-16T08:54:54.3632052Z 
+2025-10-16T08:54:54.3632588Z     [0m [90m 110 |[39m           [33m<[39m[33m/[39m[33mdiv[39m[33m>[39m
+2025-10-16T08:54:54.3634017Z      [90m 111 |[39m           [33m<[39m[33mdiv[39m className[33m=[39m[32m"w-full bg-gray-200 rounded-full h-2"[39m[33m>[39m
+2025-10-16T08:54:54.3635144Z     [31m[1m>[22m[39m[90m 112 |[39m             [33m<[39m[33mdiv[39m 
+2025-10-16T08:54:54.3635940Z      [90m     |[39m                         [31m[1m^[22m[39m
+2025-10-16T08:54:54.3637065Z      [90m 113 |[39m               className[33m=[39m[32m"bg-emerald-600 h-2 rounded-full transition-all duration-300"[39m 
+2025-10-16T08:54:54.3638432Z      [90m 114 |[39m               style[33m=[39m{{ width[33m:[39m [32m`${((stepIndex + 1) / STEPS.length) * 100}%`[39m }}
+2025-10-16T08:54:54.3639382Z      [90m 115 |[39m             [33m/[39m[33m>[39m[0m
+2025-10-16T08:54:54.3639735Z 
+2025-10-16T08:54:54.3640011Z       at loadQuestions (app/survey/page.tsx:112:25)
+2025-10-16T08:54:54.3640355Z 
+2025-10-16T08:54:54.4933831Z PASS ui __tests__/ui.home.spec.tsx
+2025-10-16T08:54:54.5473439Z PASS ui __tests__/ui.dashboard.spec.tsx
+2025-10-16T08:54:54.5513526Z   ● Console
+2025-10-16T08:54:54.5517207Z 
+2025-10-16T08:54:54.5520896Z     console.error
+2025-10-16T08:54:54.5525701Z       Dashboard fetch error: Error: No authentication token available
+2025-10-16T08:54:54.5554682Z           at getAuthHeaders (/home/runner/work/greenfashionscore-v2/greenfashionscore-v2/lib/auth/client.ts:6:11)
+2025-10-16T08:54:54.5559764Z           at processTicksAndRejections (node:internal/process/task_queues:95:5)
+2025-10-16T08:54:54.5561405Z           at fetchDashboard (/home/runner/work/greenfashionscore-v2/greenfashionscore-v2/app/dashboard/page.tsx:89:20)
+2025-10-16T08:54:54.5566310Z 
+2025-10-16T08:54:54.5566946Z     [0m [90m 137 |[39m
+2025-10-16T08:54:54.5567648Z      [90m 138 |[39m   [36mif[39m (loading) {
+2025-10-16T08:54:54.5568321Z     [31m[1m>[22m[39m[90m 139 |[39m     [36mreturn[39m (
+2025-10-16T08:54:54.5568996Z      [90m     |[39m                       [31m[1m^[22m[39m
+2025-10-16T08:54:54.5569677Z      [90m 140 |[39m       [33m<[39m[33mAuthGuard[39m[33m>[39m
+2025-10-16T08:54:54.5570713Z      [90m 141 |[39m         [33m<[39m[33mmain[39m className[33m=[39m[32m"min-h-screen bg-gray-50 py-8"[39m[33m>[39m
+2025-10-16T08:54:54.5572045Z      [90m 142 |[39m           [33m<[39m[33mdiv[39m className[33m=[39m[32m"container mx-auto px-4 max-w-6xl"[39m[33m>[39m[0m
+2025-10-16T08:54:54.5573162Z 
+2025-10-16T08:54:54.5573467Z       at fetchDashboard (app/dashboard/page.tsx:139:25)
+2025-10-16T08:54:54.5573828Z 
+2025-10-16T08:54:54.7801246Z PASS ui __tests__/components.hero.spec.tsx
+2025-10-16T08:54:54.8786939Z PASS ui __tests__/components.steps.spec.tsx
+2025-10-16T08:54:54.9149719Z PASS ui __tests__/a11y.survey.spec.tsx
+2025-10-16T08:54:54.9302942Z   ● Console
+2025-10-16T08:54:54.9303629Z 
+2025-10-16T08:54:54.9304120Z     console.warn
+2025-10-16T08:54:54.9304906Z       Failed to load questions from DB, using fallback: Error: No authentication token available
+2025-10-16T08:54:54.9306116Z           at getAuthHeaders (/home/runner/work/greenfashionscore-v2/greenfashionscore-v2/lib/auth/client.ts:6:11)
+2025-10-16T08:54:54.9307225Z           at processTicksAndRejections (node:internal/process/task_queues:95:5)
+2025-10-16T08:54:54.9308485Z           at loadQuestions (/home/runner/work/greenfashionscore-v2/greenfashionscore-v2/app/survey/page.tsx:31:20)
+2025-10-16T08:54:54.9309271Z 
+2025-10-16T08:54:54.9309894Z     [0m [90m 110 |[39m           [33m<[39m[33m/[39m[33mdiv[39m[33m>[39m
+2025-10-16T08:54:54.9311185Z      [90m 111 |[39m           [33m<[39m[33mdiv[39m className[33m=[39m[32m"w-full bg-gray-200 rounded-full h-2"[39m[33m>[39m
+2025-10-16T08:54:54.9312370Z     [31m[1m>[22m[39m[90m 112 |[39m             [33m<[39m[33mdiv[39m 
+2025-10-16T08:54:54.9313565Z      [90m     |[39m                         [31m[1m^[22m[39m
+2025-10-16T08:54:54.9314716Z      [90m 113 |[39m               className[33m=[39m[32m"bg-emerald-600 h-2 rounded-full transition-all duration-300"[39m 
+2025-10-16T08:54:54.9316100Z      [90m 114 |[39m               style[33m=[39m{{ width[33m:[39m [32m`${((stepIndex + 1) / STEPS.length) * 100}%`[39m }}
+2025-10-16T08:54:54.9317114Z      [90m 115 |[39m             [33m/[39m[33m>[39m[0m
+2025-10-16T08:54:54.9317488Z 
+2025-10-16T08:54:54.9317776Z       at loadQuestions (app/survey/page.tsx:112:25)
+2025-10-16T08:54:54.9318148Z 
+2025-10-16T08:54:54.9318332Z     console.error
+2025-10-16T08:54:54.9319034Z       Warning: An update to SurveyWizardPage inside a test was not wrapped in act(...).
+2025-10-16T08:54:54.9319723Z       
+2025-10-16T08:54:54.9320383Z       When testing, code that causes React state updates should be wrapped into act(...):
+2025-10-16T08:54:54.9321081Z       
+2025-10-16T08:54:54.9321412Z       act(() => {
+2025-10-16T08:54:54.9321854Z         /* fire events that update state */
+2025-10-16T08:54:54.9322320Z       });
+2025-10-16T08:54:54.9342902Z       /* assert on the output */
+2025-10-16T08:54:54.9343395Z       
+2025-10-16T08:54:54.9344462Z       This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+2025-10-16T08:54:54.9346485Z           at SurveyWizardPage (/home/runner/work/greenfashionscore-v2/greenfashionscore-v2/app/survey/page.tsx:48:51)
+2025-10-16T08:54:54.9347278Z 
+2025-10-16T08:54:54.9347751Z     [0m [90m 112 |[39m             [33m<[39m[33mdiv[39m 
+2025-10-16T08:54:54.9348960Z      [90m 113 |[39m               className[33m=[39m[32m"bg-emerald-600 h-2 rounded-full transition-all duration-300"[39m 
+2025-10-16T08:54:54.9350456Z     [31m[1m>[22m[39m[90m 114 |[39m               style[33m=[39m{{ width[33m:[39m [32m`${((stepIndex + 1) / STEPS.length) * 100}%`[39m }}
+2025-10-16T08:54:54.9351489Z      [90m     |[39m                 [31m[1m^[22m[39m
+2025-10-16T08:54:54.9352205Z      [90m 115 |[39m             [33m/[39m[33m>[39m
+2025-10-16T08:54:54.9353353Z      [90m 116 |[39m           [33m<[39m[33m/[39m[33mdiv[39m[33m>[39m
+2025-10-16T08:54:54.9354256Z      [90m 117 |[39m         [33m<[39m[33m/[39m[33mdiv[39m[33m>[39m[0m
+2025-10-16T08:54:54.9354677Z 
+2025-10-16T08:54:54.9355160Z       at printWarning (node_modules/react-dom/cjs/react-dom.development.js:86:30)
+2025-10-16T08:54:54.9356095Z       at error (node_modules/react-dom/cjs/react-dom.development.js:60:7)
+2025-10-16T08:54:54.9357227Z       at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom.development.js:27628:9)
+2025-10-16T08:54:54.9358811Z       at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom.development.js:25547:5)
+2025-10-16T08:54:54.9359950Z       at dispatchSetState (node_modules/react-dom/cjs/react-dom.development.js:16708:7)
+2025-10-16T08:54:54.9360811Z       at loadQuestions (app/survey/page.tsx:114:17)
+2025-10-16T08:54:54.9361178Z 
+2025-10-16T08:54:54.9361347Z     console.error
+2025-10-16T08:54:54.9362031Z       Warning: An update to SurveyWizardPage inside a test was not wrapped in act(...).
+2025-10-16T08:54:54.9383137Z       
+2025-10-16T08:54:54.9383898Z       When testing, code that causes React state updates should be wrapped into act(...):
+2025-10-16T08:54:54.9384609Z       
+2025-10-16T08:54:54.9384945Z       act(() => {
+2025-10-16T08:54:54.9385390Z         /* fire events that update state */
+2025-10-16T08:54:54.9385867Z       });
+2025-10-16T08:54:54.9386249Z       /* assert on the output */
+2025-10-16T08:54:54.9386679Z       
+2025-10-16T08:54:54.9387681Z       This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+2025-10-16T08:54:54.9389324Z           at SurveyWizardPage (/home/runner/work/greenfashionscore-v2/greenfashionscore-v2/app/survey/page.tsx:48:51)
+2025-10-16T08:54:54.9390122Z 
+2025-10-16T08:54:54.9390950Z     [0m [90m 114 |[39m               style[33m=[39m{{ width[33m:[39m [32m`${((stepIndex + 1) / STEPS.length) * 100}%`[39m }}
+2025-10-16T08:54:54.9391945Z      [90m 115 |[39m             [33m/[39m[33m>[39m
+2025-10-16T08:54:54.9409661Z     [31m[1m>[22m[39m[90m 116 |[39m           [33m<[39m[33m/[39m[33mdiv[39m[33m>[39m
+2025-10-16T08:54:54.9410602Z      [90m     |[39m                 [31m[1m^[22m[39m
+2025-10-16T08:54:54.9411421Z      [90m 117 |[39m         [33m<[39m[33m/[39m[33mdiv[39m[33m>[39m
+2025-10-16T08:54:54.9412098Z      [90m 118 |[39m         
+2025-10-16T08:54:54.9414612Z      [90m 119 |[39m         [33m<[39m[33msection[39m aria[33m-[39mlabel[33m=[39m{[32m`Sección ${current.title}`[39m} className[33m=[39m[32m"bg-white rounded-lg shadow-sm p-8 mb-6"[39m[33m>[39m[0m
+2025-10-16T08:54:54.9415702Z 
+2025-10-16T08:54:54.9416197Z       at printWarning (node_modules/react-dom/cjs/react-dom.development.js:86:30)
+2025-10-16T08:54:54.9417177Z       at error (node_modules/react-dom/cjs/react-dom.development.js:60:7)
+2025-10-16T08:54:54.9418356Z       at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom.development.js:27628:9)
+2025-10-16T08:54:54.9419665Z       at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom.development.js:25547:5)
+2025-10-16T08:54:54.9421132Z       at dispatchSetState (node_modules/react-dom/cjs/react-dom.development.js:16708:7)
+2025-10-16T08:54:54.9422012Z       at loadQuestions (app/survey/page.tsx:116:17)
+2025-10-16T08:54:54.9422382Z 
+2025-10-16T08:54:54.9422524Z     console.warn
+2025-10-16T08:54:54.9423468Z       Failed to load questions from DB, using fallback: Error: No authentication token available
+2025-10-16T08:54:54.9424789Z           at getAuthHeaders (/home/runner/work/greenfashionscore-v2/greenfashionscore-v2/lib/auth/client.ts:6:11)
+2025-10-16T08:54:54.9425919Z           at runNextTicks (node:internal/process/task_queues:60:5)
+2025-10-16T08:54:54.9426630Z           at listOnTimeout (node:internal/timers:545:9)
+2025-10-16T08:54:54.9427274Z           at processTimers (node:internal/timers:519:7)
+2025-10-16T08:54:54.9428323Z           at loadQuestions (/home/runner/work/greenfashionscore-v2/greenfashionscore-v2/app/survey/page.tsx:31:20)
+2025-10-16T08:54:54.9429042Z 
+2025-10-16T08:54:54.9429547Z     [0m [90m 110 |[39m           [33m<[39m[33m/[39m[33mdiv[39m[33m>[39m
+2025-10-16T08:54:54.9430733Z      [90m 111 |[39m           [33m<[39m[33mdiv[39m className[33m=[39m[32m"w-full bg-gray-200 rounded-full h-2"[39m[33m>[39m
+2025-10-16T08:54:54.9431805Z     [31m[1m>[22m[39m[90m 112 |[39m             [33m<[39m[33mdiv[39m 
+2025-10-16T08:54:54.9476002Z      [90m     |[39m                         [31m[1m^[22m[39m
+2025-10-16T08:54:54.9477271Z      [90m 113 |[39m               className[33m=[39m[32m"bg-emerald-600 h-2 rounded-full transition-all duration-300"[39m 
+2025-10-16T08:54:54.9478757Z      [90m 114 |[39m               style[33m=[39m{{ width[33m:[39m [32m`${((stepIndex + 1) / STEPS.length) * 100}%`[39m }}
+2025-10-16T08:54:54.9479842Z      [90m 115 |[39m             [33m/[39m[33m>[39m[0m
+2025-10-16T08:54:54.9480211Z 
+2025-10-16T08:54:54.9480497Z       at loadQuestions (app/survey/page.tsx:112:25)
+2025-10-16T08:54:54.9480872Z 
+2025-10-16T08:54:55.0384240Z PASS ui __tests__/components.footer.spec.tsx
+2025-10-16T08:54:55.1477788Z PASS ui __tests__/components.benefits.spec.tsx
+2025-10-16T08:54:55.4353090Z PASS ui __tests__/a11y.home.spec.tsx
+2025-10-16T08:54:55.4717973Z 
+2025-10-16T08:54:55.4721857Z Test Suites: 5 failed, 1 skipped, 10 passed, 15 of 16 total
+2025-10-16T08:54:55.4723602Z Tests:       15 failed, 1 skipped, 50 passed, 66 total
+2025-10-16T08:54:55.4724201Z Snapshots:   0 total
+2025-10-16T08:54:55.4724601Z Time:        4.409 s
+2025-10-16T08:54:55.4725060Z Ran all test suites in 2 projects.
+2025-10-16T08:54:55.5566890Z ##[error]Process completed with exit code 1.

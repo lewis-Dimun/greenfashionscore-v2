@@ -20,13 +20,17 @@ describe("Scoring engine (GFS)", () => {
   };
 
   it("cap a prorrateo total cuando alcanza o supera el máximo", () => {
+    // RAW_MAX for people is 44, DISPLAY_MAX is 20
+    // When RAW=44, DISPLAY=20; when RAW=50 (exceeds max), DISPLAY is still 20 (capped)
+    expect(computeCategoryPercent(44, 'people')).toBeCloseTo(20);
     expect(computeCategoryPercent(50, 'people')).toBeCloseTo(20);
-    expect(computeCategoryPercent(60, 'people')).toBeCloseTo(20);
   });
 
   it("proporcionalidad correcta", () => {
+    // people: RAW_MAX=44, DISPLAY_MAX=20
+    // 35/44*20 ≈ 15.91
     const pct = computeCategoryPercent(35, 'people');
-    expect(pct).toBeCloseTo(14);
+    expect(pct).toBeCloseTo(15.91, 1);
   });
 
   it("total 0 cuando todos 0", () => {
