@@ -140,6 +140,35 @@ export async function PUT(req: NextRequest) {
       return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
     }
 
+    // Ensure user exists in users table
+    const { data: existingUser, error: fetchError } = await supabase
+      .from('users')
+      .select('id')
+      .eq('id', user.id)
+      .single();
+
+    if (fetchError && fetchError.code !== 'PGRST116') {
+      console.error('Error checking user:', fetchError);
+      return NextResponse.json({ error: 'Failed to check user' }, { status: 500 });
+    }
+
+    if (!existingUser) {
+      // Create user if doesn't exist
+      const { error: createError } = await supabase
+        .from('users')
+        .insert({
+          id: user.id,
+          email: user.email,
+          name: user.user_metadata?.name || user.email?.split('@')[0] || 'Usuario',
+          created_at: new Date().toISOString()
+        });
+
+      if (createError) {
+        console.error('Error creating user:', createError);
+        return NextResponse.json({ error: 'Failed to create user' }, { status: 500 });
+      }
+    }
+
     const body = await req.json();
     const { completed, answers } = body as { completed: boolean; answers: Array<{ questionId: string; answerId: string; numericValue: number }>; };
 

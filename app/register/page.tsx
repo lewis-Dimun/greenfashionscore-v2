@@ -19,7 +19,7 @@ export default function RegisterPage() {
     setMessage(null);
     setLoading(true);
     
-    const { error: err } = await supabase.auth.signUp({ 
+    const { error: err, data } = await supabase.auth.signUp({ 
       email, 
       password,
       options: {
@@ -30,7 +30,30 @@ export default function RegisterPage() {
     if (err) {
       setError(err.message);
     } else {
-      setMessage("Revisa tu email para confirmar el registro.");
+      // If user is immediately confirmed (no email confirmation required)
+      if (data.user && !data.user.email_confirmed_at) {
+        // User needs email confirmation
+        setMessage("Revisa tu email para confirmar el registro.");
+      } else if (data.user && data.session) {
+        // User is immediately confirmed, ensure user record exists
+        try {
+          const token = data.session.access_token;
+          await fetch('/api/users/ensure', {
+            method: 'POST',
+            headers: { 'Authorization': `Bearer ${token}` }
+          });
+        } catch (ensureError) {
+          console.error('Error ensuring user:', ensureError);
+          // Continue anyway - user might already exist
+        }
+        setMessage("Registro exitoso. Redirigiendo al dashboard...");
+        // Redirect to dashboard
+        setTimeout(() => {
+          window.location.href = "/dashboard";
+        }, 2000);
+      } else {
+        setMessage("Revisa tu email para confirmar el registro.");
+      }
     }
     
     setLoading(false);

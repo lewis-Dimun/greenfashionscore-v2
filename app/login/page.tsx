@@ -17,11 +17,25 @@ export default function LoginPage() {
     setError(null);
     setLoading(true);
     
-    const { error: err } = await supabase.auth.signInWithPassword({ email, password });
+    const { error: err, data } = await supabase.auth.signInWithPassword({ email, password });
     
     if (err) {
       setError(err.message);
     } else {
+      // Ensure user exists in users table
+      const session = await supabase.auth.getSession();
+      if (session.data.session) {
+        const token = session.data.session.access_token;
+        try {
+          await fetch('/api/users/ensure', {
+            method: 'POST',
+            headers: { 'Authorization': `Bearer ${token}` }
+          });
+        } catch (ensureError) {
+          console.error('Error ensuring user:', ensureError);
+          // Continue anyway - user might already exist
+        }
+      }
       // Redirect to dashboard on successful login
       router.push("/dashboard");
     }
