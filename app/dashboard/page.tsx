@@ -1,21 +1,23 @@
 "use client";
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import AuthGuard from "../../components/AuthGuard";
 import { getAuthHeaders } from "../../lib/auth/client";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
+import { CertificateButton } from "../../components/CertificatePDF";
 
 // Componente para tarjeta de categoría
 function CategoryCard({ 
   title, 
   score, 
   max, 
-  icon, 
+  dimensionLogo, 
   color 
 }: { 
   title: string; 
   score: number; 
   max: number; 
-  icon: string; 
+  dimensionLogo: string; 
   color: string; 
 }) {
   const percentage = (score / max) * 100;
@@ -24,8 +26,14 @@ function CategoryCard({
     <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center space-x-3">
-          <div className={`w-12 h-12 rounded-full flex items-center justify-center text-white text-xl ${color}`}>
-            {icon}
+          <div className="w-16 h-16 flex items-center justify-center">
+            <Image 
+              src={dimensionLogo} 
+              alt={title} 
+              width={64} 
+              height={64}
+              className="object-contain"
+            />
           </div>
           <div>
             <h3 className="text-lg font-bold text-gray-900">{title}</h3>
@@ -54,17 +62,23 @@ function CategoryCard({
 
 // Componente para badge de grade
 function GradeBadge({ grade }: { grade: string }) {
-  const gradeColors = {
-    A: 'bg-green-100 text-green-800 border-green-200',
-    B: 'bg-blue-100 text-blue-800 border-blue-200',
-    C: 'bg-yellow-100 text-yellow-800 border-yellow-200',
-    D: 'bg-orange-100 text-orange-800 border-orange-200',
-    E: 'bg-red-100 text-red-800 border-red-200'
+  const semaphoreImages = {
+    A: '/branding/SEMÁFORO A.png',
+    B: '/branding/SEMÁFORO B.png',
+    C: '/branding/SEMÁFORO C.png',
+    D: '/branding/SEMÁFORO D.png',
+    E: '/branding/SEMÁFORO E.png'
   };
   
   return (
-    <div className={`inline-flex items-center px-4 py-2 rounded-full border-2 font-bold text-lg ${gradeColors[grade as keyof typeof gradeColors]}`}>
-      {grade}
+    <div className="flex flex-col items-center">
+      <Image 
+        src={semaphoreImages[grade as keyof typeof semaphoreImages]} 
+        alt={`Calificación ${grade}`}
+        width={300}
+        height={300}
+        className="object-contain"
+      />
     </div>
   );
 }
@@ -212,28 +226,28 @@ export default function DashboardPage() {
               title="PEOPLE"
               score={data.people}
               max={20}
-              icon="👥"
+              dimensionLogo="/branding/People.png"
               color="bg-blue-500"
             />
             <CategoryCard
               title="PLANET"
               score={data.planet}
               max={20}
-              icon="🌍"
+              dimensionLogo="/branding/Planet.png"
               color="bg-green-500"
             />
             <CategoryCard
               title="MATERIALS"
               score={data.materials}
               max={40}
-              icon="🧵"
+              dimensionLogo="/branding/Materials.png"
               color="bg-purple-500"
             />
             <CategoryCard
               title="CIRCULARITY"
               score={data.circularity}
               max={20}
-              icon="♻️"
+              dimensionLogo="/branding/Circularity.png"
               color="bg-orange-500"
             />
           </div>
@@ -263,6 +277,26 @@ export default function DashboardPage() {
                 {((data.total / 100) * 100).toFixed(1)}% del máximo
               </div>
             </div>
+          </div>
+          
+          {/* Botón de Certificado */}
+          <div className="text-center mb-8">
+            <CertificateButton 
+              data={{
+                grade: data.grade,
+                total: data.total,
+                people: data.people,
+                planet: data.planet,
+                materials: data.materials,
+                circularity: data.circularity,
+                userName: 'Usuario', // TODO: Get actual user name
+                date: new Date().toLocaleDateString('es-ES', { 
+                  year: 'numeric', 
+                  month: 'long', 
+                  day: 'numeric' 
+                })
+              }}
+            />
           </div>
           
           {/* Charts Section */}
