@@ -18,7 +18,6 @@ export default function SurveyWizardPage() {
   const draft = useSurveyStore();
   const [stepIndex, setStepIndex] = useState(draft.stepIndex);
   const nextButtonRef = useRef<HTMLButtonElement | null>(null);
-  const [submitting, setSubmitting] = useState(false);
   const [questions, setQuestions] = useState<Record<string, any[]>>({});
   const [loading, setLoading] = useState(true);
   const router = useRouter();
@@ -122,6 +121,21 @@ export default function SurveyWizardPage() {
             <p className="text-lg text-gray-600">{current.description}</p>
           </div>
           
+          {/* Feedback banners */}
+          {draft.isSubmitted && (
+            <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
+              <h3 className="text-green-800 font-semibold">✅ Encuesta enviada correctamente</h3>
+              <p className="text-green-700">Redirigiendo al dashboard...</p>
+            </div>
+          )}
+
+          {draft.submitError && (
+            <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+              <h3 className="text-red-800 font-semibold">❌ Error al enviar</h3>
+              <p className="text-red-700">{draft.submitError}</p>
+            </div>
+          )}
+          
                 {loading ? (
                   <div className="text-center py-8">
                     <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-600 mx-auto"></div>
@@ -146,6 +160,7 @@ export default function SurveyWizardPage() {
                                   draft.setAnswer(String(question.id), String(e.target.value));
                                 }}
                                 checked={draft.answers[String(question.id)] === String(answer.id)}
+                                disabled={draft.isSubmitted}
                               />
                               <div className="flex-1">
                                 <span className="text-gray-900 group-hover:text-emerald-700 transition-colors">
@@ -189,9 +204,9 @@ export default function SurveyWizardPage() {
             {/* Guardar borrador disponible en cualquier paso */}
             <button
               aria-label="Guardar borrador"
-              disabled={submitting}
+              disabled={draft.isSubmitting || draft.isSubmitted}
               onClick={async () => {
-                setSubmitting(true);
+                draft.setSubmitting(true);
                 try {
                   const answers = Object.entries(draft.answers).map(([questionId, answerId]) => {
                     const question = Object.values(questions).flat().find((q: any) => String(q.id) === String(questionId));
@@ -208,19 +223,20 @@ export default function SurveyWizardPage() {
                     body: JSON.stringify({ completed: false, answers })
                   });
                 } finally {
-                  setSubmitting(false);
+                  draft.setSubmitting(false);
                 }
               }}
               className="px-6 py-2 border border-emerald-600 text-emerald-700 rounded-md font-medium hover:bg-emerald-50 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
             >
-              Guardar borrador
+              {draft.isSubmitting ? "Guardando..." : "Guardar borrador"}
             </button>
             {stepIndex === STEPS.length - 1 && (
               <button
                 aria-label="Enviar encuesta"
-                disabled={submitting || !isSurveyValid(draft.answers)}
+                disabled={draft.isSubmitting || draft.isSubmitted || !isSurveyValid(draft.answers)}
                       onClick={async () => {
-                        setSubmitting(true);
+                        draft.setSubmitting(true);
+                        draft.setSubmitError(null);
                         try {
                           // Convert answers to new format
                           const answers = Object.entries(draft.answers).map(([questionId, answerId]) => {
@@ -242,14 +258,32 @@ export default function SurveyWizardPage() {
                               answers
                             })
                           });
-                          if (res.ok) router.push("/dashboard");
+                          
+                          if (res.ok) {
+                            const result = await res.json();
+                            if (result.success) {
+                              draft.setSubmitted(true);
+                              // Redirect to dashboard after 2 seconds
+                              setTimeout(() => {
+                                router.push("/dashboard");
+                              }, 2000);
+                            } else {
+                              draft.setSubmitError(result.error || 'Error al enviar la encuesta');
+                            }
+                          } else {
+                            const errorData = await res.json();
+                            draft.setSubmitError(errorData.error || 'Error al enviar la encuesta');
+                          }
+                        } catch (error) {
+                          console.error('Submit error:', error);
+                          draft.setSubmitError('Error de conexión. Inténtalo de nuevo.');
                         } finally {
-                          setSubmitting(false);
+                          draft.setSubmitting(false);
                         }
                       }}
                 className="px-6 py-2 bg-emerald-700 text-white rounded-md font-medium hover:bg-emerald-800 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
               >
-                {submitting ? "Enviando..." : "Enviar"}
+                {draft.isSubmitting ? "Enviando..." : draft.isSubmitted ? "Enviado" : "Enviar"}
               </button>
             )}
           </div>
