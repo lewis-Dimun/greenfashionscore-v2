@@ -8,9 +8,6 @@ describe('Dashboard Handler', () => {
     mockDeps = dashboardHandlerDeps({
       fetchUserSurveys: jest.fn()
     });
-    // Cast to any to access mock methods
-    (mockDeps.fetchUserSurveys as any).mockResolvedValue = jest.fn();
-    (mockDeps.fetchUserSurveys as any).mockRejectedValue = jest.fn();
   });
 
   describe('GET /dashboard', () => {
@@ -206,7 +203,7 @@ describe('Dashboard Handler', () => {
     });
 
     it('should handle ETag caching', async () => {
-      (mockDeps.fetchUserSurveys as any).mockResolvedValue([
+      const mockData = [
         {
           surveyId: 'general-1',
           scope: 'general',
@@ -219,7 +216,9 @@ describe('Dashboard Handler', () => {
             grade: 'C'
           }
         }
-      ]);
+      ];
+      
+      (mockDeps.fetchUserSurveys as any).mockResolvedValue(mockData);
 
       const handler = dashboardHandler(mockDeps);
       

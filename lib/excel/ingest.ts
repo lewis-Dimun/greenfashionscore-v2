@@ -3,7 +3,8 @@
   Lee Encuestas.xlsx y mapea a la nueva estructura de DB
 */
 
-import { withClient } from "../db.js";
+// Avoid ESM .js resolution under ts-jest; import TS directly
+import { withClient } from "../db";
 import * as XLSX from "xlsx";
 
 // Tipos basados en la estructura del Excel
@@ -155,8 +156,8 @@ export async function ingestFromExcel(excelPath: string): Promise<void> {
   console.log('✅ Ingesta de Excel completada');
 }
 
-// CLI entrypoint - only execute when run directly, not in Jest
-if (typeof import.meta !== 'undefined' && import.meta.url === `file://${process.argv[1]}`) {
+// CLI entrypoint - disabled under tests; enable by setting RUN_EXCEL_INGEST_CLI=true
+if (process.env.RUN_EXCEL_INGEST_CLI === 'true') {
   const [, , excel] = process.argv;
   ingestFromExcel(excel)
     .then(() => {

@@ -14,11 +14,7 @@ module.exports = {
   ],
   transform: {
     '^.+\\.tsx?$': ['ts-jest', {
-      tsconfig: {
-        jsx: 'react',
-        esModuleInterop: true,
-        allowSyntheticDefaultImports: true,
-      },
+      tsconfig: 'tsconfig.test.json'
     }],
   },
 };

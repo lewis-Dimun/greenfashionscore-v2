@@ -80,7 +80,7 @@ export function dashboardHandler(deps: DashboardDeps) {
       const aggregated = aggregateScores(generalScore, productScores);
 
       // Generate ETag based on last survey update
-      const etag = `"${Date.now()}"`;
+      const etag = `"${JSON.stringify(aggregated).length}"`;
 
       // Check for ETag match
       const ifNoneMatch = (req.headers as any)?.get?.("if-none-match");

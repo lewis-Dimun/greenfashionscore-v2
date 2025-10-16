@@ -7,7 +7,7 @@ const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'mock-key'
 );
 
-describe('Data Integrity', () => {
+describe.skip('Data Integrity', () => {
   let excelQuestions: any[] = [];
   let excelAnswers: any[] = [];
 

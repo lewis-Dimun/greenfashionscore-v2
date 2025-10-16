@@ -18,6 +18,7 @@
     "jsx": "preserve",
     "incremental": true,
     "baseUrl": ".",
+    "types": ["jest", "@testing-library/jest-dom"],
     "plugins": [
       {
         "name": "next"
@@ -31,6 +32,7 @@
     "**/*.ts",
     "**/*.tsx",
     "next-env.d.ts",
+    "jest.d.ts",
     ".next/types/**/*.ts"
   ],
   "exclude": [
