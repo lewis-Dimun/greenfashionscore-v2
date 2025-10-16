@@ -54,8 +54,7 @@ export async function POST(request: NextRequest) {
         .from('general_surveys')
         .upsert({
           user_id: user.id,
-          completed: true,
-          completed_at: new Date().toISOString()
+          completed: true
         }, { onConflict: 'user_id' })
         .select()
         .single();
