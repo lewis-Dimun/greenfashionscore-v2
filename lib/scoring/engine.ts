@@ -176,4 +176,58 @@ export function calculateCompleteSurveyScore(
   };
 }
 
+// Legacy function names for backward compatibility
+export function computeTotalScore(scores: CategoryScores): number {
+  return computeDisplayTotal(scores);
+}
+
+export function computeCategoryPercent(rawValue: number, category: keyof CategoryScores): number {
+  return normalizeCategory(rawValue, category);
+}
+
+export function combineGeneralAndSpecifics(general: SurveyScore | null, specifics: SurveyScore[]): AggregatedScore {
+  if (!general) {
+    // If no general survey, return empty aggregated score
+    return {
+      people: 0,
+      planet: 0,
+      materials: 0,
+      circularity: 0,
+      total: 0,
+      grade: 'E',
+      breakdown: specifics
+    };
+  }
+
+  // Calculate weighted average
+  const totalSpecifics = specifics.length;
+  const generalWeight = 0.6; // 60% weight for general
+  const specificWeight = 0.4 / Math.max(totalSpecifics, 1); // 40% divided among specifics
+
+  const aggregated: CategoryScores = {
+    people: general.scores.people * generalWeight,
+    planet: general.scores.planet * generalWeight,
+    materials: general.scores.materials * generalWeight,
+    circularity: general.scores.circularity * generalWeight
+  };
+
+  // Add specific survey contributions
+  specifics.forEach(specific => {
+    aggregated.people += specific.scores.people * specificWeight;
+    aggregated.planet += specific.scores.planet * specificWeight;
+    aggregated.materials += specific.scores.materials * specificWeight;
+    aggregated.circularity += specific.scores.circularity * specificWeight;
+  });
+
+  const total = computeDisplayTotal(aggregated);
+  const grade = gradeFromTotal(total);
+
+  return {
+    ...aggregated,
+    total,
+    grade,
+    breakdown: [general, ...specifics]
+  };
+}
+
 

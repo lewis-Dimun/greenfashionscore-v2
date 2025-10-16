@@ -35,10 +35,6 @@
   ],
   "exclude": [
     "node_modules",
-    "supabase/functions/**",
-    "__tests__/**/*.spec.ts",
-    "__tests__/**/*.spec.tsx",
-    "__tests__/**/*.test.ts",
-    "__tests__/**/*.test.tsx"
+    "supabase/functions/**"
   ]
 }

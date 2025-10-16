@@ -31,8 +31,9 @@ module.exports = async () => {
     setupFilesAfterEnv: ['<rootDir>/jest.setup.node.ts'],
     preset: 'ts-jest',
     transform: {
-      '^.+\\.tsx?$': ['ts-jest', { isolatedModules: true }],
+      '^.+\\.tsx?$': ['ts-jest', { useESM: true, isolatedModules: true }],
     },
+    extensionsToTreatAsEsm: ['.ts', '.tsx'],
     ...base,
   };
 

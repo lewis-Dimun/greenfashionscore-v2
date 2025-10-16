@@ -3,6 +3,9 @@ import 'whatwg-fetch';
 import '@testing-library/jest-dom';
 import 'jest-axe/extend-expect';
 
+// Mock fetch globally
+global.fetch = jest.fn();
+
 jest.mock('next/image', () => ({
   __esModule: true,
   default: (props: any) => {

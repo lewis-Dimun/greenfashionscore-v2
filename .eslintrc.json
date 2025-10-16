@@ -21,7 +21,9 @@
       "files": ["**/*.test.ts", "**/*.test.tsx", "**/*.spec.ts", "**/*.spec.tsx", "__tests__/**/*"],
       "rules": {
         "@typescript-eslint/no-explicit-any": "off",
-        "@typescript-eslint/no-unused-vars": "off"
+        "@typescript-eslint/no-unused-vars": "off",
+        "no-console": "off",
+        "@typescript-eslint/no-require-imports": "off"
       }
     },
     {
@@ -31,9 +33,10 @@
       }
     },
     {
-      "files": ["lib/logger.ts", "lib/excel/ingest.ts"],
+      "files": ["lib/logger.ts", "lib/excel/ingest.ts", "jest.setup.ts", "jest.setup.node.ts"],
       "rules": {
-        "no-console": "off"
+        "no-console": "off",
+        "@typescript-eslint/no-require-imports": "off"
       }
     }
   ]
